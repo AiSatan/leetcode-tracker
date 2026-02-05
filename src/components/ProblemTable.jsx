@@ -1,4 +1,5 @@
- import { CheckCircle2, Circle, Calendar, ExternalLink, Minus } from "lucide-react";
+import { CheckCircle2, Circle, Calendar, ExternalLink, Minus, Star } from "lucide-react";
+import { getReviewStatus } from "../utils/scheduler";
 
 const difficultyColor = {
   Easy: "text-green-600",
@@ -9,8 +10,7 @@ const difficultyColor = {
 const ProblemTable = ({
   problems,
   progress,
-  toggleComplete,
-  calculateNextReviews,
+  handleReview,
   filterCategory,
   filterDifficulty,
   showOnlyDueToday,
@@ -27,29 +27,17 @@ const ProblemTable = ({
 
     if (!showOnlyDueToday) return categoryMatch && difficultyMatch;
 
-    const prob = progress[problem.id];
-    if (!prob || !prob.solved) return false;
-    const nextReviews = calculateNextReviews(prob.solvedDate);
-    const isDueToday = nextReviews.some(
-      (date, idx) => !prob.reviews?.[idx] && date <= today
-    );
-    return categoryMatch && difficultyMatch && isDueToday;
+    const status = getReviewStatus(problem.id, progress);
+    return categoryMatch && difficultyMatch && status === 'due';
   });
 
   const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
     });
-  };
-
-  const isOverdue = (date) => {
-    return date < today;
-  };
-
-  const isDueToday = (date) => {
-    return date === today;
   };
 
   return (
@@ -73,9 +61,6 @@ const ProblemTable = ({
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-24">
                 Difficulty
               </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-40">
-                Companies
-              </th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-32">
                 Status
               </th>
@@ -87,10 +72,9 @@ const ProblemTable = ({
           <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {filteredProblems.map((problem, index) => {
               const prob = progress[problem.id] || {};
-              const nextReviews = calculateNextReviews(prob.solvedDate);
               return (
                 <tr
-                  key={index.id}
+                  key={problem.id}
                   className="hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
@@ -132,56 +116,13 @@ const ProblemTable = ({
                     </div>
                   </td>
                   <td
-                    className={`px-4 py-4 whitespace-nowrap text-sm font-semibold ${
-                      difficultyColor[problem.difficulty]
-                    }`}
+                    className={`px-4 py-4 whitespace-nowrap text-sm font-semibold ${difficultyColor[problem.difficulty]
+                      }`}
                   >
                     {problem.difficulty}
                   </td>
-                  <td className="px-4 py-4">
-                    <div className="flex items-center gap-1.5 flex-wrap max-w-[192px]">
-                      {problem.companies && problem.companies.length > 0 ? (
-                        problem.companies.map((company, idx) => (
-                          <div
-                            key={idx}
-                            className="relative group"
-                            title={company.name}
-                          >
-                            {company.logo ? (
-                              <img
-                                src={company.logo}
-                                alt={company.name}
-                                className="h-6 w-6 object-contain cursor-pointer hover:scale-110 transition-transform"
-                              />
-                            ) : (
-                              <div className="h-6 w-6 bg-gray-300 dark:bg-gray-700 rounded flex items-center justify-center text-xs font-semibold text-gray-800 dark:text-gray-100 cursor-pointer hover:scale-110 transition-transform">
-                                {company.name[0]}
-                              </div>
-                            )}
-                            {/* Tooltip */}
-                            <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-xs text-white bg-gray-900 dark:bg-gray-700 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                              {company.name}
-                            </span>
-                          </div>
-                        ))
-                      ) : (
-                        <div
-                          className="flex items-center gap-1 text-gray-400 dark:text-gray-500"
-                          title="No company data available"
-                        >
-                          <Minus
-                            size={16}
-                            className="text-gray-300 dark:text-gray-600"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </td>
                   <td className="px-4 py-4 whitespace-nowrap">
-                    <button
-                      onClick={() => toggleComplete(problem.id)}
-                      className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
-                    >
+                    <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                       {prob.solved ? (
                         <CheckCircle2
                           className="text-green-600 dark:text-green-500"
@@ -193,60 +134,67 @@ const ProblemTable = ({
                       <span className="text-xs">
                         {prob.solved ? "Solved" : "Not Solved"}
                       </span>
-                    </button>
+                    </div>
                   </td>
                   <td className="px-4 py-4">
-                    {prob.solved ? (
-                      <div className="flex flex-wrap gap-2">
-                        {nextReviews.map((date, idx) => {
-                          const isCompleted = prob.reviews?.[idx];
-                          const overdue = !isCompleted && isOverdue(date);
-                          const dueToday = !isCompleted && isDueToday(date);
-
-                          return (
-                            <div
-                              key={idx}
-                              className="flex flex-col items-center"
+                    {/* Review Actions */}
+                    {(!prob.solved || (prob.nextReview && prob.nextReview <= today)) ? (
+                      <div className="flex flex-col gap-1">
+                        <span className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                          Rate how well you did:
+                        </span>
+                        <div className="flex gap-1">
+                          {[1, 2, 3, 4, 5].map((rating) => (
+                            <button
+                              key={rating}
+                              onClick={() => handleReview(problem.id, rating)}
+                              className={`
+                                w-8 h-8 rounded flex items-center justify-center text-sm font-bold transition-all transform hover:scale-110
+                                ${rating <= 2 ? 'bg-red-100 hover:bg-red-200 text-red-700 border border-red-200' : ''}
+                                ${rating === 3 ? 'bg-yellow-100 hover:bg-yellow-200 text-yellow-700 border border-yellow-200' : ''}
+                                ${rating >= 4 ? 'bg-green-100 hover:bg-green-200 text-green-700 border border-green-200' : ''}
+                              `}
+                              title={`Rate ${rating}/5`}
                             >
-                              <button
-                                onClick={() => toggleComplete(problem.id, idx)}
-                                className={`px-2 py-1 rounded text-xs border min-w-[50px] transition-colors ${
-                                  isCompleted
-                                    ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border-green-300 dark:border-green-600"
-                                    : overdue
-                                    ? "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-red-300 dark:border-red-600"
-                                    : dueToday
-                                    ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 border-yellow-300 dark:border-yellow-600"
-                                    : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600"
-                                }`}
-                                title={`Review ${idx + 1} - Due: ${formatDate(
-                                  date
-                                )}`}
-                              >
-                                {`R${idx + 1}`}
-                              </button>
-                              <div
-                                className={`text-[10px] mt-1 flex items-center gap-0.5 ${
-                                  isCompleted
-                                    ? "text-green-600 dark:text-green-400"
-                                    : overdue
-                                    ? "text-red-600 dark:text-red-400"
-                                    : dueToday
-                                    ? "text-yellow-600 dark:text-yellow-400"
-                                    : "text-gray-500 dark:text-gray-300"
-                                }`}
-                              >
-                                <Calendar size={10} />
-                                {formatDate(date)}
-                              </div>
-                            </div>
-                          );
-                        })}
+                              {rating}
+                            </button>
+                          ))}
+                        </div>
                       </div>
                     ) : (
-                      <span className="text-xs text-gray-400 dark:text-gray-500">
-                        Complete problem to see review schedule
-                      </span>
+                      <div className="flex flex-col gap-1 opacity-75">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                            Last Score:
+                          </span>
+                          <span className="text-xs text-gray-400">
+                            Next: {formatDate(prob.nextReview)} ({prob.interval}d)
+                          </span>
+                        </div>
+                        <div className="flex gap-1">
+                          {[1, 2, 3, 4, 5].map((rating) => {
+                            const isSelected = prob.performance === rating;
+                            return (
+                              <button
+                                key={rating}
+                                disabled
+                                className={`
+                                  w-8 h-8 rounded flex items-center justify-center text-sm font-bold transition-all
+                                  cursor-not-allowed
+                                  ${isSelected
+                                    ? (rating <= 2 ? 'bg-red-200 text-red-800 border-red-300 ring-2 ring-red-400'
+                                      : rating === 3 ? 'bg-yellow-200 text-yellow-800 border-yellow-300 ring-2 ring-yellow-400'
+                                        : 'bg-green-200 text-green-800 border-green-300 ring-2 ring-green-400')
+                                    : 'bg-gray-100 text-gray-400 border-gray-200 dark:bg-gray-700 dark:text-gray-500 dark:border-gray-600'}
+                                `}
+                                title={`Last rating: ${prob.performance || 'N/A'}`}
+                              >
+                                {rating}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
                     )}
                   </td>
                 </tr>
