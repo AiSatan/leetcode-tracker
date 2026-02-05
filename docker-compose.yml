@@ -1,0 +1,11 @@
+services:
+  app:
+    build: 
+      context: ./flask_app
+    ports:
+      - "8080:3000"
+    volumes:
+      - ./flask_app:/app
+    environment:
+      - FLASK_ENV=development
+    restart: always
