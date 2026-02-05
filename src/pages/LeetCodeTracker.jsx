@@ -28,34 +28,51 @@ const intervals = [1, 3, 7, 14, 30];
 
 const LeetCodeTracker = () => {
   // --- Local state with localStorage ---
-    const [progress, setProgress] = useState(() => {
-      try {
-        const savedProgress = localStorage.getItem("leetcode-progress-v2");
-        return savedProgress
-          ? JSON.parse(savedProgress)
-          : {
-              "Blind 75": {},
-              "LeetCode 75": {},
-              "NeetCode 150": {},
-            };
-      } catch (error) {
-        console.error("Error loading progress from localStorage:", error);
-        return {
+  const [progress, setProgress] = useState(() => {
+    try {
+      const savedProgress = localStorage.getItem("leetcode-progress-v2");
+      return savedProgress
+        ? JSON.parse(savedProgress)
+        : {
           "Blind 75": {},
           "LeetCode 75": {},
           "NeetCode 150": {},
         };
-      }
-    });
+    } catch (error) {
+      console.error("Error loading progress from localStorage:", error);
+      return {
+        "Blind 75": {},
+        "LeetCode 75": {},
+        "NeetCode 150": {},
+      };
+    }
+  });
 
   const [filterCategory, setFilterCategory] = useState("All");
   const [filterDifficulty, setFilterDifficulty] = useState("All");
   const [showOnlyDueToday, setShowOnlyDueToday] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
-  const [selectedList, setSelectedList] = useState("");
+  // --- Local state with localStorage ---
+  const [selectedList, setSelectedList] = useState(() => {
+    try {
+      return localStorage.getItem("leetcode-tracker-selected-list") || "NeetCode 150";
+    } catch (error) {
+      console.error("Error loading selected list from localStorage:", error);
+      return "NeetCode 150";
+    }
+  });
+
+  // Save selected list to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem("leetcode-tracker-selected-list", selectedList);
+    } catch (error) {
+      console.error("Error saving selected list to localStorage:", error);
+    }
+  }, [selectedList]);
 
 
-// Save progress to localStorage whenever it changes
+  // Save progress to localStorage whenever it changes
   useEffect(() => {
     try {
       localStorage.setItem("leetcode-progress-v2", JSON.stringify(progress));
@@ -133,19 +150,19 @@ const LeetCodeTracker = () => {
   ];
   const difficulties = ["All", "Easy", "Medium", "Hard"];
 
-   const stats = {
-     total: problems.length,
-     solved: problems.filter((p) => currentProgress[p.id]?.solved).length,
-     easy: problems.filter(
-       (p) => p.difficulty === "Easy" && currentProgress[p.id]?.solved
-     ).length,
-     medium: problems.filter(
-       (p) => p.difficulty === "Medium" && currentProgress[p.id]?.solved
-     ).length,
-     hard: problems.filter(
-       (p) => p.difficulty === "Hard" && currentProgress[p.id]?.solved
-     ).length,
-   };
+  const stats = {
+    total: problems.length,
+    solved: problems.filter((p) => currentProgress[p.id]?.solved).length,
+    easy: problems.filter(
+      (p) => p.difficulty === "Easy" && currentProgress[p.id]?.solved
+    ).length,
+    medium: problems.filter(
+      (p) => p.difficulty === "Medium" && currentProgress[p.id]?.solved
+    ).length,
+    hard: problems.filter(
+      (p) => p.difficulty === "Hard" && currentProgress[p.id]?.solved
+    ).length,
+  };
 
   const getDueProblems = () => {
     return problems.filter((problem) => {
