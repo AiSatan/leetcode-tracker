@@ -1,11 +1,11 @@
 services:
   app:
-    build: 
-      context: ./flask_app
+    build: .
     ports:
-      - "8080:3000"
+      - "5173:5173"
     volumes:
-      - ./flask_app:/app
+      - .:/app
+      - /app/node_modules
     environment:
-      - FLASK_ENV=development
+      - CHOKIDAR_USEPOLLING=true
     restart: always
