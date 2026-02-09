@@ -16,10 +16,10 @@ const Patterns = () => {
 
 
   const languages = [
-    { id: "python", name: "Python", color: "bg-blue-500" },
-    { id: "javascript", name: "JavaScript", color: "bg-yellow-500" },
-    { id: "java", name: "Java", color: "bg-red-500" },
-    { id: "go", name: "Go", color: "bg-cyan-500" },
+    { id: "python", name: "Python", color: "bg-category-blue" },
+    { id: "javascript", name: "JavaScript", color: "bg-category-yellow" },
+    { id: "java", name: "Java", color: "bg-category-red" },
+    { id: "go", name: "Go", color: "bg-category-cyan" },
   ];
 
   const copyToClipboard = (text, index) => {
@@ -38,7 +38,7 @@ const Patterns = () => {
             </h1>
             <Code2
               size={36}
-              className="text-blue-600 dark:text-blue-400 ml-2"
+              className="text-primary-main ml-2"
             />
           </div>
           <p className="text-text-muted text-lg">
@@ -56,8 +56,8 @@ const Patterns = () => {
                 key={lang.id}
                 onClick={() => setSelectedLanguage(lang.id)}
                 className={`px-4 py-2 rounded-lg font-medium transition-all ${selectedLanguage === lang.id
-                    ? `${lang.color} text-white shadow-lg scale-105`
-                    : "bg-background-subtle text-text-muted hover:bg-background-highlight"
+                  ? `${lang.color} text-white shadow-lg scale-105`
+                  : "bg-background-subtle text-text-muted hover:bg-background-highlight"
                   }`}
               >
                 {lang.name}
@@ -72,11 +72,11 @@ const Patterns = () => {
               key={idx}
               className="bg-background-surface rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all"
             >
-              <div className="bg-gradient-to-r from-indigo-500 to-blue-500 py-3 px-4">
+              <div className="bg-gradient-to-r from-category-indigo to-category-blue py-3 px-4">
                 <h2 className="text-lg font-bold text-white mb-1">
                   {pattern.title}
                 </h2>
-                <p className="text-blue-50">{pattern.description}</p>
+                <p className="text-white/80">{pattern.description}</p>
               </div>
 
               <div className="p-6">
@@ -128,15 +128,15 @@ const Patterns = () => {
                     {pattern.templates[selectedLanguage].replace(/\\n/g, "\n")}
                   </SyntaxHighlighter>
                 </div>
-                <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-4">
-                  <span className="font-semibold text-blue-900 dark:text-blue-300 text-sm">
+                <div className="bg-background-subtle rounded-lg p-4">
+                  <span className="font-semibold text-text-main text-sm">
                     Common Problems:
                   </span>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {pattern.problems.map((problem, pIdx) => (
                       <span
                         key={pIdx}
-                        className="px-3 py-1 bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-100 rounded-full text-sm font-medium"
+                        className="px-3 py-1 bg-primary-light text-primary-text rounded-full text-sm font-medium"
                       >
                         {problem}
                       </span>

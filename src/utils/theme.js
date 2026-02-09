@@ -97,6 +97,90 @@ export const theme = {
             3: { light: "#D0814D", dark: "#D0814D" }, // Mix
             4: { light: "#E79957", dark: "#E79957" }, // Mix
             5: { light: "#FFB162", dark: "#FFB162" }, // Burning Flame
+        },
+
+        // Categorical / Roadmap Colors
+        categorical: {
+            blue: {
+                light: "#4A6FA5", // Muted Blue
+                dark: "#6B9AC4"   // Light Blue
+            },
+            blueDim: {
+                light: "rgba(74, 111, 165, 0.1)",
+                dark: "rgba(107, 154, 196, 0.2)"
+            },
+            green: {
+                light: "#5E8C61", // Sage Green
+                dark: "#7FB083"   // Light Sage
+            },
+            greenDim: {
+                light: "rgba(94, 140, 97, 0.1)",
+                dark: "rgba(127, 176, 131, 0.2)"
+            },
+            purple: {
+                light: "#886095", // Muted Purple
+                dark: "#A882C7"   // Light Purple
+            },
+            purpleDim: {
+                light: "rgba(136, 96, 149, 0.1)",
+                dark: "rgba(168, 130, 199, 0.2)"
+            },
+            yellow: {
+                light: "#D4A017", // Ochre
+                dark: "#EAC435"   // Bright Ochre
+            },
+            yellowDim: {
+                light: "rgba(212, 160, 23, 0.1)",
+                dark: "rgba(234, 196, 53, 0.2)"
+            },
+            red: {
+                light: "#C04E4E", // Muted Red
+                dark: "#E06C6C"   // Light Red
+            },
+            redDim: {
+                light: "rgba(192, 78, 78, 0.1)",
+                dark: "rgba(224, 108, 108, 0.2)"
+            },
+            indigo: {
+                light: "#5B6592", // Slate Indigo
+                dark: "#7D86B6"   // Light Indigo
+            },
+            indigoDim: {
+                light: "rgba(91, 101, 146, 0.1)",
+                dark: "rgba(125, 134, 182, 0.2)"
+            },
+            pink: {
+                light: "#C27BA0", // Dusty Pink
+                dark: "#E6A3C4"   // Light Pink
+            },
+            pinkDim: {
+                light: "rgba(194, 123, 160, 0.1)",
+                dark: "rgba(230, 163, 196, 0.2)"
+            },
+            orange: {
+                light: "#D67D3E", // Rust
+                dark: "#F09D58"   // Light Rust
+            },
+            orangeDim: {
+                light: "rgba(214, 125, 62, 0.1)",
+                dark: "rgba(240, 157, 88, 0.2)"
+            },
+            teal: {
+                light: "#4E8E8E", // Teal
+                dark: "#70B0B0"   // Light Teal
+            },
+            tealDim: {
+                light: "rgba(78, 142, 142, 0.1)",
+                dark: "rgba(112, 176, 176, 0.2)"
+            },
+            cyan: {
+                light: "#5F9EA0", // Cadet Blue
+                dark: "#82C0C2"   // Light Cyan
+            },
+            cyanDim: {
+                light: "rgba(95, 158, 160, 0.1)",
+                dark: "rgba(130, 192, 194, 0.2)"
+            }
         }
     }
 };
