@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { Info, ExternalLink, Map } from "lucide-react";
+import { scheduleReview } from "../utils/scheduler";
 import {
   Filters,
   StatsCard,
   ProblemTable,
   ExportImportControls,
   CircularStatsCard,
+  DailyProgress,
 } from "../components";
 import { blind75, leetcode75, neetcode150 } from "../data";
 
@@ -22,40 +24,53 @@ const roadmapLinks = {
   "NeetCode 150": "https://neetcode.io/roadmap",
 };
 
-
-// --- Spaced repetition intervals ---
-const intervals = [1, 3, 7, 14, 30];
-
 const LeetCodeTracker = () => {
   // --- Local state with localStorage ---
-    const [progress, setProgress] = useState(() => {
-      try {
-        const savedProgress = localStorage.getItem("leetcode-progress-v2");
-        return savedProgress
-          ? JSON.parse(savedProgress)
-          : {
-              "Blind 75": {},
-              "LeetCode 75": {},
-              "NeetCode 150": {},
-            };
-      } catch (error) {
-        console.error("Error loading progress from localStorage:", error);
-        return {
+  const [progress, setProgress] = useState(() => {
+    try {
+      const savedProgress = localStorage.getItem("leetcode-progress-v2");
+      return savedProgress
+        ? JSON.parse(savedProgress)
+        : {
           "Blind 75": {},
           "LeetCode 75": {},
           "NeetCode 150": {},
         };
-      }
-    });
+    } catch (error) {
+      console.error("Error loading progress from localStorage:", error);
+      return {
+        "Blind 75": {},
+        "LeetCode 75": {},
+        "NeetCode 150": {},
+      };
+    }
+  });
 
   const [filterCategory, setFilterCategory] = useState("All");
   const [filterDifficulty, setFilterDifficulty] = useState("All");
   const [showOnlyDueToday, setShowOnlyDueToday] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
-  const [selectedList, setSelectedList] = useState("");
+  // --- Local state with localStorage ---
+  const [selectedList, setSelectedList] = useState(() => {
+    try {
+      return localStorage.getItem("leetcode-tracker-selected-list") || "NeetCode 150";
+    } catch (error) {
+      console.error("Error loading selected list from localStorage:", error);
+      return "NeetCode 150";
+    }
+  });
+
+  // Save selected list to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem("leetcode-tracker-selected-list", selectedList);
+    } catch (error) {
+      console.error("Error saving selected list to localStorage:", error);
+    }
+  }, [selectedList]);
 
 
-// Save progress to localStorage whenever it changes
+  // Save progress to localStorage whenever it changes
   useEffect(() => {
     try {
       localStorage.setItem("leetcode-progress-v2", JSON.stringify(progress));
@@ -68,59 +83,32 @@ const LeetCodeTracker = () => {
   // --- Helpers ---
   const today = new Date().toISOString().split("T")[0];
 
-  const calculateNextReviews = (solvedDate) => {
-    if (!solvedDate) return [];
-    const date = new Date(solvedDate);
-    return intervals.map(
-      (days) =>
-        new Date(date.getTime() + days * 24 * 60 * 60 * 1000)
-          .toISOString()
-          .split("T")[0]
-    );
-  };
-
-  const toggleComplete = (problemId, reviewIndex = null) => {
-    const todayStr = new Date().toISOString().split("T")[0];
+  const handleReview = (problemId, performance) => {
     setProgress((prev) => {
       const listProgress = prev[selectedList] || {};
-      const current = listProgress[problemId] || {
-        solved: false,
-        reviews: Array(5).fill(false),
-        dates: {},
-      };
+      const current = listProgress[problemId];
+      const problem = problems.find(p => p.id === problemId) || { difficulty: "Medium" };
 
-      if (reviewIndex === null) {
-        const newSolved = !current.solved;
-        return {
-          ...prev,
-          [selectedList]: {
-            ...listProgress,
-            [problemId]: {
-              ...current,
-              solved: newSolved,
-              solvedDate: newSolved ? todayStr : null,
-              reviews: newSolved ? current.reviews : Array(5).fill(false),
-              dates: newSolved ? { ...current.dates, initial: todayStr } : {},
-            },
-          },
+      // Returns a map of updates: { [listName]: { [probId]: newProgress } }
+      const updates = scheduleReview(
+        problem,
+        current,
+        performance,
+        prev,
+        selectedList
+      );
+
+      // Deep merge updates into previous state
+      const newState = { ...prev };
+
+      Object.keys(updates).forEach(listName => {
+        newState[listName] = {
+          ...(newState[listName] || {}),
+          ...updates[listName]
         };
-      } else {
-        const newReviews = [...current.reviews];
-        newReviews[reviewIndex] = !newReviews[reviewIndex];
-        const newDates = { ...current.dates };
-        if (newReviews[reviewIndex]) {
-          newDates[`review${reviewIndex + 1}`] = todayStr;
-        } else {
-          delete newDates[`review${reviewIndex + 1}`];
-        }
-        return {
-          ...prev,
-          [selectedList]: {
-            ...listProgress,
-            [problemId]: { ...current, reviews: newReviews, dates: newDates },
-          },
-        };
-      }
+      });
+
+      return newState;
     });
   };
 
@@ -133,41 +121,38 @@ const LeetCodeTracker = () => {
   ];
   const difficulties = ["All", "Easy", "Medium", "Hard"];
 
-   const stats = {
-     total: problems.length,
-     solved: problems.filter((p) => currentProgress[p.id]?.solved).length,
-     easy: problems.filter(
-       (p) => p.difficulty === "Easy" && currentProgress[p.id]?.solved
-     ).length,
-     medium: problems.filter(
-       (p) => p.difficulty === "Medium" && currentProgress[p.id]?.solved
-     ).length,
-     hard: problems.filter(
-       (p) => p.difficulty === "Hard" && currentProgress[p.id]?.solved
-     ).length,
-   };
+  const stats = {
+    total: problems.length,
+    solved: problems.filter((p) => currentProgress[p.id]?.solved).length,
+    easy: problems.filter(
+      (p) => p.difficulty === "Easy" && currentProgress[p.id]?.solved
+    ).length,
+    medium: problems.filter(
+      (p) => p.difficulty === "Medium" && currentProgress[p.id]?.solved
+    ).length,
+    hard: problems.filter(
+      (p) => p.difficulty === "Hard" && currentProgress[p.id]?.solved
+    ).length,
+  };
 
   const getDueProblems = () => {
     return problems.filter((problem) => {
       const prob = currentProgress[problem.id];
       if (!prob || !prob.solved) return false;
-      const nextReviews = calculateNextReviews(prob.solvedDate);
-      return nextReviews.some(
-        (date, idx) => !prob.reviews?.[idx] && date <= today
-      );
+      return prob.nextReview && prob.nextReview <= today;
     }).length;
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 transition-colors">
+    <div className="min-h-screen bg-background-page p-4 transition-colors">
       <div className="max-w-7xl mx-auto">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6 transition-colors">
+        <div className="bg-background-surface rounded-lg shadow-lg p-6 mb-6 transition-colors">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
+              <h1 className="text-3xl font-bold text-text-main mb-2">
                 CodeTrack Pro - {selectedList} Progress Tracker
               </h1>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-text-muted">
                 Track your progress with spaced repetition
               </p>
             </div>
@@ -178,7 +163,7 @@ const LeetCodeTracker = () => {
                 value={selectedList}
                 title="Select a problem list"
                 onChange={(e) => setSelectedList(e.target.value)}
-                className="px-4 py-2 cursor-pointer rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none"
+                className="px-4 py-2 cursor-pointer rounded border border-border-default bg-background-surface text-text-main focus:outline-none"
               >
                 <option value="" disabled>
                   Select List
@@ -195,7 +180,7 @@ const LeetCodeTracker = () => {
                 href={roadmapLinks[selectedList]}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-status-warning hover:opacity-90 text-white rounded transition-colors"
                 title="View the official NeetCode roadmap"
               >
                 <Map size={16} /> Roadmap <ExternalLink size={14} />
@@ -207,7 +192,7 @@ const LeetCodeTracker = () => {
           <div className="mt-4">
             <button
               onClick={() => setShowExplanation(!showExplanation)}
-              className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm transition-colors"
+              className="flex items-center gap-2 text-primary hover:text-primary-hover transition-colors text-sm"
             >
               <Info size={16} />
               {showExplanation ? "Hide" : "Show"} Spaced Repetition Info
@@ -217,49 +202,21 @@ const LeetCodeTracker = () => {
 
         {/* Explanation Section */}
         {showExplanation && (
-          <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg p-6 mb-6 transition-colors">
-            <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-300 mb-3">
+          <div className="bg-primary-light border border-primary-light rounded-lg p-6 mb-6 transition-colors">
+            <h3 className="text-lg font-semibold text-primary-text mb-3">
               How Spaced Repetition Works
             </h3>
-            <div className="text-blue-700 dark:text-blue-200 space-y-2">
-              <p>
-                This tracker uses spaced repetition to help you retain coding
-                problems long-term.
+            <div className="text-primary-text mt-2">
+              <p className="mb-2">
+                This tracker uses a <strong>Fair Review Scheduler</strong> based on the Completely Fair Scheduler (CFS) logic.
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                <div>
-                  <h4 className="font-semibold mb-2">Review Schedule:</h4>
-                  <ul className="space-y-1 text-sm">
-                    <li>
-                      <strong>R1:</strong> Review after 1 day
-                    </li>
-                    <li>
-                      <strong>R2:</strong> Review after 3 days
-                    </li>
-                    <li>
-                      <strong>R3:</strong> Review after 7 days (1 week)
-                    </li>
-                    <li>
-                      <strong>R4:</strong> Review after 14 days (2 weeks)
-                    </li>
-                    <li>
-                      <strong>R5:</strong> Review after 30 days (1 month)
-                    </li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2">How to Use:</h4>
-                  <ul className="space-y-1 text-sm">
-                    <li>1. Mark a problem as solved when you complete it</li>
-                    <li>2. Review buttons (R1-R5) will show required dates</li>
-                    <li>
-                      3. Click review buttons when you successfully review
-                    </li>
-                    <li>4. Use "Due Today" filter to see what needs review</li>
-                    <li>5. Check the Official Roadmap for study guidance</li>
-                  </ul>
-                </div>
-              </div>
+              <ul className="list-disc list-inside space-y-1 text-sm">
+                <li>Rate your performance (1-5) after solving each problem.</li>
+                <li><strong>1-2 (Struggled):</strong> High penalty, review scheduled for tomorrow.</li>
+                <li><strong>3 (Okay):</strong> Moderate interval increase (1.5x).</li>
+                <li><strong>4-5 (Good):</strong> Large interval increase (2.5x).</li>
+                <li><strong>Load Balancing:</strong> The system automatically distributes reviews to avoid overloaded days.</li>
+              </ul>
             </div>
           </div>
         )}
@@ -292,12 +249,14 @@ const LeetCodeTracker = () => {
           setShowOnlyDueToday={setShowOnlyDueToday}
         />
 
+        {/* Daily Progress Forecast */}
+        <DailyProgress progress={progress} />
+
         {/* Problems Table */}
         <ProblemTable
           problems={problems}
           progress={currentProgress}
-          toggleComplete={toggleComplete}
-          calculateNextReviews={calculateNextReviews}
+          handleReview={handleReview}
           filterCategory={filterCategory}
           filterDifficulty={filterDifficulty}
           showOnlyDueToday={showOnlyDueToday}

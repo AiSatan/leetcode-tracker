@@ -14,7 +14,7 @@ const CircularProgress = ({ solved, total, size = 120 }) => {
           stroke="currentColor"
           strokeWidth="10"
           fill="none"
-          className="text-gray-200 dark:text-gray-700"
+          className="text-border-default"
         />
         <circle
           cx={size / 2}
@@ -25,13 +25,13 @@ const CircularProgress = ({ solved, total, size = 120 }) => {
           fill="none"
           strokeDasharray={circumference}
           strokeDashoffset={offset}
-          className="text-blue-600 dark:text-blue-500 transition-all duration-500"
+          className="text-primary transition-all duration-500"
           strokeLinecap="round"
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="text-center">
-          <div className="text-2xl font-bold text-gray-800 dark:text-white">
+          <div className="text-2xl font-bold text-text-main">
             {solved}/{total}
           </div>
         </div>
@@ -46,8 +46,8 @@ const CircularStatsCard = ({ stats, problems }) => {
   const totalHard = problems.filter((p) => p.difficulty === "Hard").length;
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors">
-      <h2 className="text-xl font-semibold mb-6 text-gray-800 dark:text-white">
+    <div className="bg-background-surface rounded-lg shadow-lg p-6 transition-colors">
+      <h2 className="text-xl font-semibold mb-6 text-text-main">
         Progress Overview
       </h2>
 
@@ -60,23 +60,22 @@ const CircularStatsCard = ({ stats, problems }) => {
           {/* Easy */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 flex-1">
-              <div className="w-3 h-3 rounded-full bg-green-500"></div>
-              <span className="text-gray-700 dark:text-gray-300 font-medium">
+              <div className="w-3 h-3 rounded-full bg-status-success"></div>
+              <span className="text-text-muted font-medium">
                 Easy
               </span>
             </div>
             <div className="flex items-center gap-4 flex-1">
-              <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+              <div className="flex-1 bg-background-subtle rounded-full h-2">
                 <div
-                  className="bg-green-500 h-2 rounded-full transition-all duration-500"
+                  className="bg-status-success h-2 rounded-full transition-all duration-500"
                   style={{
-                    width: `${
-                      totalEasy > 0 ? (stats.easy / totalEasy) * 100 : 0
-                    }%`,
+                    width: `${totalEasy > 0 ? (stats.easy / totalEasy) * 100 : 0
+                      }%`,
                   }}
                 ></div>
               </div>
-              <span className="text-sm font-semibold text-gray-800 dark:text-white min-w-[60px] text-right">
+              <span className="text-sm font-semibold text-text-main min-w-[60px] text-right">
                 {stats.easy}/{totalEasy}
               </span>
             </div>
@@ -85,23 +84,22 @@ const CircularStatsCard = ({ stats, problems }) => {
           {/* Medium */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 flex-1">
-              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-              <span className="text-gray-700 dark:text-gray-300 font-medium">
+              <div className="w-3 h-3 rounded-full bg-status-warning"></div>
+              <span className="text-text-muted font-medium">
                 Medium
               </span>
             </div>
             <div className="flex items-center gap-4 flex-1">
-              <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+              <div className="flex-1 bg-background-subtle rounded-full h-2">
                 <div
-                  className="bg-yellow-500 h-2 rounded-full transition-all duration-500"
+                  className="bg-status-warning h-2 rounded-full transition-all duration-500"
                   style={{
-                    width: `${
-                      totalMedium > 0 ? (stats.medium / totalMedium) * 100 : 0
-                    }%`,
+                    width: `${totalMedium > 0 ? (stats.medium / totalMedium) * 100 : 0
+                      }%`,
                   }}
                 ></div>
               </div>
-              <span className="text-sm font-semibold text-gray-800 dark:text-white min-w-[60px] text-right">
+              <span className="text-sm font-semibold text-text-main min-w-[60px] text-right">
                 {stats.medium}/{totalMedium}
               </span>
             </div>
@@ -110,23 +108,22 @@ const CircularStatsCard = ({ stats, problems }) => {
           {/* Hard */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 flex-1">
-              <div className="w-3 h-3 rounded-full bg-red-500"></div>
-              <span className="text-gray-700 dark:text-gray-300 font-medium">
+              <div className="w-3 h-3 rounded-full bg-status-error"></div>
+              <span className="text-text-muted font-medium">
                 Hard
               </span>
             </div>
             <div className="flex items-center gap-4 flex-1">
-              <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+              <div className="flex-1 bg-background-subtle rounded-full h-2">
                 <div
-                  className="bg-red-500 h-2 rounded-full transition-all duration-500"
+                  className="bg-status-error h-2 rounded-full transition-all duration-500"
                   style={{
-                    width: `${
-                      totalHard > 0 ? (stats.hard / totalHard) * 100 : 0
-                    }%`,
+                    width: `${totalHard > 0 ? (stats.hard / totalHard) * 100 : 0
+                      }%`,
                   }}
                 ></div>
               </div>
-              <span className="text-sm font-semibold text-gray-800 dark:text-white min-w-[60px] text-right">
+              <span className="text-sm font-semibold text-text-main min-w-[60px] text-right">
                 {stats.hard}/{totalHard}
               </span>
             </div>
@@ -135,21 +132,21 @@ const CircularStatsCard = ({ stats, problems }) => {
       </div>
 
       {/* Additional Stats */}
-      <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+      <div className="mt-6 pt-6 border-t border-border-default">
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-purple-50 dark:bg-purple-900/30 rounded-lg p-4">
-            <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+          <div className="bg-primary-light rounded-lg p-4">
+            <div className="text-2xl font-bold text-primary">
               {stats.dueToday || 0}
             </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="text-sm text-text-muted">
               Due Today
             </div>
           </div>
-          <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-4">
-            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+          <div className="bg-primary-light rounded-lg p-4">
+            <div className="text-2xl font-bold text-primary">
               {Math.round((stats.solved / stats.total) * 100) || 0}%
             </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="text-sm text-text-muted">
               Completion
             </div>
           </div>

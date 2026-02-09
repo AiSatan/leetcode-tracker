@@ -1,11 +1,11 @@
 const colorClasses = {
-  blue: "bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400",
-  green: "bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400",
+  blue: "bg-primary-light text-primary",
+  green: "bg-status-success/10 text-status-success",
   yellow:
-    "bg-yellow-50 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400",
-  red: "bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400",
+    "bg-status-warning/10 text-status-warning",
+  red: "bg-status-error/10 text-status-error",
   purple:
-    "bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400",
+    "bg-primary-light text-primary", // Mapping purple to primary for now to ensure theme spread
 };
 
 const StatsCard = ({ color, value, label }) => (

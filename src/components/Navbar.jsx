@@ -6,24 +6,24 @@ const Navbar = () => {
   const { isDark, toggleTheme } = useTheme();
 
   return (
-    <nav className="bg-white dark:bg-gray-900 shadow dark:shadow-gray-800 mb-6 transition-colors duration-300">
+    <nav className="bg-background-surface shadow mb-6 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex gap-3 sm:gap-6">
           <Link
             to="/"
-            className="font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition"
+            className="font-bold text-primary hover:text-primary-hover transition"
           >
             Tracker
           </Link>
           <Link
             to="/patterns"
-            className="font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition"
+            className="font-bold text-primary hover:text-primary-hover transition"
           >
             Patterns
           </Link>
           <Link
             to="/roadmap"
-            className="font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition"
+            className="font-bold text-primary hover:text-primary-hover transition"
           >
             Roadmap
           </Link>
@@ -34,22 +34,22 @@ const Navbar = () => {
           {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
-            className="h-10 w-10 flex items-center justify-center rounded bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300"
+            className="h-10 w-10 flex items-center justify-center rounded bg-background-subtle hover:bg-background-highlight transition-all duration-300"
             aria-label="Toggle theme"
           >
             {isDark ? (
-              <Sun size={20} className="text-yellow-500 animate-spin-slow" />
+              <Sun size={20} className="text-status-warning animate-spin-slow" />
             ) : (
-              <Moon size={20} className="text-gray-700 dark:text-gray-200" />
+              <Moon size={20} className="text-text-muted" />
             )}
           </button>
 
           {/* GitHub Button */}
           <a
-            href="https://github.com/javydevx/neetcode-tracker"
+            href="https://github.com/AiSatan/leetcode-tracker"
             target="_blank"
             rel="noopener noreferrer"
-            className="h-10 group relative flex items-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white rounded overflow-hidden font-semibold transition-all duration-300 hover:shadow-xl"
+            className="h-10 group relative flex items-center gap-2 px-4 py-2 bg-background-subtle text-text-main rounded overflow-hidden font-semibold transition-all duration-300 hover:shadow-xl"
           >
             <span className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
             <Github
