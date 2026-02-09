@@ -10,4 +10,7 @@ export default defineConfig({
       plugins: [tailwindcss, autoprefixer],
     },
   },
+  server: {
+    allowedHosts: ["leetcode-tracker-gp01.onrender.com"],
+  },
 });
