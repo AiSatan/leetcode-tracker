@@ -29,17 +29,23 @@ const DailyProgress = ({ progress }) => {
                             {Array.from({ length: maxTasksPerDay }).map((_, slotIdx) => {
                                 const task = day.tasks[slotIdx];
                                 const color = task ? getPerformanceColor(task.performance) : 'transparent';
+                                const hasTasks = day.tasks.length > 0;
+                                const isToday = day.label === "0";
+
+                                // Dashed/Striped if: Not today, Day has tasks, and this slot is empty
+                                const showStriped = !task && hasTasks && !isToday;
 
                                 return (
                                     <div
                                         key={slotIdx}
                                         className={`
-                      w-full h-1/5 rounded-sm transition-all
-                      ${!task ? 'bg-background-subtle' : ''}
-                    `}
+                                            w-full h-1/5 rounded-sm transition-all
+                                            ${!task && !showStriped ? 'bg-background-subtle' : ''}
+                                            ${showStriped ? 'bg-striped opacity-30' : ''}
+                                        `}
                                         style={{
                                             backgroundColor: task ? color : undefined,
-                                            border: task ? `1px solid ${color}` : undefined
+                                            boxShadow: task ? `0 0 10px color-mix(in srgb, ${color}, transparent 75%)` : undefined // Glow effect
                                         }}
                                         title={task ? `Task Solved. Score: ${task.performance}` : 'Empty Slot'}
                                     />

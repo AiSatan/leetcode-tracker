@@ -10,19 +10,19 @@ export const theme = {
         background: {
             page: {
                 light: "#f9fafb", // gray-50
-                dark: "#111827"   // gray-900
+                dark: "#050505"   // Obsidian Black
             },
             surface: {
                 light: "#ffffff", // white
-                dark: "#1f2937"   // gray-800
+                dark: "#121217"   // Deep Void
             },
             subtle: {
-                light: "#f9fafb", // gray-50 (used in headers, etc)
-                dark: "#374151"   // gray-700
+                light: "#f9fafb", // gray-50
+                dark: "#1c1c24"   // Lighter Void
             },
             highlight: {
-                light: "#eff6ff", // blue-50 (used in headers, etc)
-                dark: "rgba(30, 58, 138, 0.4)"   // blue-900/40
+                light: "#f5f3ff", // violet-50
+                dark: "rgba(139, 92, 246, 0.1)"   // Purple tint
             }
         },
 
@@ -30,7 +30,7 @@ export const theme = {
         text: {
             main: {
                 light: "#111827", // gray-900
-                dark: "#f3f4f6"   // gray-100
+                dark: "#ffffff"   // White
             },
             muted: {
                 light: "#6b7280", // gray-500
@@ -38,7 +38,7 @@ export const theme = {
             },
             inverted: {
                 light: "#ffffff",
-                dark: "#111827"
+                dark: "#000000"
             }
         },
 
@@ -46,57 +46,57 @@ export const theme = {
         border: {
             default: {
                 light: "#e5e7eb", // gray-200
-                dark: "#374151"   // gray-700
+                dark: "#27272a"   // zinc-800
             },
             focus: {
                 light: "#9ca3af", // gray-400
-                dark: "#4b5563"   // gray-600
+                dark: "#8b5cf6"   // violet-500
             }
         },
 
         // Brand / Interactive
         primary: {
             main: {
-                light: "#2563eb", // blue-600
-                dark: "#3b82f6"   // blue-500
+                light: "#7c3aed", // violet-600
+                dark: "#8b5cf6"   // violet-500
             },
             hover: {
-                light: "#1e40af", // blue-800
-                dark: "#93c5fd"   // blue-300
+                light: "#6d28d9", // violet-700
+                dark: "#a78bfa"   // violet-400
             },
             light: {
-                light: "#dbeafe", // blue-100
-                dark: "rgba(30, 58, 138, 0.4)" // blue-900/40
+                light: "#ede9fe", // violet-100
+                dark: "rgba(139, 92, 246, 0.15)" // violet-500/15
             },
             text: {
-                light: "#1d4ed8", // blue-700
-                dark: "#93c5fd"   // blue-300
+                light: "#5b21b6", // violet-800
+                dark: "#c4b5fd"   // violet-300
             }
         },
 
         // Status & Difficulty
         status: {
             success: {
-                light: "#16a34a", // green-600
-                dark: "#22c55e"   // green-500
+                light: "#16a34a",
+                dark: "#4ade80"   // green-400
             },
             warning: {
-                light: "#ca8a04", // yellow-600
-                dark: "#eab308"   // yellow-500
+                light: "#ca8a04",
+                dark: "#facc15"   // yellow-400
             },
             error: {
-                light: "#dc2626", // red-600
-                dark: "#ef4444"   // red-500
+                light: "#dc2626",
+                dark: "#f87171"   // red-400
             }
         },
 
         // Performance / Ratings (Likert Scale)
         performance: {
-            1: "#8c2f39", // Deep Crimson
-            2: "#b25d48", // Muted Rust
-            3: "#d6c68b", // Pale Gold
-            4: "#8aa29e", // Cold Teal
-            5: "#203354", // Deep Navy
+            1: { light: "#ef4444", dark: "#ff5252" }, // Red
+            2: { light: "#f97316", dark: "#ff9100" }, // Orange
+            3: { light: "#eab308", dark: "#ffd740" }, // Yellow
+            4: { light: "#0ea5e9", dark: "#40c4ff" }, // Blue
+            5: { light: "#22c55e", dark: "#69f0ae" }, // Green
         }
     }
 };
@@ -104,10 +104,10 @@ export const theme = {
 /**
  * Legacy support for direct performance color access.
  * @param {number} score 
- * @returns {string} Hex color
+ * @returns {string} CSS Variable or Hex color
  */
 export const getPerformanceColor = (score) => {
-    return theme.colors.performance[score] || "#e5e7eb";
+    return theme.colors.performance[score] ? `var(--color-performance-${score})` : "#e5e7eb";
 };
 
 
