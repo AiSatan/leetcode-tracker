@@ -1,5 +1,10 @@
 # 🧠 CodeTrack Pro - LeetCode Progress Tracker
 
+> This project builds on the original [LeetCode Tracker](https://github.com/javydevx/leetcode-tracker), adding several new features:
+> *   **Fair Review Scheduler**: A new repetition system inspired by the Completely Fair Scheduler (CFS). It uses a 1-5 rating scale to track your performance and schedule repetitions.
+> *   **Load Balancing**: The scheduler organizes tasks based on your score, the problem's difficulty, and available slots. It schedules harder tasks sooner and pushes easier ones further out. It also limits reviews to a maximum of 5 tasks per day so you don't get overwhelmed.
+> *   **New Theme**: New theme and support for theme changes.
+
 A modern, interactive web application to track your progress through the famous LeetCode problems with built-in spaced repetition system for long-term retention.
 
 ![LeetCode Tracker](https://img.shields.io/badge/React-18.2.0-blue.svg)
