@@ -29,11 +29,11 @@ const Patterns = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-6 transition-colors">
+    <div className="min-h-screen bg-background-page p-6 transition-colors">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-3">
-            <h1 className="text-4xl font-bold text-gray-800 dark:text-white">
+            <h1 className="text-4xl font-bold text-text-main">
               LeetCode Patterns Cheat Sheet
             </h1>
             <Code2
@@ -41,25 +41,24 @@ const Patterns = () => {
               className="text-blue-600 dark:text-blue-400 ml-2"
             />
           </div>
-          <p className="text-gray-600 dark:text-gray-300 text-lg">
+          <p className="text-text-muted text-lg">
             Master coding patterns in multiple languages
           </p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-8 sticky top-4 z-10 transition-colors">
+        <div className="bg-background-surface rounded-lg shadow-md p-4 mb-8 sticky top-4 z-10 transition-colors">
           <div className="flex items-center justify-center gap-3 flex-wrap">
-            <span className="text-gray-700 dark:text-gray-300 font-medium">
+            <span className="text-text-muted font-medium">
               Select Language:
             </span>
             {languages.map((lang) => (
               <button
                 key={lang.id}
                 onClick={() => setSelectedLanguage(lang.id)}
-                className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                  selectedLanguage === lang.id
+                className={`px-4 py-2 rounded-lg font-medium transition-all ${selectedLanguage === lang.id
                     ? `${lang.color} text-white shadow-lg scale-105`
-                    : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
-                }`}
+                    : "bg-background-subtle text-text-muted hover:bg-background-highlight"
+                  }`}
               >
                 {lang.name}
               </button>
@@ -71,7 +70,7 @@ const Patterns = () => {
           {patterns.map((pattern, idx) => (
             <div
               key={idx}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all"
+              className="bg-background-surface rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all"
             >
               <div className="bg-gradient-to-r from-indigo-500 to-blue-500 py-3 px-4">
                 <h2 className="text-lg font-bold text-white mb-1">
@@ -83,7 +82,7 @@ const Patterns = () => {
               <div className="p-6">
                 <div className="relative mb-4">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase">
+                    <span className="text-sm font-semibold text-text-muted uppercase">
                       {languages.find((l) => l.id === selectedLanguage)?.name}{" "}
                       Template
                     </span>
@@ -94,15 +93,15 @@ const Patterns = () => {
                           idx
                         )
                       }
-                      className="flex items-center gap-2 px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition-colors"
+                      className="flex items-center gap-2 px-3 py-1 text-sm bg-background-subtle hover:bg-background-highlight rounded transition-colors"
                     >
                       {copiedIndex === idx ? (
                         <>
                           <Check
                             size={16}
-                            className="text-green-600 dark:text-green-400"
+                            className="text-status-success"
                           />
-                          <span className="text-green-600 dark:text-green-400">
+                          <span className="text-status-success">
                             Copied!
                           </span>
                         </>
@@ -110,9 +109,9 @@ const Patterns = () => {
                         <>
                           <Copy
                             size={16}
-                            className="text-gray-700 dark:text-gray-300"
+                            className="text-text-muted"
                           />
-                          <span className="text-gray-700 dark:text-gray-300">
+                          <span className="text-text-muted">
                             Copy
                           </span>
                         </>
@@ -149,7 +148,7 @@ const Patterns = () => {
           ))}
         </div>
 
-        <div className="mt-12 text-center text-gray-600 dark:text-gray-400">
+        <div className="mt-12 text-center text-text-muted">
           <p className="text-sm">
             💡 Practice these patterns regularly to build strong problem-solving
             intuition

@@ -9,35 +9,35 @@ export const theme = {
         // Base Layout
         background: {
             page: {
-                light: "#f9fafb", // gray-50
-                dark: "#050505"   // Obsidian Black
+                light: "#EEE9DF", // Palladian
+                dark: "#1B2632"   // Abyssal Anchorfish Blue
             },
             surface: {
-                light: "#ffffff", // white
-                dark: "#121217"   // Deep Void
+                light: "#FFFFFF", // White
+                dark: "#2C3B4D"   // Blue Fantastic
             },
             subtle: {
-                light: "#f9fafb", // gray-50
-                dark: "#1c1c24"   // Lighter Void
+                light: "#C9C1B1", // Oatmeal
+                dark: "#233040"   // Slightly darker Blue Fantastic
             },
             highlight: {
-                light: "#f5f3ff", // violet-50
-                dark: "rgba(139, 92, 246, 0.1)"   // Purple tint
+                light: "#FFB162", // Burning Flame (low opacity usually)
+                dark: "rgba(255, 177, 98, 0.1)"   // Burning Flame tint
             }
         },
 
         // Typography
         text: {
             main: {
-                light: "#111827", // gray-900
-                dark: "#ffffff"   // White
+                light: "#1B2632", // Abyssal Anchorfish Blue
+                dark: "#EEE9DF"   // Palladian
             },
             muted: {
-                light: "#6b7280", // gray-500
-                dark: "#9ca3af"   // gray-400
+                light: "#5C6B7F", // Muted Blue
+                dark: "#C9C1B1"   // Oatmeal
             },
             inverted: {
-                light: "#ffffff",
+                light: "#FFFFFF",
                 dark: "#000000"
             }
         },
@@ -45,58 +45,58 @@ export const theme = {
         // Borders
         border: {
             default: {
-                light: "#e5e7eb", // gray-200
-                dark: "#27272a"   // zinc-800
+                light: "#C9C1B1", // Oatmeal
+                dark: "#374A5E"   // Lighter Blue Fantastic
             },
             focus: {
-                light: "#9ca3af", // gray-400
-                dark: "#8b5cf6"   // violet-500
+                light: "#A35139", // Truffle Trouble
+                dark: "#FFB162"   // Burning Flame
             }
         },
 
         // Brand / Interactive
         primary: {
             main: {
-                light: "#7c3aed", // violet-600
-                dark: "#8b5cf6"   // violet-500
+                light: "#A35139", // Truffle Trouble
+                dark: "#FFB162"   // Burning Flame
             },
             hover: {
-                light: "#6d28d9", // violet-700
-                dark: "#a78bfa"   // violet-400
+                light: "#8B4530", // Darker Truffle
+                dark: "#FFC285"   // Brighter Flame
             },
             light: {
-                light: "#ede9fe", // violet-100
-                dark: "rgba(139, 92, 246, 0.15)" // violet-500/15
+                light: "rgba(163, 81, 57, 0.1)", // Truffle Low Opacity
+                dark: "rgba(255, 177, 98, 0.15)" // Flame Low Opacity
             },
             text: {
-                light: "#5b21b6", // violet-800
-                dark: "#c4b5fd"   // violet-300
+                light: "#A35139", // Truffle Trouble
+                dark: "#FFB162"   // Burning Flame
             }
         },
 
         // Status & Difficulty
         status: {
             success: {
-                light: "#16a34a",
-                dark: "#4ade80"   // green-400
+                light: "#A35139", // Truffle Trouble
+                dark: "#FFB162"   // Burning Flame
             },
             warning: {
-                light: "#ca8a04",
-                dark: "#facc15"   // yellow-400
+                light: "#D97706",
+                dark: "#F59E0B"
             },
             error: {
-                light: "#dc2626",
-                dark: "#f87171"   // red-400
+                light: "#DC2626",
+                dark: "#EF4444"
             }
         },
 
         // Performance / Ratings (Likert Scale)
         performance: {
-            1: { light: "#ef4444", dark: "#ff5252" }, // Red
-            2: { light: "#f97316", dark: "#ff9100" }, // Orange
-            3: { light: "#eab308", dark: "#ffd740" }, // Yellow
-            4: { light: "#0ea5e9", dark: "#40c4ff" }, // Blue
-            5: { light: "#22c55e", dark: "#69f0ae" }, // Green
+            1: { light: "#A35139", dark: "#A35139" }, // Truffle Trouble
+            2: { light: "#B96943", dark: "#B96943" }, // Mix
+            3: { light: "#D0814D", dark: "#D0814D" }, // Mix
+            4: { light: "#E79957", dark: "#E79957" }, // Mix
+            5: { light: "#FFB162", dark: "#FFB162" }, // Burning Flame
         }
     }
 };
