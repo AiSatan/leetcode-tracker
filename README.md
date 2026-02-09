@@ -5,6 +5,7 @@
 > *   **Load Balancing**: The scheduler organizes tasks based on your score, the problem's difficulty, and available slots. It schedules harder tasks sooner and pushes easier ones further out. It also limits reviews to a maximum of 5 tasks per day so you don't get overwhelmed.
 > *   **New Theme**: New theme and support for theme changes.
 > *   **Docker support**: Added docker and docker-compose files for easy deployment.
+> *   **Try it**: [You can try this version here https://leetcode-tracker-gp01.onrender.com](https://leetcode-tracker-gp01.onrender.com)
 
 A modern, interactive web application to track your progress through the famous LeetCode problems with built-in spaced repetition system for long-term retention.
 
