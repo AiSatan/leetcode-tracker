@@ -87,7 +87,7 @@ const InterviewRoadmap = () => {
           <button
             onClick={() => setActiveTab("interview")}
             className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all ${activeTab === "interview"
-              ? "bg-primary-main text-white shadow-lg"
+              ? "bg-primary-main text-text-inverted shadow-lg"
               : "bg-background-subtle text-text-muted hover:bg-background-highlight"
               }`}
           >
@@ -96,7 +96,7 @@ const InterviewRoadmap = () => {
           <button
             onClick={() => setActiveTab("dsa")}
             className={`flex-1 py-2 px-6 rounded-lg font-semibold transition-all ${activeTab === "dsa"
-              ? "bg-primary-main text-white shadow-lg"
+              ? "bg-primary-main text-text-inverted shadow-lg"
               : "bg-background-subtle text-text-muted hover:bg-background-highlight"
               }`}
           >
@@ -125,10 +125,10 @@ const InterviewRoadmap = () => {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <div className="bg-white bg-opacity-20 p-2 rounded-lg">
-                          <Icon size={32} className="text-white" />
+                          <Icon size={32} className="text-text-inverted" />
                         </div>
                         <div>
-                          <h2 className="text-lg font-bold text-white">
+                          <h2 className="text-lg font-bold text-text-inverted">
                             {idx + 1}. {section.title}
                           </h2>
                           <div className="flex items-center gap-2 mt-2">
@@ -138,16 +138,16 @@ const InterviewRoadmap = () => {
                                 style={{ width: `${progress}%` }}
                               />
                             </div>
-                            <span className="text-white text-xs font-semibold">
+                            <span className="text-text-inverted text-xs font-semibold">
                               {progress}%
                             </span>
                           </div>
                         </div>
                       </div>
                       {isExpanded ? (
-                        <ChevronDown size={24} className="text-white" />
+                        <ChevronDown size={24} className="text-text-inverted" />
                       ) : (
-                        <ChevronRight size={24} className="text-white" />
+                        <ChevronRight size={24} className="text-text-inverted" />
                       )}
                     </div>
                   </div>
@@ -227,7 +227,7 @@ const InterviewRoadmap = () => {
                   className="bg-background-surface rounded-lg shadow-lg overflow-hidden"
                 >
                   <div className={`${section.color} py-3 px-4`}>
-                    <h3 className="text-lg font-bold text-white">
+                    <h3 className="text-lg font-bold text-text-inverted">
                       {section.title}
                     </h3>
                   </div>
