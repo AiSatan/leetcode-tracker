@@ -51,7 +51,7 @@ const Navbar = () => {
             rel="noopener noreferrer"
             className="h-10 group relative flex items-center gap-2 px-4 py-2 bg-background-subtle text-text-main rounded overflow-hidden font-semibold transition-all duration-300 hover:shadow-xl"
           >
-            <span className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+            <span className="absolute inset-0 bg-gradient-to-r from-[#A35139] to-[#FFB162] translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
             <Github
               size={20}
               className="relative z-10 group-hover:rotate-12 transition-transform duration-300"

@@ -97,23 +97,27 @@ const ProblemTable = ({
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-sm text-text-main">
                     <div className="flex flex-wrap gap-1.5 max-w-[192px]">
-                      {problem.listMeta?.section || problem.listMeta?.module ? (
-                        <span
-                          className="px-2 py-1 text-xs bg-background-subtle text-text-muted rounded"
-                          title="Category"
-                        >
-                          {problem.listMeta.section || problem.listMeta.module}
-                        </span>
-                      ) : null}
-                      {(problem.topics || []).map((t, idx) => (
-                        <span
-                          key={idx}
-                          className="px-2 py-1 text-xs bg-primary-light text-primary-text rounded"
-                          title="Topic"
-                        >
-                          {t}
-                        </span>
-                      ))}
+                      {(() => {
+                        const section = problem.listMeta?.section || problem.listMeta?.module;
+                        const topics = problem.topics || [];
+                        const uniqueTags = new Set();
+
+                        if (section) uniqueTags.add(section);
+                        topics.forEach(t => uniqueTags.add(t));
+
+                        return Array.from(uniqueTags).map((tag, idx) => (
+                          <span
+                            key={idx}
+                            className={`px-2 py-1 text-xs rounded ${tag === section
+                                ? "bg-background-subtle text-text-muted border border-border-default"
+                                : "bg-primary-light text-primary-text"
+                              }`}
+                            title="Category/Topic"
+                          >
+                            {tag}
+                          </span>
+                        ));
+                      })()}
                     </div>
                   </td>
                   <td
@@ -203,7 +207,7 @@ const ProblemTable = ({
           </tbody>
         </table>
       </div>
-    </div>
+    </div >
   );
 };
 
