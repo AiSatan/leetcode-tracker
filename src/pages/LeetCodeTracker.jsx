@@ -7,6 +7,7 @@ import {
   ProblemTable,
   ExportImportControls,
   CircularStatsCard,
+  DailyProgress,
 } from "../components";
 import { blind75, leetcode75, neetcode150 } from "../data";
 
@@ -247,6 +248,9 @@ const LeetCodeTracker = () => {
           showOnlyDueToday={showOnlyDueToday}
           setShowOnlyDueToday={setShowOnlyDueToday}
         />
+
+        {/* Daily Progress Forecast */}
+        <DailyProgress progress={progress} />
 
         {/* Problems Table */}
         <ProblemTable

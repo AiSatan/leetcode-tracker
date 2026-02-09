@@ -219,6 +219,7 @@ const performLoadBalancing = (targetDate, allProgress) => {
     return bestDate.toISOString().split('T')[0];
 };
 
+
 export const getReviewStatus = (problemId, progress) => {
     const prob = progress[problemId];
     if (!prob || !prob.solved) return 'unsolved';
@@ -227,4 +228,70 @@ export const getReviewStatus = (problemId, progress) => {
     if (!prob.nextReview || prob.nextReview <= today) return 'due';
 
     return 'future';
+};
+
+/**
+ * Generates a forecast of tasks for the next days.
+ * @param {object} allProgress - The global progress object { listName: { problemId: { ... } } }
+ * @param {number} days - Number of days to forecast (default 11: today + 10 days)
+ * @returns {Array} Array of day objects: { date: 'YYYY-MM-DD', label: '0'...'10', tasks: [] }
+ */
+export const getDailyForecast = (allProgress, days = 11) => {
+    const forecast = [];
+    const today = new Date();
+
+    // 1. Collect all scheduled reviews
+    const reviewsByDate = {};
+
+    // Helper to add task to date bucket
+    const addToDate = (dateStr, task) => {
+        if (!reviewsByDate[dateStr]) {
+            reviewsByDate[dateStr] = [];
+        }
+        reviewsByDate[dateStr].push(task);
+    };
+
+    // Iterate through all lists and problems
+    Object.keys(allProgress).forEach(listName => {
+        Object.keys(allProgress[listName]).forEach(problemId => {
+            const prob = allProgress[listName][problemId];
+
+            // Only care about solved problems with a nextReview date
+            if (prob.solved && prob.nextReview) {
+                // Determine if it's "Due Today" (or overdue) or "Future"
+                const todayStr = today.toISOString().split('T')[0];
+                let targetDate = prob.nextReview;
+
+                // If due in the past, group it with today
+                if (targetDate < todayStr) {
+                    targetDate = todayStr;
+                }
+
+                addToDate(targetDate, {
+                    id: problemId,
+                    list: listName,
+                    performance: prob.performance || 0, // Default to 0 (no color) if undefined
+                    difficulty: prob.difficulty
+                });
+            }
+        });
+    });
+
+    // 2. Build the forecast array
+    for (let i = 0; i < days; i++) {
+        const dateObj = new Date(today);
+        dateObj.setDate(today.getDate() + i);
+        const dateStr = dateObj.toISOString().split('T')[0];
+
+        const dayLabel = i === 0 ? "0" : `${i}`;
+
+        forecast.push({
+            dayIndex: i,
+            date: dateStr,
+            label: dayLabel,
+            tasks: reviewsByDate[dateStr] || []
+        });
+    }
+
+    return forecast;
 };

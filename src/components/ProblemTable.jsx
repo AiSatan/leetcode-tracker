@@ -1,5 +1,6 @@
 import { CheckCircle2, Circle, Calendar, ExternalLink, Minus, Star } from "lucide-react";
 import { getReviewStatus } from "../utils/scheduler";
+import { getPerformanceColor } from "../utils/theme";
 
 const difficultyColor = {
   Easy: "text-green-600",
@@ -144,21 +145,20 @@ const ProblemTable = ({
                           Rate how well you did:
                         </span>
                         <div className="flex gap-1">
-                          {[1, 2, 3, 4, 5].map((rating) => (
-                            <button
-                              key={rating}
-                              onClick={() => handleReview(problem.id, rating)}
-                              className={`
-                                w-8 h-8 rounded flex items-center justify-center text-sm font-bold transition-all transform hover:scale-110
-                                ${rating <= 2 ? 'bg-red-100 hover:bg-red-200 text-red-700 border border-red-200' : ''}
-                                ${rating === 3 ? 'bg-yellow-100 hover:bg-yellow-200 text-yellow-700 border border-yellow-200' : ''}
-                                ${rating >= 4 ? 'bg-green-100 hover:bg-green-200 text-green-700 border border-green-200' : ''}
-                              `}
-                              title={`Rate ${rating}/5`}
-                            >
-                              {rating}
-                            </button>
-                          ))}
+                          {[1, 2, 3, 4, 5].map((rating) => {
+                            const color = getPerformanceColor(rating);
+                            return (
+                              <button
+                                key={rating}
+                                onClick={() => handleReview(problem.id, rating)}
+                                className="w-8 h-8 rounded flex items-center justify-center text-sm font-bold text-white transition-all transform hover:scale-110 shadow-sm"
+                                style={{ backgroundColor: color }}
+                                title={`Rate ${rating}/5`}
+                              >
+                                {rating}
+                              </button>
+                            )
+                          })}
                         </div>
                       </div>
                     ) : (
@@ -174,6 +174,7 @@ const ProblemTable = ({
                         <div className="flex gap-1">
                           {[1, 2, 3, 4, 5].map((rating) => {
                             const isSelected = prob.performance === rating;
+                            const color = getPerformanceColor(rating);
                             return (
                               <button
                                 key={rating}
@@ -181,15 +182,14 @@ const ProblemTable = ({
                                 className={`
                                   w-8 h-8 rounded flex items-center justify-center text-sm font-bold transition-all
                                   cursor-not-allowed
-                                  ${isSelected
-                                    ? (rating <= 2 ? 'bg-red-200 text-red-800 border-red-300 ring-2 ring-red-400'
-                                      : rating === 3 ? 'bg-yellow-200 text-yellow-800 border-yellow-300 ring-2 ring-yellow-400'
-                                        : 'bg-green-200 text-green-800 border-green-300 ring-2 ring-green-400')
-                                    : 'bg-gray-100 text-gray-400 border-gray-200 dark:bg-gray-700 dark:text-gray-500 dark:border-gray-600'}
+                                  ${!isSelected ? 'opacity-30' : 'ring-2 ring-offset-1 ring-gray-400 dark:ring-gray-600'}
                                 `}
+                                style={{
+                                  backgroundColor: isSelected ? color : (prob.performance ? getPerformanceColor(prob.performance) : undefined)
+                                }}
                                 title={`Last rating: ${prob.performance || 'N/A'}`}
                               >
-                                {rating}
+                                {isSelected ? rating : ''}
                               </button>
                             );
                           })}
