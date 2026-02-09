@@ -144,15 +144,15 @@ const LeetCodeTracker = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 transition-colors">
+    <div className="min-h-screen bg-background-page p-4 transition-colors">
       <div className="max-w-7xl mx-auto">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6 transition-colors">
+        <div className="bg-background-surface rounded-lg shadow-lg p-6 mb-6 transition-colors">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
+              <h1 className="text-3xl font-bold text-text-main mb-2">
                 CodeTrack Pro - {selectedList} Progress Tracker
               </h1>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-text-muted">
                 Track your progress with spaced repetition
               </p>
             </div>
@@ -163,7 +163,7 @@ const LeetCodeTracker = () => {
                 value={selectedList}
                 title="Select a problem list"
                 onChange={(e) => setSelectedList(e.target.value)}
-                className="px-4 py-2 cursor-pointer rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none"
+                className="px-4 py-2 cursor-pointer rounded border border-border-default bg-background-surface text-text-main focus:outline-none"
               >
                 <option value="" disabled>
                   Select List
@@ -180,7 +180,7 @@ const LeetCodeTracker = () => {
                 href={roadmapLinks[selectedList]}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-status-warning hover:opacity-90 text-white rounded transition-colors"
                 title="View the official NeetCode roadmap"
               >
                 <Map size={16} /> Roadmap <ExternalLink size={14} />
@@ -192,7 +192,7 @@ const LeetCodeTracker = () => {
           <div className="mt-4">
             <button
               onClick={() => setShowExplanation(!showExplanation)}
-              className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm transition-colors"
+              className="flex items-center gap-2 text-primary hover:text-primary-hover transition-colors text-sm"
             >
               <Info size={16} />
               {showExplanation ? "Hide" : "Show"} Spaced Repetition Info
@@ -202,11 +202,11 @@ const LeetCodeTracker = () => {
 
         {/* Explanation Section */}
         {showExplanation && (
-          <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg p-6 mb-6 transition-colors">
-            <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-300 mb-3">
+          <div className="bg-primary-light border border-primary-light rounded-lg p-6 mb-6 transition-colors">
+            <h3 className="text-lg font-semibold text-primary-text mb-3">
               How Spaced Repetition Works
             </h3>
-            <div className="text-blue-700 dark:text-blue-200 mt-2">
+            <div className="text-primary-text mt-2">
               <p className="mb-2">
                 This tracker uses a <strong>Fair Review Scheduler</strong> based on the Completely Fair Scheduler (CFS) logic.
               </p>

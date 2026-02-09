@@ -3,9 +3,9 @@ import { getReviewStatus } from "../utils/scheduler";
 import { getPerformanceColor } from "../utils/theme";
 
 const difficultyColor = {
-  Easy: "text-green-600",
-  Medium: "text-yellow-600",
-  Hard: "text-red-600",
+  Easy: "text-status-success",
+  Medium: "text-status-warning",
+  Hard: "text-status-error",
 };
 
 const ProblemTable = ({
@@ -42,52 +42,52 @@ const ProblemTable = ({
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors">
-      <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
+    <div className="bg-background-surface rounded-lg shadow-lg p-6 transition-colors">
+      <h2 className="text-xl font-semibold mb-4 text-text-main">
         Problems
       </h2>
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-700">
-            <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-16">
+        <table className="min-w-full divide-y divide-border-default">
+          <thead className="bg-background-subtle">
+            <tr className="hover:bg-background-subtle">
+              <th className="px-4 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider w-16">
                 #
               </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider min-w-[200px]">
+              <th className="px-4 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider min-w-[200px]">
                 Name
               </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-40">
+              <th className="px-4 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider w-40">
                 Category
               </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-24">
+              <th className="px-4 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider w-24">
                 Difficulty
               </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-32">
+              <th className="px-4 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider w-32">
                 Status
               </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider min-w-[200px]">
+              <th className="px-4 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider min-w-[200px]">
                 Reviews & Due Dates
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody className="bg-background-surface divide-y divide-border-default">
             {filteredProblems.map((problem, index) => {
               const prob = progress[problem.id] || {};
               return (
                 <tr
                   key={problem.id}
-                  className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                  className="hover:bg-background-subtle"
                 >
-                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                  <td className="px-4 py-4 whitespace-nowrap text-sm text-text-main">
                     {index + 1}
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-900 dark:text-gray-100">
+                  <td className="px-4 py-4 text-sm text-text-main">
                     <div className="flex items-center gap-2">
                       <a
                         href={problem.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline flex items-center gap-1"
+                        className="text-primary hover:text-primary-hover hover:underline flex items-center gap-1"
                         title={`Open ${problem.name} on NeetCode`}
                       >
                         <span className="line-clamp-2">{problem.title}</span>
@@ -95,11 +95,11 @@ const ProblemTable = ({
                       </a>
                     </div>
                   </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                  <td className="px-4 py-4 whitespace-nowrap text-sm text-text-main">
                     <div className="flex flex-wrap gap-1.5 max-w-[192px]">
                       {problem.listMeta?.section || problem.listMeta?.module ? (
                         <span
-                          className="px-2 py-1 text-xs bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded"
+                          className="px-2 py-1 text-xs bg-background-subtle text-text-muted rounded"
                           title="Category"
                         >
                           {problem.listMeta.section || problem.listMeta.module}
@@ -108,7 +108,7 @@ const ProblemTable = ({
                       {(problem.topics || []).map((t, idx) => (
                         <span
                           key={idx}
-                          className="px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded"
+                          className="px-2 py-1 text-xs bg-primary-light text-primary-text rounded"
                           title="Topic"
                         >
                           {t}
@@ -123,10 +123,10 @@ const ProblemTable = ({
                     {problem.difficulty}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                    <div className="flex items-center gap-2 text-text-muted">
                       {prob.solved ? (
                         <CheckCircle2
-                          className="text-green-600 dark:text-green-500"
+                          className="text-status-success"
                           size={20}
                         />
                       ) : (
@@ -141,7 +141,7 @@ const ProblemTable = ({
                     {/* Review Actions */}
                     {(!prob.solved || (prob.nextReview && prob.nextReview <= today)) ? (
                       <div className="flex flex-col gap-1">
-                        <span className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                        <span className="text-xs font-medium text-text-muted mb-1">
                           Rate how well you did:
                         </span>
                         <div className="flex gap-1">
@@ -164,10 +164,10 @@ const ProblemTable = ({
                     ) : (
                       <div className="flex flex-col gap-1 opacity-75">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                          <span className="text-xs font-medium text-text-muted">
                             Last Score:
                           </span>
-                          <span className="text-xs text-gray-400">
+                          <span className="text-xs text-text-muted">
                             Next: {formatDate(prob.nextReview)} ({prob.interval}d)
                           </span>
                         </div>
@@ -182,7 +182,7 @@ const ProblemTable = ({
                                 className={`
                                   w-8 h-8 rounded flex items-center justify-center text-sm font-bold transition-all
                                   cursor-not-allowed
-                                  ${!isSelected ? 'opacity-30' : 'ring-2 ring-offset-1 ring-gray-400 dark:ring-gray-600'}
+                                  ${!isSelected ? 'opacity-30' : 'ring-2 ring-offset-1 ring-border-focus'}
                                 `}
                                 style={{
                                   backgroundColor: isSelected ? color : (prob.performance ? getPerformanceColor(prob.performance) : undefined)

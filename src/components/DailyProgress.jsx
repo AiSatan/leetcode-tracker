@@ -11,8 +11,8 @@ const DailyProgress = ({ progress }) => {
     }, [progress]);
 
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6 transition-colors">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
+        <div className="bg-background-surface rounded-lg shadow-lg p-6 mb-6 transition-colors">
+            <h2 className="text-xl font-semibold mb-4 text-text-main">
                 10-Day Forecast
             </h2>
 
@@ -21,10 +21,10 @@ const DailyProgress = ({ progress }) => {
                 {forecast.map((day, dayIdx) => (
                     <div key={day.date} className="flex flex-col gap-1 min-w-[2.5rem] flex-1">
                         {/* Header: Day Number */}
-                        <div className="text-center font-bold text-lg text-gray-700 dark:text-gray-300 mb-1">
+                        <div className="text-center font-bold text-lg text-text-muted mb-1">
                             {day.label === "0" ? "-" : day.label}
                         </div>
-                        
+
                         <div className="flex flex-col gap-1 h-32"> {/* Fixed height to align rows */}
                             {Array.from({ length: maxTasksPerDay }).map((_, slotIdx) => {
                                 const task = day.tasks[slotIdx];
@@ -35,7 +35,7 @@ const DailyProgress = ({ progress }) => {
                                         key={slotIdx}
                                         className={`
                       w-full h-1/5 rounded-sm transition-all
-                      ${!task ? 'bg-gray-100 dark:bg-gray-700/50' : ''}
+                      ${!task ? 'bg-background-subtle' : ''}
                     `}
                                         style={{
                                             backgroundColor: task ? color : undefined,

@@ -3,7 +3,44 @@ export default {
   content: ["./src/**/*.{js,jsx,ts,tsx}", "./index.html"],
   darkMode: 'class',
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        background: {
+          page: "var(--color-background-page)",
+          surface: "var(--color-background-surface)",
+          subtle: "var(--color-background-subtle)",
+          highlight: "var(--color-background-highlight)",
+        },
+        text: {
+          main: "var(--color-text-main)",
+          muted: "var(--color-text-muted)",
+          inverted: "var(--color-text-inverted)",
+        },
+        border: {
+          default: "var(--color-border-default)",
+          focus: "var(--color-border-focus)",
+        },
+        primary: {
+          DEFAULT: "var(--color-primary-main)",
+          hover: "var(--color-primary-hover)",
+          text: "var(--color-primary-text)",
+          light: "var(--color-primary-light)",
+        },
+        status: {
+          success: "var(--color-status-success)",
+          warning: "var(--color-status-warning)",
+          error: "var(--color-status-error)",
+        },
+        // Performance colors are direct values
+        performance: {
+          1: "var(--color-performance-1)",
+          2: "var(--color-performance-2)",
+          3: "var(--color-performance-3)",
+          4: "var(--color-performance-4)",
+          5: "var(--color-performance-5)",
+        }
+      },
+    },
   },
   safelist: [
     "bg-blue-500",
