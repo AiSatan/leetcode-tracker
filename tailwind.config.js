@@ -27,9 +27,12 @@ export default {
           light: "var(--color-primary-light)",
         },
         status: {
-          success: "var(--color-status-success)",
-          warning: "var(--color-status-warning)",
-          error: "var(--color-status-error)",
+          success: "var(--color-status-success-main)",
+          "success-hover": "var(--color-status-success-hover)",
+          warning: "var(--color-status-warning-main)",
+          "warning-hover": "var(--color-status-warning-hover)",
+          error: "var(--color-status-error-main)",
+          "error-hover": "var(--color-status-error-hover)",
         },
         // Performance colors are direct values
         performance: {

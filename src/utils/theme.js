@@ -77,16 +77,34 @@ export const theme = {
         // Status & Difficulty
         status: {
             success: {
-                light: "#A35139", // Truffle Trouble
-                dark: "#FFB162"   // Burning Flame
+                main: {
+                    light: "#A35139", // Truffle Trouble
+                    dark: "#FFB162"   // Burning Flame
+                },
+                hover: {
+                    light: "#8B4530", // Darker Truffle
+                    dark: "#FFC285"   // Brighter Flame
+                }
             },
             warning: {
-                light: "#D97706",
-                dark: "#F59E0B"
+                main: {
+                    light: "#D97706",
+                    dark: "#F59E0B"
+                },
+                hover: {
+                    light: "#B45309",
+                    dark: "#D97706"
+                }
             },
             error: {
-                light: "#DC2626",
-                dark: "#EF4444"
+                main: {
+                    light: "#DC2626",
+                    dark: "#EF4444"
+                },
+                hover: {
+                    light: "#B91C1C",
+                    dark: "#DC2626"
+                }
             }
         },
 
