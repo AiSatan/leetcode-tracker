@@ -75,7 +75,7 @@ const InterviewRoadmap = () => {
             <h1 className="text-4xl font-bold text-text-main">
               Interview Mastery Roadmap
             </h1>
-            <Rocket size={36} className="text-blue-600 ml-2" />
+            <Rocket size={36} className="text-primary-main ml-2" />
           </div>
           <p className="text-lg text-text-muted">
             Your complete guide from application to offer
@@ -87,8 +87,8 @@ const InterviewRoadmap = () => {
           <button
             onClick={() => setActiveTab("interview")}
             className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all ${activeTab === "interview"
-                ? "bg-blue-600 text-white shadow-lg"
-                : "bg-background-subtle text-text-muted hover:bg-background-highlight"
+              ? "bg-primary-main text-text-inverted shadow-lg"
+              : "bg-background-subtle text-text-muted hover:bg-background-highlight"
               }`}
           >
             Interview Process
@@ -96,8 +96,8 @@ const InterviewRoadmap = () => {
           <button
             onClick={() => setActiveTab("dsa")}
             className={`flex-1 py-2 px-6 rounded-lg font-semibold transition-all ${activeTab === "dsa"
-                ? "bg-blue-600 text-white shadow-lg"
-                : "bg-background-subtle text-text-muted hover:bg-background-highlight"
+              ? "bg-primary-main text-text-inverted shadow-lg"
+              : "bg-background-subtle text-text-muted hover:bg-background-highlight"
               }`}
           >
             DSA Mind Map
@@ -115,7 +115,7 @@ const InterviewRoadmap = () => {
               return (
                 <div
                   key={section.id}
-                  className="bg-red rounded-lg shadow-lg overflow-hidden"
+                  className="bg-background-surface rounded-lg shadow-lg overflow-hidden"
                 >
                   {/* Section Header */}
                   <div
@@ -125,10 +125,10 @@ const InterviewRoadmap = () => {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <div className="bg-white bg-opacity-20 p-2 rounded-lg">
-                          <Icon size={32} className="text-white" />
+                          <Icon size={32} className="text-text-inverted" />
                         </div>
                         <div>
-                          <h2 className="text-lg font-bold text-white">
+                          <h2 className="text-lg font-bold text-text-inverted">
                             {idx + 1}. {section.title}
                           </h2>
                           <div className="flex items-center gap-2 mt-2">
@@ -138,16 +138,16 @@ const InterviewRoadmap = () => {
                                 style={{ width: `${progress}%` }}
                               />
                             </div>
-                            <span className="text-white text-xs font-semibold">
+                            <span className="text-text-inverted text-xs font-semibold">
                               {progress}%
                             </span>
                           </div>
                         </div>
                       </div>
                       {isExpanded ? (
-                        <ChevronDown size={24} className="text-white" />
+                        <ChevronDown size={24} className="text-text-inverted" />
                       ) : (
-                        <ChevronRight size={24} className="text-white" />
+                        <ChevronRight size={24} className="text-text-inverted" />
                       )}
                     </div>
                   </div>
@@ -163,14 +163,14 @@ const InterviewRoadmap = () => {
                               key={item.id}
                               onClick={() => toggleComplete(item.id)}
                               className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${isCompleted
-                                  ? "bg-green-50 dark:bg-green-900/30 border-green-500 dark:border-green-600"
-                                  : "bg-background-surface border-border-default hover:border-border-focus"
+                                ? "bg-background-surface border-status-success"
+                                : "bg-background-surface border-border-default hover:border-border-focus"
                                 }`}
                             >
                               <div className="flex items-start gap-3">
                                 {isCompleted ? (
                                   <CheckCircle
-                                    className="text-green-500 flex-shrink-0 mt-1"
+                                    className="text-status-success flex-shrink-0 mt-1"
                                     size={24}
                                   />
                                 ) : (
@@ -182,8 +182,8 @@ const InterviewRoadmap = () => {
                                 <div className="flex-1">
                                   <h3
                                     className={`font-semibold mb-1 ${isCompleted
-                                        ? "text-green-900 dark:text-green-300 line-through"
-                                        : "text-text-main"
+                                      ? "text-status-success line-through"
+                                      : "text-text-main"
                                       }`}
                                   >
                                     {item.title}
@@ -213,7 +213,7 @@ const InterviewRoadmap = () => {
                 <h2 className="text-2xl font-bold text-text-main">
                   {dsaMindmap.title}
                 </h2>
-                <Brain size={32} className="text-blue-600" />
+                <Brain size={32} className="text-primary-main" />
               </div>
               <p className="text-text-muted">
                 {dsaMindmap.description}
@@ -227,7 +227,7 @@ const InterviewRoadmap = () => {
                   className="bg-background-surface rounded-lg shadow-lg overflow-hidden"
                 >
                   <div className={`${section.color} py-3 px-4`}>
-                    <h3 className="text-lg font-bold text-white">
+                    <h3 className="text-lg font-bold text-text-inverted">
                       {section.title}
                     </h3>
                   </div>
@@ -236,26 +236,26 @@ const InterviewRoadmap = () => {
                       <div
                         key={idx}
                         className={`p-3 rounded-lg ${item.type === "question"
-                            ? "bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 dark:border-blue-400"
-                            : item.type === "answer"
-                              ? "bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 dark:border-green-400 ml-4"
-                              : item.type === "use"
-                                ? "bg-purple-50 dark:bg-purple-900/20 border-l-4 border-purple-500 dark:border-purple-400"
-                                : item.type === "note"
-                                  ? "bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 dark:border-yellow-400"
-                                  : "bg-background-subtle border-l-4 border-border-default"
+                          ? "bg-category-blue/10 border-l-4 border-category-blue"
+                          : item.type === "answer"
+                            ? "bg-category-green/10 border-l-4 border-category-green ml-4"
+                            : item.type === "use"
+                              ? "bg-category-purple/10 border-l-4 border-category-purple"
+                              : item.type === "note"
+                                ? "bg-category-yellow/10 border-l-4 border-category-yellow"
+                                : "bg-background-subtle border-l-4 border-border-default"
                           }`}
                       >
                         <p
                           className={`text-sm ${item.type === "question"
-                              ? "font-semibold text-blue-900 dark:text-blue-300"
-                              : item.type === "answer"
-                                ? "text-green-900 dark:text-green-300"
-                                : item.type === "use"
-                                  ? "text-purple-900 dark:text-purple-300"
-                                  : item.type === "note"
-                                    ? "text-yellow-900 dark:text-yellow-300"
-                                    : "text-text-main"
+                            ? "font-semibold text-category-blue"
+                            : item.type === "answer"
+                              ? "text-category-green"
+                              : item.type === "use"
+                                ? "text-category-purple"
+                                : item.type === "note"
+                                  ? "text-category-yellow"
+                                  : "text-text-main"
                             }`}
                         >
                           {item.text}

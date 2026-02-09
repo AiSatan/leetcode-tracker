@@ -1,4 +1,4 @@
-import { CheckCircle2, Circle, Calendar, ExternalLink, Minus, Star } from "lucide-react";
+import { CheckCircle2, Circle, ExternalLink } from "lucide-react";
 import { getReviewStatus } from "../utils/scheduler";
 import { getPerformanceColor } from "../utils/theme";
 
@@ -121,8 +121,7 @@ const ProblemTable = ({
                     </div>
                   </td>
                   <td
-                    className={`px-4 py-4 whitespace-nowrap text-sm font-semibold ${difficultyColor[problem.difficulty]
-                      }`}
+                    className={`px-4 py-4 whitespace-nowrap text-sm font-semibold ${difficultyColor[problem.difficulty]}`}
                   >
                     {problem.difficulty}
                   </td>
@@ -161,7 +160,7 @@ const ProblemTable = ({
                               >
                                 {rating}
                               </button>
-                            )
+                            );
                           })}
                         </div>
                       </div>
@@ -207,7 +206,7 @@ const ProblemTable = ({
           </tbody>
         </table>
       </div>
-    </div >
+    </div>
   );
 };
 

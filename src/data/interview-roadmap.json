@@ -3,7 +3,7 @@
     "id": "getting-interview",
     "title": "Getting the Interview",
     "icon": "Briefcase",
-    "color": "bg-blue-500",
+    "color": "bg-category-blue",
     "items": [
       {
         "id": "resume",
@@ -46,7 +46,7 @@
     "id": "technical",
     "title": "Technical Interviews",
     "icon": "Code",
-    "color": "bg-green-500",
+    "color": "bg-category-green",
     "items": [
       {
         "id": "big-o",
@@ -79,7 +79,7 @@
     "id": "non-technical",
     "title": "Non-Technical Interviews",
     "icon": "MessageSquare",
-    "color": "bg-purple-500",
+    "color": "bg-category-purple",
     "items": [
       {
         "id": "tell-me",
@@ -122,7 +122,7 @@
     "id": "offer",
     "title": "Offer & Negotiation",
     "icon": "DollarSign",
-    "color": "bg-yellow-500",
+    "color": "bg-category-yellow",
     "items": [
       {
         "id": "negotiation-101",
