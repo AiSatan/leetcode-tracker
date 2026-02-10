@@ -15,6 +15,7 @@ const ProblemTable = ({
   filterCategory,
   filterDifficulty,
   showOnlyDueToday,
+  hidePlanned,
 }) => {
   const today = new Date().toISOString().split("T")[0];
 
@@ -26,10 +27,17 @@ const ProblemTable = ({
     const difficultyMatch =
       filterDifficulty === "All" || problem.difficulty === filterDifficulty;
 
-    if (!showOnlyDueToday) return categoryMatch && difficultyMatch;
+    if (!showOnlyDueToday && !hidePlanned) return categoryMatch && difficultyMatch;
 
     const status = getReviewStatus(problem.id, progress);
-    return categoryMatch && difficultyMatch && status === 'due';
+
+    if (showOnlyDueToday && status !== 'due') return false;
+
+    // "Hide Planned" hides problems that are solved and scheduled for the future
+    // (i.e. their stars are disabled because they aren't due yet)
+    if (hidePlanned && status === 'future') return false;
+
+    return categoryMatch && difficultyMatch;
   });
 
   const formatDate = (dateString) => {
@@ -109,8 +117,8 @@ const ProblemTable = ({
                           <span
                             key={idx}
                             className={`px-2 py-1 text-xs rounded ${tag === section
-                                ? "bg-background-subtle text-text-muted border border-border-default"
-                                : "bg-primary-light text-primary-text"
+                              ? "bg-background-subtle text-text-muted border border-border-default"
+                              : "bg-primary-light text-primary-text"
                               }`}
                             title="Category/Topic"
                           >
@@ -154,7 +162,7 @@ const ProblemTable = ({
                               <button
                                 key={rating}
                                 onClick={() => handleReview(problem.id, rating)}
-                                className="w-8 h-8 rounded flex items-center justify-center text-sm font-bold text-white transition-all transform hover:scale-110 shadow-sm"
+                                className="w-8 h-8 rounded flex items-center justify-center text-sm font-bold text-gray-300 transition-all transform hover:scale-110"
                                 style={{ backgroundColor: color }}
                                 title={`Rate ${rating}/5`}
                               >
@@ -185,10 +193,10 @@ const ProblemTable = ({
                                 className={`
                                   w-8 h-8 rounded flex items-center justify-center text-sm font-bold transition-all
                                   cursor-not-allowed
-                                  ${!isSelected ? 'opacity-30' : 'ring-2 ring-offset-1 ring-border-focus'}
+                                  ${isSelected ? 'text-gray-300' : 'bg-striped bg-background-subtle opacity-40'}
                                 `}
                                 style={{
-                                  backgroundColor: isSelected ? color : (prob.performance ? getPerformanceColor(prob.performance) : undefined)
+                                  backgroundColor: isSelected ? color : undefined
                                 }}
                                 title={`Last rating: ${prob.performance || 'N/A'}`}
                               >

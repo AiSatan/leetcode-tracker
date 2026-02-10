@@ -49,6 +49,7 @@ const LeetCodeTracker = () => {
   const [filterCategory, setFilterCategory] = useState("All");
   const [filterDifficulty, setFilterDifficulty] = useState("All");
   const [showOnlyDueToday, setShowOnlyDueToday] = useState(false);
+  const [hidePlanned, setHidePlanned] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
   // --- Local state with localStorage ---
   const [selectedList, setSelectedList] = useState(() => {
@@ -237,20 +238,31 @@ const LeetCodeTracker = () => {
         {/* Export / Import / Clear */}
         <ExportImportControls progress={progress} setProgress={setProgress} />
 
-        {/* Filters */}
-        <Filters
-          categories={categories}
-          difficulties={difficulties}
-          filterCategory={filterCategory}
-          setFilterCategory={setFilterCategory}
-          filterDifficulty={filterDifficulty}
-          setFilterDifficulty={setFilterDifficulty}
-          showOnlyDueToday={showOnlyDueToday}
-          setShowOnlyDueToday={setShowOnlyDueToday}
-        />
-
-        {/* Daily Progress Forecast */}
-        <DailyProgress progress={progress} />
+        {/* Forecast + Filters Combined */}
+        <div className="bg-background-surface rounded-lg shadow-lg p-5 mb-6 transition-colors">
+          <div className="flex flex-col lg:flex-row gap-5">
+            {/* Forecast - Left */}
+            <div className="flex-1 min-w-0">
+              <DailyProgress progress={progress} compact />
+            </div>
+            {/* Filters - Right */}
+            <div className="lg:w-64 flex-shrink-0">
+              <Filters
+                categories={categories}
+                difficulties={difficulties}
+                filterCategory={filterCategory}
+                setFilterCategory={setFilterCategory}
+                filterDifficulty={filterDifficulty}
+                setFilterDifficulty={setFilterDifficulty}
+                showOnlyDueToday={showOnlyDueToday}
+                setShowOnlyDueToday={setShowOnlyDueToday}
+                hidePlanned={hidePlanned}
+                setHidePlanned={setHidePlanned}
+                compact
+              />
+            </div>
+          </div>
+        </div>
 
         {/* Problems Table */}
         <ProblemTable
@@ -260,6 +272,7 @@ const LeetCodeTracker = () => {
           filterCategory={filterCategory}
           filterDifficulty={filterDifficulty}
           showOnlyDueToday={showOnlyDueToday}
+          hidePlanned={hidePlanned}
         />
       </div>
     </div>

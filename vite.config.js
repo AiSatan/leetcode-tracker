@@ -11,6 +11,7 @@ export default defineConfig({
     },
   },
   server: {
+    port: parseInt(process.env.PORT) || 5173,
     allowedHosts: ["leetcode-tracker-gp01.onrender.com"],
   },
 });

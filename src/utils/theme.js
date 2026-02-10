@@ -110,11 +110,11 @@ export const theme = {
 
         // Performance / Ratings (Likert Scale)
         performance: {
-            1: { light: "#C04E4E", dark: "#E06C6C" }, // Muted Red / Light Red
-            2: { light: "#D67D3E", dark: "#F09D58" }, // Rust / Light Rust
-            3: { light: "#D4A017", dark: "#EAC435" }, // Ochre / Bright Ochre
-            4: { light: "#5E8C61", dark: "#7FB083" }, // Sage / Light Sage
-            5: { light: "#4E8E8E", dark: "#70B0B0" }, // Teal / Light Teal
+            1: { light: "#704040", dark: "#7E4E4E" }, // Muted Earth Red
+            2: { light: "#6E5438", dark: "#7E6048" }, // Muted Earth Brown
+            3: { light: "#636030", dark: "#78703A" }, // Dark Olive
+            4: { light: "#405A42", dark: "#4D6550" }, // Dark Muted Sage
+            5: { light: "#385555", dark: "#486565" }, // Dark Grey-Teal
         },
 
         // Categorical / Roadmap Colors

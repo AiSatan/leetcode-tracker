@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { getDailyForecast } from '../utils/scheduler';
 import { getPerformanceColor } from '../utils/theme';
 
-const DailyProgress = ({ progress }) => {
+const DailyProgress = ({ progress, compact }) => {
     const days = 11;
     const maxTasksPerDay = 5;
 
@@ -10,49 +10,48 @@ const DailyProgress = ({ progress }) => {
         return getDailyForecast(progress, days);
     }, [progress]);
 
+    const cellSize = compact ? 'w-6 h-6' : 'w-7 h-7';
+
     return (
-        <div className="bg-background-surface rounded-lg shadow-lg p-6 mb-6 transition-colors">
-            <h2 className="text-xl font-semibold mb-4 text-text-main">
+        <div className={compact ? '' : 'bg-background-surface rounded-lg shadow-lg p-6 mb-6 transition-colors'}>
+            <h2 className={`font-semibold mb-3 text-text-main ${compact ? 'text-sm' : 'text-xl mb-4'}`}>
                 10-Day Forecast
             </h2>
 
-            {/* Grid Container */}
-            <div className="flex gap-2 w-full overflow-x-auto pb-2">
-                {forecast.map((day, dayIdx) => (
-                    <div key={day.date} className="flex flex-col gap-1 min-w-[2.5rem] flex-1">
-                        {/* Header: Day Number */}
-                        <div className="text-center font-bold text-lg text-text-muted mb-1">
-                            {day.label === "0" ? "-" : day.label}
-                        </div>
-
-                        <div className="flex flex-col gap-1 h-32"> {/* Fixed height to align rows */}
-                            {Array.from({ length: maxTasksPerDay }).map((_, slotIdx) => {
-                                const task = day.tasks[slotIdx];
-                                const color = task ? getPerformanceColor(task.performance) : 'transparent';
-                                const hasTasks = day.tasks.length > 0;
-                                const isToday = day.label === "0";
-
-                                // Dashed/Striped if: Not today, Day has tasks, and this slot is empty
-                                const showStriped = !task && hasTasks && !isToday;
-
-                                return (
-                                    <div
-                                        key={slotIdx}
-                                        className={`
-                                            w-full h-1/5 rounded-sm transition-all
-                                            ${!task && !showStriped ? 'bg-background-subtle' : ''}
-                                            ${showStriped ? 'bg-striped opacity-30' : ''}
-                                        `}
-                                        style={{
-                                            backgroundColor: task ? color : undefined,
-                                            boxShadow: task ? `0 0 10px color-mix(in srgb, ${color}, transparent 75%)` : undefined // Glow effect
-                                        }}
-                                        title={task ? `Task Solved. Score: ${task.performance}` : 'Empty Slot'}
-                                    />
-                                );
-                            })}
-                        </div>
+            {/* Grid: columns = days, rows = slots */}
+            <div className="inline-grid gap-1" style={{ gridTemplateColumns: `repeat(${days}, auto)` }}>
+                {/* Header Row */}
+                {forecast.map((day) => (
+                    <div key={`h-${day.date}`} className="text-center font-bold text-text-muted text-xs">
+                        {day.label === "0" ? "-" : day.label}
                     </div>
+                ))}
+
+                {/* Cell Rows */}
+                {Array.from({ length: maxTasksPerDay }).map((_, slotIdx) => (
+                    forecast.map((day) => {
+                        const task = day.tasks[slotIdx];
+                        const color = task ? getPerformanceColor(task.performance) : 'transparent';
+                        const hasTasks = day.tasks.length > 0;
+                        const isToday = day.label === "0";
+                        const showStriped = !task && hasTasks && !isToday;
+
+                        return (
+                            <div
+                                key={`${day.date}-${slotIdx}`}
+                                className={`
+                                    ${cellSize} rounded-sm transition-all
+                                    ${!task && !showStriped ? 'bg-background-subtle' : ''}
+                                    ${showStriped ? 'bg-striped opacity-40' : ''}
+                                `}
+                                style={{
+                                    backgroundColor: task ? color : undefined,
+                                    boxShadow: task ? `0 0 6px color-mix(in srgb, ${color}, transparent 80%)` : undefined
+                                }}
+                                title={task ? `Task Solved. Score: ${task.performance}` : 'Empty Slot'}
+                            />
+                        );
+                    })
                 ))}
             </div>
         </div>
