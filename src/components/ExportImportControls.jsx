@@ -1,6 +1,6 @@
-import { Download, Upload, Trash2 } from "lucide-react";
+import { Download, Upload, Trash2, Database } from "lucide-react";
 
-const ExportImportControls = ({ progress, setProgress }) => {
+const ExportImportControls = ({ progress, setProgress, compact }) => {
   const exportData = () => {
     const dataStr = JSON.stringify(progress, null, 2);
     const blob = new Blob([dataStr], { type: "application/json" });
@@ -35,29 +35,39 @@ const ExportImportControls = ({ progress, setProgress }) => {
     }
   };
 
+  const btnBase = "flex items-center gap-2 px-3 py-1.5 text-xs rounded border transition-colors cursor-pointer whitespace-nowrap";
+
   return (
-    <div className="flex flex-wrap gap-2 my-6">
-      <button
-        onClick={exportData}
-        className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded transition-colors"
-      >
-        <Download size={16} /> Export Progress
-      </button>
-      <label className="flex items-center gap-2 px-4 py-2 bg-status-success hover:bg-status-success-hover text-white rounded transition-colors cursor-pointer">
-        <Upload size={16} /> Import Progress
-        <input
-          type="file"
-          accept=".json"
-          onChange={importData}
-          className="hidden"
-        />
-      </label>
-      <button
-        onClick={clearAllData}
-        className="flex items-center gap-2 px-4 py-2 bg-status-error hover:bg-status-error-hover text-white rounded transition-colors"
-      >
-        <Trash2 size={16} /> Clear All
-      </button>
+    <div className={compact ? '' : 'bg-background-surface rounded-lg shadow-lg p-6 mb-6 transition-colors'}>
+      <div className="flex items-center gap-2 mb-3">
+        <Database size={compact ? 14 : 20} className="text-text-muted" />
+        <h2 className={`font-semibold text-text-main ${compact ? 'text-sm' : 'text-xl'}`}>
+          Progress Data
+        </h2>
+      </div>
+      <div className="flex flex-col gap-2">
+        <button
+          onClick={exportData}
+          className={`${btnBase} border-border-default bg-background-subtle text-text-muted hover:bg-background-highlight hover:text-text-main`}
+        >
+          <Download size={14} /> Export Progress
+        </button>
+        <label className={`${btnBase} border-border-default bg-background-subtle text-text-muted hover:bg-background-highlight hover:text-text-main`}>
+          <Upload size={14} /> Import Progress
+          <input
+            type="file"
+            accept=".json"
+            onChange={importData}
+            className="hidden"
+          />
+        </label>
+        <button
+          onClick={clearAllData}
+          className={`${btnBase} border-status-error bg-background-subtle text-status-error hover:bg-status-error hover:text-white`}
+        >
+          <Trash2 size={14} /> Clear All
+        </button>
+      </div>
     </div>
   );
 };

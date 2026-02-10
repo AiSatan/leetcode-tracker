@@ -49,20 +49,13 @@ const Navbar = () => {
             href="https://github.com/AiSatan/leetcode-tracker"
             target="_blank"
             rel="noopener noreferrer"
-            className="h-10 group relative flex items-center gap-2 px-4 py-2 bg-background-subtle text-text-main rounded overflow-hidden font-semibold transition-all duration-300 hover:shadow-xl"
+            className="h-10 flex items-center gap-2 px-4 py-2 border border-border-default bg-background-subtle text-text-muted rounded font-semibold transition-all duration-300 hover:bg-background-highlight hover:text-text-main"
           >
-            <span className="absolute inset-0 bg-gradient-to-r from-[#A35139] to-[#FFB162] translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
-            <Github
-              size={20}
-              className="relative z-10 group-hover:rotate-12 transition-transform duration-300"
-            />
-            <span className="relative z-10 hidden sm:inline">
+            <Github size={20} />
+            <span className="hidden sm:inline">
               Star on GitHub
             </span>
-            <Star
-              size={16}
-              className="relative z-10 group-hover:fill-yellow-300 group-hover:text-yellow-300 transition-all duration-300"
-            />
+            <Star size={16} />
           </a>
         </div>
       </div>

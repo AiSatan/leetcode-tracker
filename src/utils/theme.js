@@ -37,8 +37,8 @@ export const theme = {
                 dark: "#C9C1B1"   // Oatmeal
             },
             inverted: {
-                light: "#FFFFFF",
-                dark: "#000000"
+                light: "#000000",
+                dark: "#EEE9DF"    // Palladian (no bright white)
             }
         },
 

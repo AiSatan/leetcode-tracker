@@ -191,9 +191,9 @@ const ProblemTable = ({
                                 key={rating}
                                 disabled
                                 className={`
-                                  w-8 h-8 rounded flex items-center justify-center text-sm font-bold transition-all
+                                  w-8 h-8 rounded-sm flex items-center justify-center text-sm font-bold transition-all
                                   cursor-not-allowed
-                                  ${isSelected ? 'text-gray-300' : 'bg-striped bg-background-subtle opacity-40'}
+                                  ${isSelected ? 'text-gray-300' : 'bg-striped opacity-40'}
                                 `}
                                 style={{
                                   backgroundColor: isSelected ? color : undefined

@@ -181,7 +181,7 @@ const LeetCodeTracker = () => {
                 href={roadmapLinks[selectedList]}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 bg-status-warning hover:opacity-90 text-white rounded transition-colors"
+                className="flex items-center gap-2 px-4 py-2 border border-border-default bg-background-subtle text-text-muted hover:bg-background-highlight hover:text-text-main rounded transition-colors"
                 title="View the official NeetCode roadmap"
               >
                 <Map size={16} /> Roadmap <ExternalLink size={14} />
@@ -222,31 +222,30 @@ const LeetCodeTracker = () => {
           </div>
         )}
 
-        {/* Stats */}
-        <CircularStatsCard
-          stats={{
-            total: stats.total,
-            solved: stats.solved,
-            easy: stats.easy,
-            medium: stats.medium,
-            hard: stats.hard,
-            dueToday: getDueProblems(),
-          }}
-          problems={problems}
-        />
-
-        {/* Export / Import / Clear */}
-        <ExportImportControls progress={progress} setProgress={setProgress} />
-
-        {/* Forecast + Filters Combined */}
-        <div className="bg-background-surface rounded-lg shadow-lg p-5 mb-6 transition-colors">
-          <div className="flex flex-col lg:flex-row gap-5">
-            {/* Forecast - Left */}
-            <div className="flex-1 min-w-0">
+        {/* Combined Dashboard Card - Single Row */}
+        <div className="bg-background-surface rounded-lg shadow-lg p-4 mb-4 transition-colors">
+          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+            {/* Overview */}
+            <div className="flex-shrink-0 w-40">
+              <CircularStatsCard
+                stats={{
+                  total: stats.total,
+                  solved: stats.solved,
+                  easy: stats.easy,
+                  medium: stats.medium,
+                  hard: stats.hard,
+                  dueToday: getDueProblems(),
+                }}
+                problems={problems}
+                compact
+              />
+            </div>
+            {/* Forecast */}
+            <div className="flex-shrink-0">
               <DailyProgress progress={progress} compact />
             </div>
-            {/* Filters - Right */}
-            <div className="lg:w-64 flex-shrink-0">
+            {/* Filters */}
+            <div className="flex-shrink-0">
               <Filters
                 categories={categories}
                 difficulties={difficulties}
@@ -260,6 +259,10 @@ const LeetCodeTracker = () => {
                 setHidePlanned={setHidePlanned}
                 compact
               />
+            </div>
+            {/* Progress Data */}
+            <div className="flex-shrink-0">
+              <ExportImportControls progress={progress} setProgress={setProgress} compact />
             </div>
           </div>
         </div>
