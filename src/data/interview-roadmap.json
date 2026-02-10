@@ -3,7 +3,7 @@
     "id": "getting-interview",
     "title": "Getting the Interview",
     "icon": "Briefcase",
-    "color": "bg-category-blue",
+    "color": "bg-category-purple",
     "items": [
       {
         "id": "resume",
@@ -122,7 +122,7 @@
     "id": "offer",
     "title": "Offer & Negotiation",
     "icon": "DollarSign",
-    "color": "bg-category-yellow",
+    "color": "bg-category-purple",
     "items": [
       {
         "id": "negotiation-101",

@@ -145,7 +145,7 @@ export const theme = {
             },
             yellow: {
                 light: "#D4A017", // Ochre
-                dark: "#EAC435"   // Bright Ochre
+                dark: "#ffb162"   // Bright Ochre
             },
             yellowDim: {
                 light: "rgba(212, 160, 23, 0.1)",
