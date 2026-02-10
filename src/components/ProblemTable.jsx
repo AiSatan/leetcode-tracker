@@ -57,7 +57,7 @@ const ProblemTable = ({
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-border-default">
           <thead className="bg-background-subtle">
-            <tr className="hover:bg-background-subtle">
+            <tr>
               <th className="px-4 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider w-16">
                 #
               </th>
@@ -84,7 +84,7 @@ const ProblemTable = ({
               return (
                 <tr
                   key={problem.id}
-                  className="hover:bg-background-subtle"
+                  className=""
                 >
                   <td className="px-4 py-4 whitespace-nowrap text-sm text-text-main">
                     {index + 1}
