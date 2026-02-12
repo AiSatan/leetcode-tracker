@@ -283,7 +283,7 @@ export const getDailyForecast = (allProgress, days = 11) => {
         dateObj.setDate(today.getDate() + i);
         const dateStr = dateObj.toISOString().split('T')[0];
 
-        const dayLabel = i === 0 ? "0" : `${i}`;
+        const dayLabel = dateObj.getDate();
 
         forecast.push({
             dayIndex: i,

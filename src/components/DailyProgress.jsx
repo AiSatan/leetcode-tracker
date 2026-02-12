@@ -23,7 +23,7 @@ const DailyProgress = ({ progress, compact }) => {
                 {/* Header Row */}
                 {forecast.map((day) => (
                     <div key={`h-${day.date}`} className="text-center font-bold text-text-muted text-xs">
-                        {day.label === "0" ? "-" : day.label}
+                        {day.label}
                     </div>
                 ))}
 
@@ -33,7 +33,7 @@ const DailyProgress = ({ progress, compact }) => {
                         const task = day.tasks[slotIdx];
                         const color = task ? getPerformanceColor(task.performance) : 'transparent';
                         const hasTasks = day.tasks.length > 0;
-                        const isToday = day.label === "0";
+                        const isToday = day.dayIndex === 0;
                         const showStriped = !task && hasTasks && !isToday;
 
                         return (
