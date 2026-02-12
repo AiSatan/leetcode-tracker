@@ -39,7 +39,7 @@ const ExportImportControls = ({ progress, setProgress, compact }) => {
 
   return (
     <div className={compact ? '' : 'bg-background-surface rounded-lg shadow-lg p-6 mb-6 transition-colors'}>
-      <div className="flex items-center gap-2 mb-3">
+      <div className="flex items-center justify-center gap-2 mb-3">
         <Database size={compact ? 14 : 20} className="text-text-muted" />
         <h2 className={`font-semibold text-text-main ${compact ? 'text-sm' : 'text-xl'}`}>
           Progress Data

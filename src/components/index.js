@@ -5,3 +5,4 @@ export { default as ProblemTable } from "./ProblemTable";
 export { default as CircularStatsCard } from "./CircularStatsCard";
 export { default as ExportImportControls } from "./ExportImportControls";
 export { default as DailyProgress } from "./DailyProgress";
+export { default as ForecastRadar } from "./ForecastRadar";

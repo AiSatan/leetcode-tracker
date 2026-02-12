@@ -46,7 +46,7 @@ const CircularStatsCard = ({ stats, problems, compact }) => {
   if (compact) {
     return (
       <div className="flex flex-col items-center text-center w-40">
-        <h2 className="text-sm font-semibold mb-2 text-text-main self-start">
+        <h2 className="text-sm font-semibold mb-2 text-text-main">
           Progress Overview
         </h2>
         <CircularProgress solved={stats.solved} total={stats.total} size={64} />

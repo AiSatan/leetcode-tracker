@@ -8,6 +8,7 @@ import {
   ExportImportControls,
   CircularStatsCard,
   DailyProgress,
+  ForecastRadar,
 } from "../components";
 import { blind75, leetcode75, neetcode150 } from "../data";
 
@@ -240,7 +241,12 @@ const LeetCodeTracker = () => {
                 compact
               />
             </div>
-            {/* Forecast */}
+
+            {/* Forecast Radar */}
+            <div className="flex-shrink-0">
+              <ForecastRadar progress={progress} compact />
+            </div>
+            {/* Forecast List */}
             <div className="flex-shrink-0">
               <DailyProgress progress={progress} compact />
             </div>
@@ -278,7 +284,7 @@ const LeetCodeTracker = () => {
           hidePlanned={hidePlanned}
         />
       </div>
-    </div>
+    </div >
   );
 };
 

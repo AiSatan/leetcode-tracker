@@ -14,7 +14,7 @@ const DailyProgress = ({ progress, compact }) => {
 
     return (
         <div className={compact ? '' : 'bg-background-surface rounded-lg shadow-lg p-6 mb-6 transition-colors'}>
-            <h2 className={`font-semibold mb-3 text-text-main ${compact ? 'text-sm' : 'text-xl mb-4'}`}>
+            <h2 className={`font-semibold mb-3 text-text-main text-center ${compact ? 'text-sm' : 'text-xl mb-4'}`}>
                 10-Day Forecast
             </h2>
 
