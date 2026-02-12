@@ -47,10 +47,43 @@ const LeetCodeTracker = () => {
     }
   });
 
+  // --- Filter State with localStorage ---
   const [filterCategory, setFilterCategory] = useState("All");
   const [filterDifficulty, setFilterDifficulty] = useState("All");
   const [showOnlyDueToday, setShowOnlyDueToday] = useState(false);
   const [hidePlanned, setHidePlanned] = useState(false);
+
+  // Load filters on mount
+  useEffect(() => {
+    try {
+      const savedFilters = localStorage.getItem("leetcode-tracker-filters");
+      if (savedFilters) {
+        const parsed = JSON.parse(savedFilters);
+        setFilterCategory(parsed.category || "All");
+        setFilterDifficulty(parsed.difficulty || "All");
+        setShowOnlyDueToday(parsed.dueToday || false);
+        setHidePlanned(parsed.hidePlanned || false);
+      }
+    } catch (error) {
+      console.error("Error loading filters:", error);
+    }
+  }, []);
+
+  // Save filters on change
+  useEffect(() => {
+    try {
+      const filters = {
+        category: filterCategory,
+        difficulty: filterDifficulty,
+        dueToday: showOnlyDueToday,
+        hidePlanned: hidePlanned
+      };
+      localStorage.setItem("leetcode-tracker-filters", JSON.stringify(filters));
+    } catch (error) {
+      console.error("Error saving filters:", error);
+    }
+  }, [filterCategory, filterDifficulty, showOnlyDueToday, hidePlanned]);
+
   const [showExplanation, setShowExplanation] = useState(false);
   // --- Local state with localStorage ---
   const [selectedList, setSelectedList] = useState(() => {
