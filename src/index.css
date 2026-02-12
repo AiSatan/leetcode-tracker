@@ -29,13 +29,13 @@
 }
 
 .custom-checkbox:hover {
-  border-color: var(--color-primary-main);
+  border-color: var(--color-performance-3);
   background-color: var(--color-background-subtle);
 }
 
 .custom-checkbox:checked {
-  background-color: var(--color-primary-main);
-  border-color: var(--color-primary-main);
+  background-color: var(--color-performance-3);
+  border-color: var(--color-performance-3);
 }
 
 .custom-checkbox:checked::after {
