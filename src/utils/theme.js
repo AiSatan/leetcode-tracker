@@ -98,12 +98,12 @@ export const theme = {
             },
             error: {
                 main: {
-                    light: "#DC2626",
-                    dark: "#EF4444"
+                    light: "#704040", // Muted Earth Red (Score 1)
+                    dark: "#7E4E4E"   // Muted Earth Brown/Red (Score 1)
                 },
                 hover: {
-                    light: "#B91C1C",
-                    dark: "#DC2626"
+                    light: "#5A3333", // Darker Score 1
+                    dark: "#8F5959"   // Lighter Score 1
                 }
             }
         },
@@ -152,12 +152,12 @@ export const theme = {
                 dark: "rgba(234, 196, 53, 0.2)"
             },
             red: {
-                light: "#C04E4E", // Muted Red
-                dark: "#E06C6C"   // Light Red
+                light: "#704040", // Muted Earth Red (Score 1)
+                dark: "#7E4E4E"   // Muted Earth Brown/Red (Score 1)
             },
             redDim: {
-                light: "rgba(192, 78, 78, 0.1)",
-                dark: "rgba(224, 108, 108, 0.2)"
+                light: "rgba(112, 64, 64, 0.1)",
+                dark: "rgba(126, 78, 78, 0.2)"
             },
             indigo: {
                 light: "#5B6592", // Slate Indigo
