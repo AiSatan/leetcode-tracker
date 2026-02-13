@@ -9,9 +9,10 @@
 
 A modern, interactive web application to track your progress through the famous LeetCode problems with built-in spaced repetition system for long-term retention.
 
-![LeetCode Tracker](https://img.shields.io/badge/React-18.2.0-blue.svg)
-![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3.4.0-38B2AC.svg)
-![Vite](https://img.shields.io/badge/Vite-5.0.0-646CFF.svg)
+![LeetCode Tracker](https://img.shields.io/badge/React-19.1.1-blue.svg)
+![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3.4.18-38B2AC.svg)
+![Vite](https://img.shields.io/badge/Vite-7.1.7-646CFF?logo=vite)
+
 
 ## ✨ Features
 
