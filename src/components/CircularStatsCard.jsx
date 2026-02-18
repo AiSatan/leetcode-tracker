@@ -1,5 +1,5 @@
-const CircularProgress = ({ solved, total, size = 80 }) => {
-  const percentage = total > 0 ? (solved / total) * 100 : 0;
+const CircularProgress = ({ mastered, total, size = 80 }) => {
+  const percentage = total > 0 ? (mastered / total) * 100 : 0;
   const radius = (size - 14) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (percentage / 100) * circumference;
@@ -31,7 +31,7 @@ const CircularProgress = ({ solved, total, size = 80 }) => {
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="text-xs font-bold text-text-main">
-          {solved}/{total}
+          {mastered}/{total}
         </div>
       </div>
     </div>
@@ -49,7 +49,7 @@ const CircularStatsCard = ({ stats, problems, compact }) => {
         <h2 className="text-sm font-semibold mb-2 text-text-main">
           Progress Overview
         </h2>
-        <CircularProgress solved={stats.solved} total={stats.total} size={64} />
+        <CircularProgress mastered={stats.mastered} total={stats.total} size={64} />
         <div className="text-xs text-text-muted mt-1.5 mb-2">
           <span className="text-primary font-semibold">{stats.dueToday || 0} due today</span>
         </div>
@@ -100,7 +100,7 @@ const CircularStatsCard = ({ stats, problems, compact }) => {
 
       <div className="flex flex-col md:flex-row items-center gap-6">
         <div className="flex-shrink-0">
-          <CircularProgress solved={stats.solved} total={stats.total} />
+          <CircularProgress mastered={stats.mastered} total={stats.total} />
         </div>
 
         <div className="flex-1 w-full space-y-4">
@@ -191,7 +191,7 @@ const CircularStatsCard = ({ stats, problems, compact }) => {
           </div>
           <div className="bg-primary-light rounded-lg p-4">
             <div className="text-2xl font-bold text-primary">
-              {Math.round((stats.solved / stats.total) * 100) || 0}%
+              {Math.round((stats.mastered / stats.total) * 100) || 0}%
             </div>
             <div className="text-sm text-text-muted">
               Completion

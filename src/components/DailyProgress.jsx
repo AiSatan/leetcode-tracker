@@ -48,7 +48,7 @@ const DailyProgress = ({ progress, compact }) => {
                                     backgroundColor: task ? color : undefined,
                                     boxShadow: task ? `0 0 6px color-mix(in srgb, ${color}, transparent 80%)` : undefined
                                 }}
-                                title={task ? `Task Solved. Score: ${task.performance}` : 'Empty Slot'}
+                                title={task ? `Score: ${task.performance}${task.performance === 5 ? ' (Mastered)' : ''}` : 'Empty Slot'}
                             />
                         );
                     })

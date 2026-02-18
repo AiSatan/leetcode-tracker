@@ -158,15 +158,15 @@ const LeetCodeTracker = () => {
 
   const stats = {
     total: problems.length,
-    solved: problems.filter((p) => currentProgress[p.id]?.solved).length,
+    mastered: problems.filter((p) => currentProgress[p.id]?.performance === 5).length,
     easy: problems.filter(
-      (p) => p.difficulty === "Easy" && currentProgress[p.id]?.solved
+      (p) => p.difficulty === "Easy" && currentProgress[p.id]?.performance === 5
     ).length,
     medium: problems.filter(
-      (p) => p.difficulty === "Medium" && currentProgress[p.id]?.solved
+      (p) => p.difficulty === "Medium" && currentProgress[p.id]?.performance === 5
     ).length,
     hard: problems.filter(
-      (p) => p.difficulty === "Hard" && currentProgress[p.id]?.solved
+      (p) => p.difficulty === "Hard" && currentProgress[p.id]?.performance === 5
     ).length,
   };
 
@@ -264,7 +264,7 @@ const LeetCodeTracker = () => {
               <CircularStatsCard
                 stats={{
                   total: stats.total,
-                  solved: stats.solved,
+                  mastered: stats.mastered,
                   easy: stats.easy,
                   medium: stats.medium,
                   hard: stats.hard,

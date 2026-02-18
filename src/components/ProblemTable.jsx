@@ -135,7 +135,7 @@ const ProblemTable = ({
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-2 text-text-muted">
-                      {prob.solved ? (
+                      {prob.performance === 5 ? (
                         <CheckCircle2
                           className="text-status-success"
                           size={20}
@@ -144,7 +144,7 @@ const ProblemTable = ({
                         <Circle size={20} />
                       )}
                       <span className="text-xs">
-                        {prob.solved ? "Solved" : "Not Solved"}
+                        {prob.performance === 5 ? "Mastered" : prob.solved ? "Learning" : "Not Started"}
                       </span>
                     </div>
                   </td>
