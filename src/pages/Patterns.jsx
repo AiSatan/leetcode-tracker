@@ -16,10 +16,10 @@ const Patterns = () => {
 
 
   const languages = [
-    { id: "python", name: "Python", color: "bg-category-blue" },
-    { id: "javascript", name: "JavaScript", color: "bg-category-yellow" },
-    { id: "java", name: "Java", color: "bg-category-red" },
-    { id: "go", name: "Go", color: "bg-category-cyan" },
+    { id: "python", name: "Python" },
+    { id: "javascript", name: "JavaScript" },
+    { id: "java", name: "Java" },
+    { id: "go", name: "Go" },
   ];
 
   const copyToClipboard = (text, index) => {
@@ -56,7 +56,7 @@ const Patterns = () => {
                 key={lang.id}
                 onClick={() => setSelectedLanguage(lang.id)}
                 className={`px-4 py-2 rounded-lg font-medium transition-all ${selectedLanguage === lang.id
-                  ? `${lang.color} text-white shadow-lg scale-105`
+                  ? `bg-primary-main text-text-inverted shadow-lg scale-105`
                   : "bg-background-subtle text-text-muted hover:bg-background-highlight"
                   }`}
               >
@@ -72,11 +72,11 @@ const Patterns = () => {
               key={idx}
               className="bg-background-surface rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all"
             >
-              <div className="bg-gradient-to-r from-category-indigo to-category-blue py-3 px-4">
-                <h2 className="text-lg font-bold text-white mb-1">
+              <div className="bg-background-subtle border-b border-border-default py-3 px-4">
+                <h2 className="text-lg font-bold text-text-main mb-1">
                   {pattern.title}
                 </h2>
-                <p className="text-white/80">{pattern.description}</p>
+                <p className="text-text-muted">{pattern.description}</p>
               </div>
 
               <div className="p-6">

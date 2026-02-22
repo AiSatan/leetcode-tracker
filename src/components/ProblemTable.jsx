@@ -162,8 +162,10 @@ const ProblemTable = ({
                               <button
                                 key={rating}
                                 onClick={() => handleReview(problem.id, rating)}
-                                className="w-8 h-8 rounded flex items-center justify-center text-sm font-bold text-gray-300 transition-all transform hover:scale-110"
-                                style={{ backgroundColor: color }}
+                                className="w-8 h-8 rounded flex items-center justify-center text-sm font-bold transition-all transform hover:scale-110 text-text-muted bg-background-subtle hover:text-white"
+                                style={{ "--hover-bg": color }}
+                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = color}
+                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
                                 title={`Rate ${rating}/5`}
                               >
                                 {rating}
@@ -193,14 +195,14 @@ const ProblemTable = ({
                                 className={`
                                   w-8 h-8 rounded-sm flex items-center justify-center text-sm font-bold transition-all
                                   cursor-not-allowed
-                                  ${isSelected ? 'text-gray-300' : 'bg-striped opacity-40'}
+                                  ${isSelected ? 'text-white shadow-sm' : 'bg-background-subtle text-text-muted opacity-40'}
                                 `}
                                 style={{
                                   backgroundColor: isSelected ? color : undefined
                                 }}
                                 title={`Last rating: ${prob.performance || 'N/A'}`}
                               >
-                                {isSelected ? rating : ''}
+                                {rating}
                               </button>
                             );
                           })}

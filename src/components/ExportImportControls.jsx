@@ -63,7 +63,7 @@ const ExportImportControls = ({ progress, setProgress, compact }) => {
         </label>
         <button
           onClick={clearAllData}
-          className={`${btnBase} border-status-error bg-background-subtle text-text-muted hover:bg-status-error hover:text-white`}
+          className={`${btnBase} border-transparent bg-background-subtle text-status-error hover:bg-status-error hover:text-white`}
         >
           <Trash2 size={14} /> Clear All
         </button>

@@ -9,196 +9,118 @@ export const theme = {
         // Base Layout
         background: {
             page: {
-                light: "#EEE9DF", // Palladian
-                dark: "#1B2632"   // Abyssal Anchorfish Blue
+                light: "#F5F7FA", // cool-grey-050
+                dark: "#1F2933"   // cool-grey-900
             },
             surface: {
-                light: "#FFFFFF", // White
-                dark: "#2C3B4D"   // Blue Fantastic
+                light: "#FFFFFF",
+                dark: "#323F4B"   // cool-grey-800
             },
             subtle: {
-                light: "#C9C1B1", // Oatmeal
-                dark: "#233040"   // Slightly darker Blue Fantastic
+                light: "#E4E7EB", // cool-grey-100
+                dark: "#3E4C59"   // cool-grey-700
             },
             highlight: {
-                light: "#FFB162", // Burning Flame (low opacity usually)
-                dark: "rgba(255, 177, 98, 0.1)"   // Burning Flame tint
+                light: "#BED0F7", // indigo-100
+                dark: "rgba(76, 99, 182, 0.15)" // indigo-500 tint
             }
         },
 
         // Typography
         text: {
             main: {
-                light: "#1B2632", // Abyssal Anchorfish Blue
-                dark: "#EEE9DF"   // Palladian
+                light: "#1F2933", // cool-grey-900
+                dark: "#F5F7FA"   // cool-grey-050
             },
             muted: {
-                light: "#5C6B7F", // Muted Blue
-                dark: "#C9C1B1"   // Oatmeal
+                light: "#616E7C", // cool-grey-500
+                dark: "#9AA5B1"   // cool-grey-300
             },
             inverted: {
-                light: "#000000",
-                dark: "#EEE9DF"    // Palladian (no bright white)
+                light: "#FFFFFF",
+                dark: "#1F2933"   // cool-grey-900
             }
         },
 
         // Borders
         border: {
             default: {
-                light: "#C9C1B1", // Oatmeal
-                dark: "#374A5E"   // Lighter Blue Fantastic
+                light: "#CBD2D9", // cool-grey-200
+                dark: "#3E4C59"   // cool-grey-700
             },
             focus: {
-                light: "#A35139", // Truffle Trouble
-                dark: "#FFB162"   // Burning Flame
+                light: "#4C63B6", // indigo-500
+                dark: "#647ACB"   // indigo-400
             }
         },
 
         // Brand / Interactive
         primary: {
             main: {
-                light: "#A35139", // Truffle Trouble
-                dark: "#FFB162"   // Burning Flame
+                light: "#4C63B6", // indigo-500
+                dark: "#647ACB"   // indigo-400
             },
             hover: {
-                light: "#8B4530", // Darker Truffle
-                dark: "#FFC285"   // Brighter Flame
+                light: "#4055A8", // indigo-600
+                dark: "#7B93DB"   // indigo-300
             },
             light: {
-                light: "rgba(163, 81, 57, 0.1)", // Truffle Low Opacity
-                dark: "rgba(255, 177, 98, 0.15)" // Flame Low Opacity
+                light: "#E0E8F9", // indigo-050
+                dark: "rgba(76, 99, 182, 0.15)"
             },
             text: {
-                light: "#A35139", // Truffle Trouble
-                dark: "#FFB162"   // Burning Flame
+                light: "#35469C", // indigo-700
+                dark: "#98AEEB"   // indigo-200
             }
         },
 
         // Status & Difficulty
         status: {
             success: {
-                main: {
-                    light: "#A35139", // Truffle Trouble
-                    dark: "#FFB162"   // Burning Flame
-                },
-                hover: {
-                    light: "#8B4530", // Darker Truffle
-                    dark: "#FFC285"   // Brighter Flame
-                }
+                main: { light: "#27AB83", dark: "#3EBD93" },
+                hover: { light: "#199473", dark: "#65D6AD" }
             },
             warning: {
-                main: {
-                    light: "#D97706",
-                    dark: "#F59E0B"
-                },
-                hover: {
-                    light: "#B45309",
-                    dark: "#D97706"
-                }
+                main: { light: "#F0B429", dark: "#F7C948" },
+                hover: { light: "#DE911D", dark: "#FADB5F" }
             },
             error: {
-                main: {
-                    light: "#704040", // Muted Earth Red (Score 1)
-                    dark: "#7E4E4E"   // Muted Earth Brown/Red (Score 1)
-                },
-                hover: {
-                    light: "#5A3333", // Darker Score 1
-                    dark: "#8F5959"   // Lighter Score 1
-                }
+                main: { light: "#E12D39", dark: "#EF4E4E" },
+                hover: { light: "#CF1124", dark: "#F86A6A" }
             }
         },
 
         // Performance / Ratings (Likert Scale)
         performance: {
-            1: { light: "#704040", dark: "#7E4E4E" }, // Muted Earth Red
-            2: { light: "#6E5438", dark: "#7E6048" }, // Muted Earth Brown
-            3: { light: "#636030", dark: "#78703A" }, // Dark Olive
-            4: { light: "#405A42", dark: "#4D6550" }, // Dark Muted Sage
-            5: { light: "#385555", dark: "#486565" }, // Dark Grey-Teal
+            1: { light: "#E12D39", dark: "#EF4E4E" }, // red
+            2: { light: "#F0B429", dark: "#F7C948" }, // yellow
+            3: { light: "#2BB0ED", dark: "#40C3F7" }, // light-blue
+            4: { light: "#4C63B6", dark: "#647ACB" }, // indigo
+            5: { light: "#27AB83", dark: "#3EBD93" }, // teal
         },
 
         // Categorical / Roadmap Colors
         categorical: {
-            blue: {
-                light: "#4A6FA5", // Muted Blue
-                dark: "#6B9AC4"   // Light Blue
-            },
-            blueDim: {
-                light: "rgba(74, 111, 165, 0.1)",
-                dark: "rgba(107, 154, 196, 0.2)"
-            },
-            green: {
-                light: "#5E8C61", // Sage Green
-                dark: "#7FB083"   // Light Sage
-            },
-            greenDim: {
-                light: "rgba(94, 140, 97, 0.1)",
-                dark: "rgba(127, 176, 131, 0.2)"
-            },
-            purple: {
-                light: "#886095", // Muted Purple
-                dark: "#A882C7"   // Light Purple
-            },
-            purpleDim: {
-                light: "rgba(136, 96, 149, 0.1)",
-                dark: "rgba(168, 130, 199, 0.2)"
-            },
-            yellow: {
-                light: "#D4A017", // Ochre
-                dark: "#ffb162"   // Bright Ochre
-            },
-            yellowDim: {
-                light: "rgba(212, 160, 23, 0.1)",
-                dark: "rgba(234, 196, 53, 0.2)"
-            },
-            red: {
-                light: "#704040", // Muted Earth Red (Score 1)
-                dark: "#7E4E4E"   // Muted Earth Brown/Red (Score 1)
-            },
-            redDim: {
-                light: "rgba(112, 64, 64, 0.1)",
-                dark: "rgba(126, 78, 78, 0.2)"
-            },
-            indigo: {
-                light: "#5B6592", // Slate Indigo
-                dark: "#7D86B6"   // Light Indigo
-            },
-            indigoDim: {
-                light: "rgba(91, 101, 146, 0.1)",
-                dark: "rgba(125, 134, 182, 0.2)"
-            },
-            pink: {
-                light: "#C27BA0", // Dusty Pink
-                dark: "#E6A3C4"   // Light Pink
-            },
-            pinkDim: {
-                light: "rgba(194, 123, 160, 0.1)",
-                dark: "rgba(230, 163, 196, 0.2)"
-            },
-            orange: {
-                light: "#D67D3E", // Rust
-                dark: "#F09D58"   // Light Rust
-            },
-            orangeDim: {
-                light: "rgba(214, 125, 62, 0.1)",
-                dark: "rgba(240, 157, 88, 0.2)"
-            },
-            teal: {
-                light: "#4E8E8E", // Teal
-                dark: "#70B0B0"   // Light Teal
-            },
-            tealDim: {
-                light: "rgba(78, 142, 142, 0.1)",
-                dark: "rgba(112, 176, 176, 0.2)"
-            },
-            cyan: {
-                light: "#5F9EA0", // Cadet Blue
-                dark: "#82C0C2"   // Light Cyan
-            },
-            cyanDim: {
-                light: "rgba(95, 158, 160, 0.1)",
-                dark: "rgba(130, 192, 194, 0.2)"
-            }
+            blue: { light: "#2BB0ED", dark: "#40C3F7" },
+            blueDim: { light: "rgba(43, 176, 237, 0.1)", dark: "rgba(64, 195, 247, 0.15)" },
+            green: { light: "#27AB83", dark: "#3EBD93" },
+            greenDim: { light: "rgba(39, 171, 131, 0.1)", dark: "rgba(62, 189, 147, 0.15)" },
+            purple: { light: "#7B93DB", dark: "#98AEEB" },
+            purpleDim: { light: "rgba(123, 147, 219, 0.1)", dark: "rgba(152, 174, 235, 0.15)" },
+            yellow: { light: "#F0B429", dark: "#F7C948" },
+            yellowDim: { light: "rgba(240, 180, 41, 0.1)", dark: "rgba(247, 201, 72, 0.15)" },
+            red: { light: "#E12D39", dark: "#EF4E4E" },
+            redDim: { light: "rgba(225, 45, 57, 0.1)", dark: "rgba(239, 78, 78, 0.15)" },
+            indigo: { light: "#4C63B6", dark: "#647ACB" },
+            indigoDim: { light: "rgba(76, 99, 182, 0.1)", dark: "rgba(100, 122, 203, 0.15)" },
+            pink: { light: "#4C63B6", dark: "#647ACB" },
+            pinkDim: { light: "rgba(76, 99, 182, 0.1)", dark: "rgba(100, 122, 203, 0.15)" },
+            orange: { light: "#DE911D", dark: "#FADB5F" },
+            orangeDim: { light: "rgba(222, 145, 29, 0.1)", dark: "rgba(250, 219, 95, 0.15)" },
+            teal: { light: "#27AB83", dark: "#3EBD93" },
+            tealDim: { light: "rgba(39, 171, 131, 0.1)", dark: "rgba(62, 189, 147, 0.15)" },
+            cyan: { light: "#2BB0ED", dark: "#40C3F7" },
+            cyanDim: { light: "rgba(43, 176, 237, 0.1)", dark: "rgba(64, 195, 247, 0.15)" }
         }
     }
 };

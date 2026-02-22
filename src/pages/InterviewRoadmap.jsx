@@ -120,34 +120,34 @@ const InterviewRoadmap = () => {
                   {/* Section Header */}
                   <div
                     onClick={() => toggleSection(section.id)}
-                    className={`${section.color} p-4 cursor-pointer hover:opacity-90 transition-opacity`}
+                    className={`bg-background-surface hover:bg-background-subtle p-4 cursor-pointer transition-colors border-b border-border-default`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <div className="bg-white bg-opacity-20 p-2 rounded-lg">
-                          <Icon size={32} className="text-text-inverted" />
+                        <div className="bg-primary-light p-2 rounded-lg">
+                          <Icon size={32} className="text-primary-main" />
                         </div>
                         <div>
-                          <h2 className="text-lg font-bold text-text-inverted">
+                          <h2 className="text-lg font-bold text-text-main">
                             {idx + 1}. {section.title}
                           </h2>
                           <div className="flex items-center gap-2 mt-2">
-                            <div className="bg-white bg-opacity-30 rounded-full h-2 w-24">
+                            <div className="bg-background-subtle border border-border-default rounded-full h-2 w-24 overflow-hidden">
                               <div
-                                className="bg-white rounded-full h-2 transition-all"
+                                className="bg-primary-main h-full transition-all"
                                 style={{ width: `${progress}%` }}
                               />
                             </div>
-                            <span className="text-text-inverted text-xs font-semibold">
+                            <span className="text-text-muted text-xs font-semibold">
                               {progress}%
                             </span>
                           </div>
                         </div>
                       </div>
                       {isExpanded ? (
-                        <ChevronDown size={24} className="text-text-inverted" />
+                        <ChevronDown size={24} className="text-text-muted" />
                       ) : (
-                        <ChevronRight size={24} className="text-text-inverted" />
+                        <ChevronRight size={24} className="text-text-muted" />
                       )}
                     </div>
                   </div>
@@ -226,8 +226,8 @@ const InterviewRoadmap = () => {
                   key={section.id}
                   className="bg-background-surface rounded-lg shadow-lg overflow-hidden"
                 >
-                  <div className={`${section.color} py-3 px-4`}>
-                    <h3 className="text-lg font-bold text-text-inverted">
+                  <div className={`bg-background-subtle border-b border-border-default py-3 px-4`}>
+                    <h3 className="text-lg font-bold text-text-main">
                       {section.title}
                     </h3>
                   </div>
@@ -236,26 +236,26 @@ const InterviewRoadmap = () => {
                       <div
                         key={idx}
                         className={`p-3 rounded-lg ${item.type === "question"
-                          ? "bg-category-blue/10 border-l-4 border-category-blue"
+                          ? "bg-background-surface border-l-4 border-border-default"
                           : item.type === "answer"
-                            ? "bg-category-green/10 border-l-4 border-category-green ml-4"
+                            ? "bg-background-surface border-l-4 border-status-success ml-4"
                             : item.type === "use"
-                              ? "bg-category-purple/10 border-l-4 border-category-purple"
+                              ? "bg-background-surface border-l-4 border-primary-main"
                               : item.type === "note"
-                                ? "bg-category-yellow/10 border-l-4 border-category-yellow"
+                                ? "bg-background-subtle border-l-4 border-status-warning"
                                 : "bg-background-subtle border-l-4 border-border-default"
                           }`}
                       >
                         <p
                           className={`text-sm ${item.type === "question"
-                            ? "font-semibold text-category-blue"
+                            ? "font-semibold text-text-main"
                             : item.type === "answer"
-                              ? "text-category-green"
+                              ? "text-status-success"
                               : item.type === "use"
-                                ? "text-category-purple"
+                                ? "text-primary-text"
                                 : item.type === "note"
-                                  ? "text-category-yellow"
-                                  : "text-text-main"
+                                  ? "text-status-warning"
+                                  : "text-text-muted"
                             }`}
                         >
                           {item.text}
