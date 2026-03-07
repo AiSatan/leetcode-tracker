@@ -94,8 +94,8 @@ export const theme = {
         performance: {
             1: { light: "#E12D39", dark: "#EF4E4E" }, // red
             2: { light: "#F0B429", dark: "#F7C948" }, // yellow
-            3: { light: "#2BB0ED", dark: "#40C3F7" }, // light-blue
-            4: { light: "#4C63B6", dark: "#647ACB" }, // indigo
+            3: { light: "#DE911D", dark: "#F7C948" }, // orange (warning)
+            4: { light: "#2BB0ED", dark: "#40C3F7" }, // light-blue
             5: { light: "#27AB83", dark: "#3EBD93" }, // teal
         },
 
