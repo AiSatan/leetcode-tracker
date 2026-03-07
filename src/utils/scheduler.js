@@ -11,6 +11,20 @@ const DIFFICULTY_MAP = {
     "Hard": 3
 };
 
+/** Returns local date string YYYY-MM-DD (not UTC) */
+const toLocalDateStr = (date) => {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+};
+
+/** Returns a new Date set to local midnight for a YYYY-MM-DD string */
+const parseLocalDate = (dateStr) => {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    return new Date(y, m - 1, d);
+};
+
 /**
  * Calculates review updates.
  * Returns an object map of problemId -> newProgress.
@@ -42,11 +56,12 @@ export const scheduleReview = (problem, _currentProgress, performance, allProgre
         newInterval = 1;
     }
 
-    // 3. Find Target Day
+    // 3. Find Target Day (using local midnight, not UTC)
     const today = new Date();
-    const targetDatePromise = new Date(today);
-    targetDatePromise.setDate(today.getDate() + newInterval);
-    const targetDateStr = targetDatePromise.toISOString().split('T')[0];
+    const todayLocal = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const targetDatePromise = new Date(todayLocal);
+    targetDatePromise.setDate(todayLocal.getDate() + newInterval);
+    const targetDateStr = toLocalDateStr(targetDatePromise);
 
     // 4. Load Balancing & Priority Bumping
     const updates = {};
@@ -59,7 +74,7 @@ export const scheduleReview = (problem, _currentProgress, performance, allProgre
     const newProgress = {
         ...currentProgress,
         solved: true,
-        lastReviewed: today.toISOString().split('T')[0],
+        lastReviewed: toLocalDateStr(today),
         nextReview: finalDate,
         interval: newInterval,
         performance: performance,
@@ -112,9 +127,9 @@ const resolveScheduling = (targetDateStr, performance, allProgress) => {
 
         if (victim) {
             // Bump victim to next available slot (Recursive bumping)
-            const victimDateObj = new Date(targetDateStr);
+            const victimDateObj = parseLocalDate(targetDateStr);
             victimDateObj.setDate(victimDateObj.getDate() + 1);
-            const nextDayStr = victimDateObj.toISOString().split('T')[0];
+            const nextDayStr = toLocalDateStr(victimDateObj);
 
             // Victim logic:
             // If victim was 5 -> stays 5.
@@ -167,7 +182,7 @@ const resolveScheduling = (targetDateStr, performance, allProgress) => {
     }
 
     // 3. No bumping possible (we are low priority, or day filled with high priority). Standard find next slot.
-    const targetDateObj = new Date(targetDateStr);
+    const targetDateObj = parseLocalDate(targetDateStr);
     const bestDate = performLoadBalancing(targetDateObj, allProgress);
     return { finalDate: bestDate, bumpedUpdates: null };
 };
@@ -194,7 +209,7 @@ const performLoadBalancing = (targetDate, allProgress) => {
     while (!found && offset < 365) {
         const checkDatePos = new Date(targetDate);
         checkDatePos.setDate(targetDate.getDate() + offset);
-        const dateStrPos = checkDatePos.toISOString().split('T')[0];
+        const dateStrPos = toLocalDateStr(checkDatePos);
 
         if ((dailyCounts[dateStrPos] || 0) < DAILY_LIMIT) {
             bestDate = checkDatePos;
@@ -205,8 +220,8 @@ const performLoadBalancing = (targetDate, allProgress) => {
         if (offset !== 0) {
             const checkDateNeg = new Date(targetDate);
             checkDateNeg.setDate(targetDate.getDate() - offset);
-            const todayStr = new Date().toISOString().split('T')[0];
-            const dateStrNeg = checkDateNeg.toISOString().split('T')[0];
+            const todayStr = toLocalDateStr(new Date());
+            const dateStrNeg = toLocalDateStr(checkDateNeg);
 
             if (dateStrNeg > todayStr && (dailyCounts[dateStrNeg] || 0) < DAILY_LIMIT) {
                 bestDate = checkDateNeg;
@@ -216,7 +231,7 @@ const performLoadBalancing = (targetDate, allProgress) => {
         }
         offset++;
     }
-    return bestDate.toISOString().split('T')[0];
+    return toLocalDateStr(bestDate);
 };
 
 
@@ -224,7 +239,7 @@ export const getReviewStatus = (problemId, progress) => {
     const prob = progress[problemId];
     if (!prob || !prob.solved) return 'unsolved';
 
-    const today = new Date().toISOString().split('T')[0];
+    const today = toLocalDateStr(new Date());
     if (!prob.nextReview || prob.nextReview <= today) return 'due';
 
     return 'future';
@@ -259,7 +274,7 @@ export const getDailyForecast = (allProgress, days = 11) => {
             // Only care about solved problems with a nextReview date
             if (prob.solved && prob.nextReview) {
                 // Determine if it's "Due Today" (or overdue) or "Future"
-                const todayStr = today.toISOString().split('T')[0];
+                const todayStr = toLocalDateStr(today);
                 let targetDate = prob.nextReview;
 
                 // If due in the past, group it with today
@@ -281,7 +296,7 @@ export const getDailyForecast = (allProgress, days = 11) => {
     for (let i = 0; i < days; i++) {
         const dateObj = new Date(today);
         dateObj.setDate(today.getDate() + i);
-        const dateStr = dateObj.toISOString().split('T')[0];
+        const dateStr = toLocalDateStr(dateObj);
 
         const dayLabel = dateObj.getDate();
 
