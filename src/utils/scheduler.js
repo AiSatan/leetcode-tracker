@@ -181,7 +181,81 @@ const resolveScheduling = (targetDateStr, performance, allProgress) => {
         }
     }
 
-    // 3. No bumping possible (we are low priority, or day filled with high priority). Standard find next slot.
+    // 3. No victims on target date. If we're high priority, search nearby dates for bumpable victims.
+    if (performance <= 3) {
+        const targetDateObj = parseLocalDate(targetDateStr);
+        const todayStr = toLocalDateStr(new Date());
+
+        // Search forward from target date for a day with a score 4+ victim
+        for (let scanOffset = 1; scanOffset <= 30; scanOffset++) {
+            const scanDate = new Date(targetDateObj);
+            scanDate.setDate(targetDateObj.getDate() + scanOffset);
+            const scanDateStr = toLocalDateStr(scanDate);
+
+            // Don't scan past dates
+            if (scanDateStr <= todayStr) continue;
+
+            // Find bumpable victims on this date
+            const itemsOnScanDate = [];
+            Object.keys(allProgress).forEach(listName => {
+                Object.keys(allProgress[listName]).forEach(id => {
+                    const p = allProgress[listName][id];
+                    if (p.nextReview === scanDateStr) {
+                        itemsOnScanDate.push({ list: listName, id: id, performance: p.performance || 3 });
+                    }
+                });
+            });
+
+            const bumpCandidates = itemsOnScanDate.filter(item => item.performance >= 4)
+                .sort((a, b) => b.performance - a.performance);
+
+            const victim = bumpCandidates[0];
+            if (victim) {
+                // Found a victim on a nearby date - bump them and take their spot
+                const victimDateObj = new Date(scanDate);
+                victimDateObj.setDate(scanDate.getDate() + 1);
+                const nextDayStr = toLocalDateStr(victimDateObj);
+
+                let newVictimPerformance = victim.performance;
+                if (newVictimPerformance === 4) {
+                    newVictimPerformance = 3;
+                }
+
+                const { finalDate: victimFinalDate, bumpedUpdates: cascadingUpdates } = resolveScheduling(
+                    nextDayStr,
+                    newVictimPerformance,
+                    allProgress
+                );
+
+                const originalVictimProgress = allProgress[victim.list][victim.id];
+                const updatedVictim = {
+                    ...originalVictimProgress,
+                    nextReview: victimFinalDate,
+                    performance: newVictimPerformance
+                };
+
+                const bumpedUpdates = {
+                    [victim.list]: {
+                        [victim.id]: updatedVictim
+                    }
+                };
+
+                if (cascadingUpdates) {
+                    Object.keys(cascadingUpdates).forEach(list => {
+                        if (!bumpedUpdates[list]) bumpedUpdates[list] = {};
+                        Object.assign(bumpedUpdates[list], cascadingUpdates[list]);
+                    });
+                }
+
+                return {
+                    finalDate: scanDateStr, // Take the victim's spot on the nearby date
+                    bumpedUpdates: bumpedUpdates
+                };
+            }
+        }
+    }
+
+    // 4. No bumping possible at all. Standard find next slot.
     const targetDateObj = parseLocalDate(targetDateStr);
     const bestDate = performLoadBalancing(targetDateObj, allProgress);
     return { finalDate: bestDate, bumpedUpdates: null };
