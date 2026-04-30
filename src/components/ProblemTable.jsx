@@ -1,11 +1,110 @@
-import { CheckCircle2, Circle, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { getReviewStatus } from "../utils/scheduler";
 import { getPerformanceColor } from "../utils/theme";
 
-const difficultyColor = {
-  Easy: "text-status-success",
-  Medium: "text-status-warning",
-  Hard: "text-status-error",
+const difficultyTone = {
+  Easy:   "var(--color-status-success-main)",
+  Medium: "var(--color-status-warning-main)",
+  Hard:   "var(--color-status-error-main)",
+};
+
+/* A vermillion seal stamp for mastered problems. */
+const Seal = ({ size = 16 }) => (
+  <span
+    aria-label="mastered"
+    title="Mastered"
+    className="inline-flex items-center justify-center"
+    style={{
+      width: size, height: size,
+      backgroundColor: "var(--color-primary-main)",
+      boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.18)"
+    }}
+  >
+    <svg viewBox="0 0 12 12" width={size * 0.65} height={size * 0.65} aria-hidden>
+      <path
+        d="M2.5 6.4 L5 8.7 L9.5 3.5"
+        fill="none"
+        stroke="var(--color-text-inverted)"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  </span>
+);
+
+const StatusMark = ({ prob }) => {
+  if (prob.performance === 5) {
+    return (
+      <span className="inline-flex items-center gap-2">
+        <Seal size={14} />
+        <span className="smallcaps text-text-main">Mastered</span>
+      </span>
+    );
+  }
+  if (prob.solved) {
+    return (
+      <span className="inline-flex items-center gap-2">
+        <span className="w-3 h-3 border border-text-muted/60 inline-block" />
+        <span className="smallcaps text-text-muted">Learning</span>
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-2">
+      <span className="w-3 h-3 border border-dashed border-border-default inline-block" />
+      <span className="smallcaps text-text-muted/70">New</span>
+    </span>
+  );
+};
+
+const RatingRow = ({ onPick, currentScore, disabled }) => (
+  <div className="flex gap-1">
+    {[1, 2, 3, 4, 5].map(rating => {
+      const ink = getPerformanceColor(rating);
+      const selected = currentScore === rating;
+      return (
+        <button
+          key={rating}
+          disabled={disabled}
+          onClick={!disabled ? () => onPick(rating) : undefined}
+          className={`
+            w-7 h-7 flex items-center justify-center
+            display tabular text-[13px]
+            border transition-all
+            ${disabled
+              ? selected
+                ? "text-text-inverted border-transparent"
+                : "border-border-default text-text-muted/40 cursor-not-allowed"
+              : "border-border-default text-text-muted hover:text-text-inverted hover:border-transparent"}
+          `}
+          style={{
+            backgroundColor: disabled
+              ? selected ? ink : "transparent"
+              : undefined,
+            "--hover-ink": ink,
+          }}
+          onMouseEnter={(e) => {
+            if (disabled) return;
+            e.currentTarget.style.backgroundColor = ink;
+          }}
+          onMouseLeave={(e) => {
+            if (disabled) return;
+            e.currentTarget.style.backgroundColor = "";
+          }}
+          title={!disabled ? `Score ${rating}/5` : `Last score: ${currentScore || "—"}`}
+        >
+          {rating}
+        </button>
+      );
+    })}
+  </div>
+);
+
+const formatDate = (dateString) => {
+  if (!dateString) return "—";
+  const d = new Date(dateString);
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 };
 
 const ProblemTable = ({
@@ -17,207 +116,144 @@ const ProblemTable = ({
   showOnlyDueToday,
   hidePlanned,
 }) => {
-  const now = new Date();
-  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  const _now = new Date();
+  const today = `${_now.getFullYear()}-${String(_now.getMonth() + 1).padStart(2, '0')}-${String(_now.getDate()).padStart(2, '0')}`;
 
-  const filteredProblems = problems.filter((problem) => {
-    const categoryMatch =
-      filterCategory === "All" ||
-      (problem.topics || []).includes(filterCategory);
-
-    const difficultyMatch =
-      filterDifficulty === "All" || problem.difficulty === filterDifficulty;
-
-    if (!showOnlyDueToday && !hidePlanned) return categoryMatch && difficultyMatch;
+  const filtered = problems.filter(problem => {
+    const catMatch = filterCategory === "All" || (problem.topics || []).includes(filterCategory);
+    const diffMatch = filterDifficulty === "All" || problem.difficulty === filterDifficulty;
+    if (!showOnlyDueToday && !hidePlanned) return catMatch && diffMatch;
 
     const status = getReviewStatus(problem.id, progress);
-
     if (showOnlyDueToday && status !== 'due') return false;
-
-    // "Hide Planned" hides problems that are solved and scheduled for the future
-    // (i.e. their stars are disabled because they aren't due yet)
     if (hidePlanned && status === 'future') return false;
-
-    return categoryMatch && difficultyMatch;
+    return catMatch && diffMatch;
   });
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-    });
-  };
-
   return (
-    <div className="bg-background-surface rounded-lg shadow-lg p-6 transition-colors">
-      <h2 className="text-xl font-semibold mb-4 text-text-main">
-        Problems
-      </h2>
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-border-default">
-          <thead className="bg-background-subtle">
-            <tr>
-              <th className="px-4 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider w-16">
-                #
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider min-w-[200px]">
-                Name
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider w-40">
-                Category
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider w-24">
-                Difficulty
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider w-32">
-                Status
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider min-w-[200px]">
-                Reviews & Due Dates
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-background-surface divide-y divide-border-default">
-            {filteredProblems.map((problem, index) => {
-              const prob = progress[problem.id] || {};
-              return (
-                <tr
-                  key={problem.id}
-                  className=""
-                >
-                  <td className="px-4 py-4 whitespace-nowrap text-sm text-text-main">
-                    {index + 1}
-                  </td>
-                  <td className="px-4 py-4 text-sm text-text-main">
-                    <div className="flex items-center gap-2">
-                      <a
-                        href={problem.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary hover:text-primary-hover hover:underline flex items-center gap-1"
-                        title={`Open ${problem.name} on NeetCode`}
-                      >
-                        <span className="line-clamp-2">{problem.title}</span>
-                        <ExternalLink size={14} className="flex-shrink-0" />
-                      </a>
-                    </div>
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-sm text-text-main">
-                    <div className="flex flex-wrap gap-1.5 max-w-[192px]">
-                      {(() => {
-                        const section = problem.listMeta?.section || problem.listMeta?.module;
-                        const topics = problem.topics || [];
-                        const uniqueTags = new Set();
+    <section className="mt-12">
+      {/* Section masthead */}
+      <header className="flex items-end justify-between border-b border-border-default pb-3 mb-1">
+        <div className="flex items-baseline gap-3">
+          <h2 className="display text-[26px] text-text-main">Problems</h2>
+          <span className="display italic text-[13px] text-text-muted/70">課題</span>
+        </div>
+        <span className="smallcaps text-text-muted tabular">
+          {filtered.length}<span className="opacity-50"> / {problems.length}</span>
+        </span>
+      </header>
 
-                        if (section) uniqueTags.add(section);
-                        topics.forEach(t => uniqueTags.add(t));
-
-                        return Array.from(uniqueTags).map((tag, idx) => (
-                          <span
-                            key={idx}
-                            className={`px-2 py-1 text-xs rounded ${tag === section
-                              ? "bg-background-subtle text-text-muted border border-border-default"
-                              : "bg-primary-light text-primary-text"
-                              }`}
-                            title="Category/Topic"
-                          >
-                            {tag}
-                          </span>
-                        ));
-                      })()}
-                    </div>
-                  </td>
-                  <td
-                    className={`px-4 py-4 whitespace-nowrap text-sm font-semibold ${difficultyColor[problem.difficulty]}`}
-                  >
-                    {problem.difficulty}
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-2 text-text-muted">
-                      {prob.performance === 5 ? (
-                        <CheckCircle2
-                          className="text-status-success"
-                          size={20}
-                        />
-                      ) : (
-                        <Circle size={20} />
-                      )}
-                      <span className="text-xs">
-                        {prob.performance === 5 ? "Mastered" : prob.solved ? "Learning" : "Not Started"}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-4 py-4">
-                    {/* Review Actions */}
-                    {(!prob.solved || (prob.nextReview && prob.nextReview <= today)) ? (
-                      <div className="flex flex-col gap-1">
-                        <span className="text-xs font-medium text-text-muted mb-1">
-                          Rate how well you did:
-                        </span>
-                        <div className="flex gap-1">
-                          {[1, 2, 3, 4, 5].map((rating) => {
-                            const color = getPerformanceColor(rating);
-                            return (
-                              <button
-                                key={rating}
-                                onClick={() => handleReview(problem.id, rating)}
-                                className="w-8 h-8 rounded flex items-center justify-center text-sm font-bold transition-all transform hover:scale-110 text-text-muted bg-background-subtle hover:text-white"
-                                style={{ "--hover-bg": color }}
-                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = color}
-                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
-                                title={`Rate ${rating}/5`}
-                              >
-                                {rating}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col gap-1 opacity-75">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-xs font-medium text-text-muted">
-                            Last Score:
-                          </span>
-                          <span className="text-xs text-text-muted">
-                            Next: {formatDate(prob.nextReview)} ({prob.interval}d)
-                          </span>
-                        </div>
-                        <div className="flex gap-1">
-                          {[1, 2, 3, 4, 5].map((rating) => {
-                            const isSelected = prob.performance === rating;
-                            const color = getPerformanceColor(rating);
-                            return (
-                              <button
-                                key={rating}
-                                disabled
-                                className={`
-                                  w-8 h-8 rounded-sm flex items-center justify-center text-sm font-bold transition-all
-                                  cursor-not-allowed
-                                  ${isSelected ? 'text-white shadow-sm' : 'bg-background-subtle text-text-muted opacity-40'}
-                                `}
-                                style={{
-                                  backgroundColor: isSelected ? color : undefined
-                                }}
-                                title={`Last rating: ${prob.performance || 'N/A'}`}
-                              >
-                                {rating}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+      {/* Column header — quiet small caps */}
+      <div className="hidden lg:grid grid-cols-[3rem_minmax(0,2.4fr)_minmax(0,1.4fr)_5rem_8rem_minmax(0,1.6fr)] gap-4 py-2 border-b border-border-default smallcaps text-text-muted/80">
+        <span>№</span>
+        <span>Problem</span>
+        <span>Topic</span>
+        <span>Diff</span>
+        <span>Status</span>
+        <span>Review</span>
       </div>
-    </div>
+
+      {filtered.length === 0 && (
+        <p className="display italic text-text-muted py-12 text-center">
+          No problems match these filters.
+        </p>
+      )}
+
+      {filtered.map((problem, index) => {
+        const prob = progress[problem.id] || {};
+        const isDue = !prob.solved || (prob.nextReview && prob.nextReview <= today);
+        const tagSection = problem.listMeta?.section || problem.listMeta?.module;
+        const topics = problem.topics || [];
+        const tags = Array.from(new Set([tagSection, ...topics].filter(Boolean)));
+
+        return (
+          <article
+            key={problem.id}
+            className="grid grid-cols-1 lg:grid-cols-[3rem_minmax(0,2.4fr)_minmax(0,1.4fr)_5rem_8rem_minmax(0,1.6fr)] gap-x-4 gap-y-3 items-start py-5 border-b border-border-default"
+          >
+            {/* Index */}
+            <span className="display tabular text-[14px] text-text-muted/70 leading-tight pt-0.5">
+              {String(index + 1).padStart(2, '0')}
+            </span>
+
+            {/* Title + link */}
+            <a
+              href={problem.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-start gap-1.5 leading-tight"
+            >
+              <span className="display text-[15px] text-text-main group-hover:text-primary transition-colors">
+                {problem.title}
+              </span>
+              <ExternalLink
+                size={12}
+                strokeWidth={1.5}
+                className="mt-1 text-text-muted/50 group-hover:text-primary transition-colors flex-shrink-0"
+              />
+            </a>
+
+            {/* Tags — hairline outlines, small */}
+            <div className="flex flex-wrap gap-1.5">
+              {tags.map((tag, idx) => (
+                <span
+                  key={idx}
+                  className={`px-1.5 py-px text-[10px] border tracking-wide ${
+                    tag === tagSection
+                      ? "border-border-default text-text-muted"
+                      : "border-primary/40 text-primary-text"
+                  }`}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            {/* Difficulty */}
+            <span className="flex items-center gap-1.5 text-[12px]">
+              <span
+                className="inline-block w-1.5 h-1.5 rounded-full"
+                style={{ backgroundColor: difficultyTone[problem.difficulty] }}
+              />
+              <span className="smallcaps" style={{ color: difficultyTone[problem.difficulty] }}>
+                {problem.difficulty}
+              </span>
+            </span>
+
+            {/* Status */}
+            <StatusMark prob={prob} />
+
+            {/* Review */}
+            <div className="flex flex-col gap-1.5">
+              {isDue ? (
+                <>
+                  <span className="text-[10px] text-text-muted smallcaps">Rate 1–5</span>
+                  <RatingRow
+                    onPick={(r) => handleReview(problem.id, r)}
+                    currentScore={prob.performance}
+                  />
+                </>
+              ) : (
+                <>
+                  <span className="text-[11px] text-text-muted">
+                    <span className="smallcaps text-text-muted/70">Next</span>{" "}
+                    <span className="display italic tabular text-text-main">
+                      {formatDate(prob.nextReview)}
+                    </span>
+                    <span className="text-text-muted/60 tabular"> · {prob.interval}d</span>
+                  </span>
+                  <RatingRow
+                    onPick={() => {}}
+                    currentScore={prob.performance}
+                    disabled
+                  />
+                </>
+              )}
+            </div>
+          </article>
+        );
+      })}
+    </section>
   );
 };
 

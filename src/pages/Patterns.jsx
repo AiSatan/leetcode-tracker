@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, Code2, Copy } from "lucide-react";
+import { Check, Copy } from "lucide-react";
 import { patterns } from "../data";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import {
@@ -8,154 +8,178 @@ import {
 } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { useTheme } from "../context/ThemeContext";
 
+const languages = [
+  { id: "python",     name: "Python" },
+  { id: "javascript", name: "JavaScript" },
+  { id: "java",       name: "Java" },
+  { id: "go",         name: "Go" },
+];
+
+const formatDateline = (d) =>
+  d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
 
 const Patterns = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("python");
   const [copiedIndex, setCopiedIndex] = useState(null);
   const { isDark } = useTheme();
 
-
-  const languages = [
-    { id: "python", name: "Python" },
-    { id: "javascript", name: "JavaScript" },
-    { id: "java", name: "Java" },
-    { id: "go", name: "Go" },
-  ];
-
   const copyToClipboard = (text, index) => {
     navigator.clipboard.writeText(text);
     setCopiedIndex(index);
-    setTimeout(() => setCopiedIndex(null), 2000);
+    setTimeout(() => setCopiedIndex(null), 1800);
+  };
+
+  const codeStyle = {
+    margin: 0,
+    padding: "1.1rem 1.25rem",
+    background: "transparent",
+    fontSize: "12.5px",
+    fontFamily: '"JetBrains Mono", ui-monospace, monospace',
   };
 
   return (
-    <div className="min-h-screen bg-background-page p-6 transition-colors">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <h1 className="text-4xl font-bold text-text-main">
-              LeetCode Patterns Cheat Sheet
-            </h1>
-            <Code2
-              size={36}
-              className="text-primary-main ml-2"
-            />
+    <main className="max-w-[1280px] mx-auto px-6 lg:px-10 pb-24">
+
+      {/* Masthead */}
+      <header className="pt-10 pb-8 border-b border-border-default">
+        <div className="flex items-baseline gap-3">
+          <span className="smallcaps text-text-muted">Reference</span>
+          <span className="h-px w-6 bg-border-default" />
+          <time className="text-[11px] text-text-muted display italic tabular">
+            {formatDateline(new Date())}
+          </time>
+        </div>
+
+        <h1 className="display text-[44px] lg:text-[52px] leading-[1.05] text-text-main mt-4">
+          Patterns
+        </h1>
+        <p className="display italic text-text-muted text-[15px] mt-2">
+          A field manual of recurring shapes — sliding window, two pointers, and the like.
+          型 (kata).
+        </p>
+      </header>
+
+      {/* Sticky language strip — inline text tabs, no pill buttons */}
+      <div className="sticky top-0 z-10 bg-background-page/95 backdrop-blur-sm border-b border-border-default -mx-6 lg:-mx-10 px-6 lg:px-10 py-3 mt-8 mb-2">
+        <div className="flex items-center gap-6">
+          <span className="smallcaps text-text-muted">Language</span>
+          <div className="flex items-center gap-5">
+            {languages.map(lang => {
+              const active = selectedLanguage === lang.id;
+              return (
+                <button
+                  key={lang.id}
+                  onClick={() => setSelectedLanguage(lang.id)}
+                  className="relative pb-1 text-[12px] tracking-wide transition-colors"
+                  style={{
+                    color: active ? "var(--color-text-main)" : "var(--color-text-muted)",
+                    fontWeight: active ? 600 : 400,
+                  }}
+                >
+                  {lang.name}
+                  {active && (
+                    <span className="absolute left-0 right-0 -bottom-px h-px bg-primary" />
+                  )}
+                </button>
+              );
+            })}
           </div>
-          <p className="text-text-muted text-lg">
-            Master coding patterns in multiple languages
-          </p>
-        </div>
-
-        <div className="bg-background-surface rounded-lg shadow-md p-4 mb-8 sticky top-4 z-10 transition-colors">
-          <div className="flex items-center justify-center gap-3 flex-wrap">
-            <span className="text-text-muted font-medium">
-              Select Language:
-            </span>
-            {languages.map((lang) => (
-              <button
-                key={lang.id}
-                onClick={() => setSelectedLanguage(lang.id)}
-                className={`px-4 py-2 rounded-lg font-medium transition-all ${selectedLanguage === lang.id
-                  ? `bg-primary-main text-text-inverted shadow-lg scale-105`
-                  : "bg-background-subtle text-text-muted hover:bg-background-highlight"
-                  }`}
-              >
-                {lang.name}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="space-y-6">
-          {patterns.map((pattern, idx) => (
-            <div
-              key={idx}
-              className="bg-background-surface rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all"
-            >
-              <div className="bg-background-subtle border-b border-border-default py-3 px-4">
-                <h2 className="text-lg font-bold text-text-main mb-1">
-                  {pattern.title}
-                </h2>
-                <p className="text-text-muted">{pattern.description}</p>
-              </div>
-
-              <div className="p-6">
-                <div className="relative mb-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-semibold text-text-muted uppercase">
-                      {languages.find((l) => l.id === selectedLanguage)?.name}{" "}
-                      Template
-                    </span>
-                    <button
-                      onClick={() =>
-                        copyToClipboard(
-                          pattern.templates[selectedLanguage],
-                          idx
-                        )
-                      }
-                      className="flex items-center gap-2 px-3 py-1 text-sm bg-background-subtle hover:bg-background-highlight rounded transition-colors"
-                    >
-                      {copiedIndex === idx ? (
-                        <>
-                          <Check
-                            size={16}
-                            className="text-status-success"
-                          />
-                          <span className="text-status-success">
-                            Copied!
-                          </span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy
-                            size={16}
-                            className="text-text-muted"
-                          />
-                          <span className="text-text-muted">
-                            Copy
-                          </span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                  <SyntaxHighlighter
-                    language={selectedLanguage}
-                    style={isDark ? oneDark : oneLight}
-                    wrapLongLines={true}
-                    showLineNumbers={true}
-                    className="rounded-lg overflow-x-auto"
-                  >
-                    {pattern.templates[selectedLanguage].replace(/\\n/g, "\n")}
-                  </SyntaxHighlighter>
-                </div>
-                <div className="bg-background-subtle rounded-lg p-4">
-                  <span className="font-semibold text-text-main text-sm">
-                    Common Problems:
-                  </span>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {pattern.problems.map((problem, pIdx) => (
-                      <span
-                        key={pIdx}
-                        className="px-3 py-1 bg-primary-light text-primary-text rounded-full text-sm font-medium"
-                      >
-                        {problem}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-12 text-center text-text-muted">
-          <p className="text-sm">
-            💡 Practice these patterns regularly to build strong problem-solving
-            intuition
-          </p>
         </div>
       </div>
-    </div>
+
+      {/* Pattern entries */}
+      <div className="divide-y divide-border-default">
+        {patterns.map((pattern, idx) => (
+          <article
+            key={idx}
+            className="grid grid-cols-1 lg:grid-cols-[5rem_minmax(0,1fr)] gap-x-8 gap-y-4 py-12"
+          >
+            {/* Numeral */}
+            <div className="flex flex-col">
+              <span className="display tabular text-[40px] leading-none text-text-muted/60">
+                {String(idx + 1).padStart(2, "0")}
+              </span>
+              <span className="smallcaps text-text-muted/70 mt-2">Pattern</span>
+            </div>
+
+            {/* Body */}
+            <div>
+              <h2 className="display text-[26px] text-text-main leading-tight">
+                {pattern.title}
+              </h2>
+              <p className="display italic text-[14px] text-text-muted mt-2 max-w-2xl">
+                {pattern.description}
+              </p>
+
+              {/* Code block — bordered hairline frame, transparent bg */}
+              <div className="mt-6 border border-border-default">
+                <div className="flex items-center justify-between px-4 py-2 border-b border-border-default bg-background-subtle/50">
+                  <span className="smallcaps text-text-muted">
+                    {languages.find(l => l.id === selectedLanguage)?.name} · Template
+                  </span>
+                  <button
+                    onClick={() => copyToClipboard(pattern.templates[selectedLanguage], idx)}
+                    className="inline-flex items-center gap-1.5 text-[11px] text-text-muted hover:text-primary transition-colors"
+                  >
+                    {copiedIndex === idx ? (
+                      <>
+                        <Check size={13} strokeWidth={1.6} className="text-status-success" />
+                        <span className="text-status-success smallcaps">Copied</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy size={13} strokeWidth={1.6} />
+                        <span className="smallcaps">Copy</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+                <SyntaxHighlighter
+                  language={selectedLanguage}
+                  style={isDark ? oneDark : oneLight}
+                  wrapLongLines={true}
+                  showLineNumbers={true}
+                  customStyle={codeStyle}
+                  lineNumberStyle={{
+                    color: "var(--color-text-muted)",
+                    opacity: 0.5,
+                    minWidth: "1.6rem",
+                    paddingRight: "0.85rem",
+                    fontSize: "11px",
+                  }}
+                  codeTagProps={{
+                    style: {
+                      fontFamily: '"JetBrains Mono", ui-monospace, monospace',
+                    },
+                  }}
+                >
+                  {pattern.templates[selectedLanguage].replace(/\\n/g, "\n")}
+                </SyntaxHighlighter>
+              </div>
+
+              {/* Common problems — footnote-style */}
+              <div className="mt-5 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                <span className="smallcaps text-text-muted/80 mr-1">
+                  Frequently appears in
+                </span>
+                {pattern.problems.map((problem, pIdx) => (
+                  <span key={pIdx} className="display italic text-[13px] text-text-main">
+                    {problem}
+                    {pIdx < pattern.problems.length - 1 && (
+                      <span className="text-text-muted/40"> · </span>
+                    )}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <p className="display italic text-text-muted text-center text-[13px] mt-12 max-w-2xl mx-auto">
+        Repeat the form until it disappears. 形を忘れる稽古.
+      </p>
+    </main>
   );
 };
 

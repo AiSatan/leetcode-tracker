@@ -1,5 +1,3 @@
-import { Filter } from "lucide-react";
-
 const Filters = ({
   categories,
   difficulties,
@@ -11,82 +9,69 @@ const Filters = ({
   setShowOnlyDueToday,
   hidePlanned,
   setHidePlanned,
-  compact,
 }) => (
-  <div className={compact ? '' : 'bg-background-surface rounded-lg shadow-lg p-6 mb-6 transition-colors'}>
-    <div className="flex items-center justify-center gap-2 mb-3">
-      <Filter size={compact ? 14 : 20} className="text-text-muted" />
-      <h2 className={`font-semibold text-text-main ${compact ? 'text-sm' : 'text-xl'}`}>
-        Filters
-      </h2>
+  <div className="flex flex-col">
+    <div className="flex items-baseline justify-between mb-4">
+      <h3 className="smallcaps text-text-muted">Filters</h3>
+      <span className="text-[10px] text-text-muted/70 display italic">絞込</span>
     </div>
+
     <div className="flex flex-col gap-3">
-      <div>
-        <label className="block text-xs font-medium text-text-muted mb-1">
-          Category
-        </label>
+      <label className="flex flex-col gap-1">
+        <span className="text-[10px] text-text-muted smallcaps">Category</span>
         <select
-          title="Category"
           value={filterCategory}
           onChange={(e) => setFilterCategory(e.target.value)}
-          className="w-full p-1.5 text-sm cursor-pointer border border-border-default rounded bg-background-surface text-text-main focus:outline-none transition-colors"
+          className="dojo-select text-[12px] w-full"
         >
-          {categories.map((cat) => (
-            <option
-              key={cat}
-              value={cat}
-              className="bg-background-surface text-text-main"
-            >
-              {cat}
-            </option>
+          {categories.map(cat => (
+            <option key={cat} value={cat}>{cat}</option>
           ))}
         </select>
-      </div>
-      <div>
-        <label className="block text-xs font-medium text-text-muted mb-1">
-          Difficulty
-        </label>
+      </label>
+
+      <label className="flex flex-col gap-1">
+        <span className="text-[10px] text-text-muted smallcaps">Difficulty</span>
         <select
-          title="Difficulty"
           value={filterDifficulty}
           onChange={(e) => setFilterDifficulty(e.target.value)}
-          className="w-full p-1.5 text-sm cursor-pointer border border-border-default rounded bg-background-surface text-text-main focus:outline-none transition-colors"
+          className="dojo-select text-[12px] w-full"
         >
-          {difficulties.map((diff) => (
-            <option
-              key={diff}
-              value={diff}
-              className="bg-background-surface text-text-main"
-            >
-              {diff}
-            </option>
+          {difficulties.map(d => (
+            <option key={d} value={d}>{d}</option>
           ))}
         </select>
-      </div>
-      <div className="flex items-center gap-2">
+      </label>
+
+      <div className="flex items-center gap-2 mt-1">
         <input
           id="due-today-checkbox"
           type="checkbox"
-          title="Show Only Due Today"
           checked={showOnlyDueToday}
-          onChange={() => setShowOnlyDueToday((prev) => !prev)}
+          onChange={() => setShowOnlyDueToday(p => !p)}
           className="custom-checkbox"
         />
-        <label htmlFor="due-today-checkbox" className="text-xs font-medium text-text-muted cursor-pointer select-none">
-          Due Today Only
+        <label
+          htmlFor="due-today-checkbox"
+          className="text-[11px] text-text-muted cursor-pointer select-none"
+        >
+          Due today only
         </label>
       </div>
+
       <div className="flex items-center gap-2">
         <input
           id="hide-planned-checkbox"
           type="checkbox"
-          title="Hide Planned"
           checked={hidePlanned}
-          onChange={() => setHidePlanned((prev) => !prev)}
+          onChange={() => setHidePlanned(p => !p)}
           className="custom-checkbox"
         />
-        <label htmlFor="hide-planned-checkbox" className="text-xs font-medium text-text-muted cursor-pointer select-none">
-          Hide Planned
+        <label
+          htmlFor="hide-planned-checkbox"
+          className="text-[11px] text-text-muted cursor-pointer select-none"
+        >
+          Hide planned
         </label>
       </div>
     </div>

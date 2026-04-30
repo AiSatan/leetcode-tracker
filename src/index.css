@@ -2,55 +2,179 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .bg-striped {
-    background-image: repeating-linear-gradient(135deg,
-        rgba(255, 255, 255, 0.08),
-        rgba(255, 255, 255, 0.08) 1px,
-        transparent 1px,
-        transparent 6px);
+@layer base {
+  html {
+    font-family: 'Geist', system-ui, sans-serif;
+    font-feature-settings: "ss01", "cv11";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Native form widgets (select dropdown panel, scrollbars) inherit
+     the page's color scheme — without this they fall back to OS light. */
+  html.light { color-scheme: light; }
+  html.dark  { color-scheme: dark; }
+
+  body {
+    background-color: var(--color-background-page);
+    color: var(--color-text-main);
+    /* Subtle washi paper grain — barely perceptible */
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(0, 0, 0, 0.012) 0, transparent 1px),
+      radial-gradient(circle at 78% 42%, rgba(0, 0, 0, 0.01) 0, transparent 1px),
+      radial-gradient(circle at 38% 88%, rgba(0, 0, 0, 0.014) 0, transparent 1px);
+    background-size: 7px 7px, 11px 11px, 13px 13px;
+  }
+
+  /* Tabular figures wherever numbers carry meaning */
+  .tabular,
+  table,
+  time {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  ::selection {
+    background-color: var(--color-primary-main);
+    color: var(--color-text-inverted);
+  }
+
+  /* Native form elements — quiet, no chrome rounding */
+  select,
+  input[type="text"],
+  input[type="search"] {
+    font-family: inherit;
   }
 }
 
-/* Modern custom checkbox */
+@layer utilities {
+  /* Diagonal hatch — used for empty-but-allocated forecast slots */
+  .bg-striped {
+    background-image: repeating-linear-gradient(135deg,
+        var(--color-text-muted) 0,
+        var(--color-text-muted) 0.5px,
+        transparent 0.5px,
+        transparent 4px);
+  }
+
+  /* Hairline rules — primary structural device of the Dojo aesthetic */
+  .rule-x {
+    border-top: 1px solid var(--color-border-default);
+  }
+
+  .rule-y {
+    border-left: 1px solid var(--color-border-default);
+  }
+
+  /* Small-caps treatment for headers */
+  .smallcaps {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.7rem;
+    font-weight: 500;
+  }
+
+  /* Display serif emphasis */
+  .display {
+    font-family: 'Shippori Mincho B1', Georgia, serif;
+    font-feature-settings: "palt" 1;
+  }
+
+  /* Vermillion seal stamp — circular, slightly imperfect */
+  .seal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-primary-main);
+    color: var(--color-text-inverted);
+    font-family: 'Shippori Mincho B1', Georgia, serif;
+    font-weight: 700;
+    border-radius: 2px;
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+      0 0 0 0.5px rgba(0, 0, 0, 0.04);
+  }
+}
+
+/* Custom checkbox — small ink square, vermillion fill on check */
 .custom-checkbox {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  width: 1.125rem;
-  height: 1.125rem;
-  border: 2px solid var(--color-border-default);
-  border-radius: 4px;
+  width: 0.95rem;
+  height: 0.95rem;
+  border: 1px solid var(--color-border-default);
+  border-radius: 1px;
   background-color: var(--color-background-surface);
   cursor: pointer;
   position: relative;
-  transition: all 0.15s ease-in-out;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
   flex-shrink: 0;
 }
 
 .custom-checkbox:hover {
-  border-color: var(--color-performance-3);
-  background-color: var(--color-background-subtle);
+  border-color: var(--color-primary-main);
 }
 
 .custom-checkbox:checked {
-  background-color: var(--color-performance-3);
-  border-color: var(--color-performance-3);
+  background-color: var(--color-primary-main);
+  border-color: var(--color-primary-main);
 }
 
 .custom-checkbox:checked::after {
   content: '';
   position: absolute;
-  left: 4px;
-  top: 1px;
+  left: 3px;
+  top: 0;
   width: 5px;
   height: 9px;
-  border: solid white;
-  border-width: 0 2px 2px 0;
+  border: solid var(--color-text-inverted);
+  border-width: 0 1.5px 1.5px 0;
   transform: rotate(45deg);
 }
 
 .custom-checkbox:focus-visible {
-  outline: 2px solid var(--color-border-focus);
+  outline: 1px solid var(--color-primary-main);
   outline-offset: 2px;
+}
+
+/* Native select — minimal styling, native chevron suppressed for our own */
+select.dojo-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: transparent;
+  border: 1px solid var(--color-border-default);
+  border-radius: 1px;
+  padding: 0.4rem 1.6rem 0.4rem 0.6rem;
+  font-family: inherit;
+  color: var(--color-text-main);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M2 4l4 5 4-5' stroke='%236B5F52' stroke-width='1' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.55rem center;
+  background-size: 9px;
+  transition: border-color 0.15s ease;
+}
+
+select.dojo-select:hover,
+select.dojo-select:focus {
+  border-color: var(--color-primary-main);
+  outline: none;
+}
+
+/* Belt-and-braces for the dropdown panel itself */
+select.dojo-select option {
+  background-color: var(--color-background-surface);
+  color: var(--color-text-main);
+}
+
+/* Slow rotation — used for theme-toggle ink mark */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 14s linear infinite;
 }

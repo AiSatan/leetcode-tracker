@@ -1,17 +1,25 @@
-const colorClasses = {
-  blue: "bg-primary-light text-primary",
-  green: "bg-status-success/10 text-status-success",
-  yellow:
-    "bg-status-warning/10 text-status-warning",
-  red: "bg-status-error/10 text-status-error",
-  purple:
-    "bg-primary-light text-primary", // Mapping purple to primary for now to ensure theme spread
+/**
+ * Lightweight stat tile — hairline-bordered, serif numeral, smallcaps label.
+ * Currently unused by the dashboard but kept for ad-hoc surfaces.
+ */
+const tone = {
+  blue:   "var(--color-categorical-blue)",
+  green:  "var(--color-status-success-main)",
+  yellow: "var(--color-status-warning-main)",
+  red:    "var(--color-status-error-main)",
+  purple: "var(--color-categorical-purple)",
 };
 
 const StatsCard = ({ color, value, label }) => (
-  <div className={`${colorClasses[color]} p-4 rounded-lg transition-colors`}>
-    <div className="text-2xl font-bold">{value}</div>
-    <div className="text-sm opacity-75">{label}</div>
+  <div className="border border-border-default px-4 py-3 flex flex-col">
+    <span
+      className="display tabular text-[26px] leading-none"
+      style={{ color: tone[color] || "var(--color-text-main)" }}
+    >
+      {value}
+    </span>
+    <span className="smallcaps text-text-muted mt-2">{label}</span>
   </div>
 );
+
 export default StatsCard;

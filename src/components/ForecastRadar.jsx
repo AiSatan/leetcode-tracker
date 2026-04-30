@@ -1,127 +1,105 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { getDailyForecast } from '../utils/scheduler';
 import { getPerformanceColor } from '../utils/theme';
 
-const ForecastRadar = ({ progress, compact = false }) => {
-    // 1. Get Forecast Data (Next 5 Days)
+/**
+ * 5-day forecast rendered as a pentagonal wax-seal.
+ * Each sector = one upcoming day. Concentric bands fill from center outward
+ * according to that day's average performance score (1-5).
+ */
+const ForecastRadar = ({ progress }) => {
     const data = useMemo(() => {
-        // Fetch 6 days, skip the first one (Today) to get "Next 5 days"
         const forecast = getDailyForecast(progress, 6).slice(1);
-
         return forecast.map(day => {
-            const totalPerf = day.tasks.reduce((sum, task) => sum + (task.performance || 0), 0);
+            const total = day.tasks.reduce((s, t) => s + (t.performance || 0), 0);
             const count = day.tasks.length;
-            const avg = count > 0 ? totalPerf / count : 0;
-            return {
-                label: day.date.split('-')[2], // "25" only
-                value: avg
-            };
+            const avg = count > 0 ? total / count : 0;
+            return { label: day.date.split('-')[2], avg, count };
         });
     }, [progress]);
 
-    // 2. Chart Config
-    const size = 220; // Slightly larger for labels
+    const size = 188;
     const center = size / 2;
-    const radius = (size / 2) - 30;
+    const radius = (size / 2) - 28;
     const levels = 5;
     const sides = 5;
 
-    // Helper: Polar to Cartesian
-    // Rotated so vertices start at -90deg (Top).
-    // Sector 0 will be the edge between Vertex 0 (-90) and Vertex 1 (-18).
-    const getCoordinates = (radiusPixels, angleRadians) => {
-        const x = center + radiusPixels * Math.cos(angleRadians);
-        const y = center + radiusPixels * Math.sin(angleRadians);
-        return { x, y };
-    };
+    const polar = (r, a) => ({ x: center + r * Math.cos(a), y: center + r * Math.sin(a) });
 
-    // Generate Blocks
-    // We want 5 sectors (Edges).
-    // Edge i is between Vertex i and Vertex i+1.
     const sectors = data.map((d, i) => {
-        const angleStart = (Math.PI * 2 * i) / sides - (Math.PI / 2);
-        const angleEnd = (Math.PI * 2 * (i + 1)) / sides - (Math.PI / 2);
-
-        // Determine how many blocks to fill
-        // Determine how many blocks to fill
-        const fillLevel = Math.floor(d.value);
-        // Use the score corresponding to the fill level, or default to 3 if 0
-        // Ensure we pass an integer to getPerformanceColor
-        const color = getPerformanceColor(Math.max(1, Math.round(d.value)) || 3);
+        const a0 = (Math.PI * 2 * i) / sides - Math.PI / 2;
+        const a1 = (Math.PI * 2 * (i + 1)) / sides - Math.PI / 2;
+        const fill = Math.floor(d.avg);
 
         const blocks = [];
         for (let l = 1; l <= levels; l++) {
-            const innerR = ((l - 1) / levels) * radius;
-            const outerR = (l / levels) * radius;
-
-            const p1 = getCoordinates(innerR, angleStart);
-            const p2 = getCoordinates(outerR, angleStart);
-            const p3 = getCoordinates(outerR, angleEnd);
-            const p4 = getCoordinates(innerR, angleEnd);
-
-            // If filled, use color based on the LEVEL (loop), not the total score
-            const isFilled = l <= fillLevel;
-            const levelColor = getPerformanceColor(l);
-
+            const ri = ((l - 1) / levels) * radius;
+            const ro = (l / levels) * radius;
+            const p1 = polar(ri, a0);
+            const p2 = polar(ro, a0);
+            const p3 = polar(ro, a1);
+            const p4 = polar(ri, a1);
             blocks.push({
-                level: l,
-                path: `${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y} ${p4.x},${p4.y}`,
-                filled: isFilled,
-                fillColor: levelColor
+                points: `${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y} ${p4.x},${p4.y}`,
+                filled: l <= fill,
+                color: getPerformanceColor(l),
             });
         }
 
-        // Label Position (Center of the edge at max radius)
-        const angleMid = (angleStart + angleEnd) / 2;
-        // Move labels closer to the edge
-        const labelPos = getCoordinates(radius + 8, angleMid);
-
-        return {
-            ...d,
-            blocks,
-            labelPos
-        };
+        const aMid = (a0 + a1) / 2;
+        const labelPos = polar(radius + 14, aMid);
+        return { ...d, blocks, labelPos };
     });
 
+    // Outer pentagonal hairline
+    const outerVertices = Array.from({ length: sides }, (_, i) => {
+        const a = (Math.PI * 2 * i) / sides - Math.PI / 2;
+        return polar(radius, a);
+    });
+    const outline = outerVertices.map(v => `${v.x},${v.y}`).join(' ');
+
     return (
-        <div className={compact ? '' : 'bg-background-surface rounded-lg shadow-lg p-6 mb-6 transition-colors'}>
-            <div className={`flex items-center justify-center ${compact ? 'mb-0' : 'mb-4'}`}>
-                <h2 className={`font-semibold text-text-main ${compact ? 'text-sm' : 'text-xl'}`}>
-                    Forecast
-                </h2>
+        <div className="flex flex-col">
+            <div className="flex items-baseline justify-between mb-4">
+                <h3 className="smallcaps text-text-muted">5-day forecast</h3>
+                <span className="text-[10px] text-text-muted/70 display italic">予報</span>
             </div>
 
-            <div className="flex justify-center items-center relative -mt-4">
+            <div className="flex justify-center -mt-1">
                 <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="overflow-visible">
-                    {/* Render Segments */}
                     {sectors.map((sector, i) => (
                         <g key={i}>
-                            {/* Blocks */}
-                            {sector.blocks.map((block, j) => (
+                            {sector.blocks.map((b, j) => (
                                 <polygon
                                     key={j}
-                                    points={block.path}
-                                    fill={block.filled ? block.fillColor : "var(--color-background-subtle)"}
-                                    stroke="var(--color-background-surface)" /* Gap color */
-                                    strokeWidth="2"
-                                    opacity={block.filled ? 0.9 : 0.3}
+                                    points={b.points}
+                                    fill={b.filled ? b.color : "var(--color-background-subtle)"}
+                                    stroke="var(--color-background-page)"
+                                    strokeWidth="1.25"
+                                    opacity={b.filled ? 0.92 : 0.55}
                                 />
                             ))}
-
-                            {/* Label */}
                             <text
                                 x={sector.labelPos.x}
                                 y={sector.labelPos.y}
                                 textAnchor="middle"
                                 dominantBaseline="middle"
                                 fontSize="11"
-                                fontWeight="600"
+                                className="display tabular"
                                 fill="var(--color-text-muted)"
                             >
                                 {sector.label}
                             </text>
                         </g>
                     ))}
+                    {/* Outer pentagonal hairline */}
+                    <polygon
+                        points={outline}
+                        fill="none"
+                        stroke="var(--color-border-default)"
+                        strokeWidth="0.75"
+                        opacity="0.7"
+                    />
                 </svg>
             </div>
         </div>

@@ -4,6 +4,15 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        display: ['"Shippori Mincho B1"', 'Georgia', 'serif'],
+        sans: ['Geist', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+      },
+      letterSpacing: {
+        smallcaps: '0.18em',
+        wider: '0.08em',
+      },
       colors: {
         background: {
           page: "var(--color-background-page)",
@@ -34,7 +43,6 @@ export default {
           error: "var(--color-status-error-main)",
           "error-hover": "var(--color-status-error-hover)",
         },
-        // Performance colors are direct values
         performance: {
           1: "var(--color-performance-1)",
           2: "var(--color-performance-2)",
@@ -42,7 +50,6 @@ export default {
           4: "var(--color-performance-4)",
           5: "var(--color-performance-5)",
         },
-        // Categorical colors from theme
         category: {
           blue: "var(--color-categorical-blue)",
           "blue-dim": "var(--color-categorical-blueDim)",
@@ -67,9 +74,24 @@ export default {
         }
       },
       borderRadius: {
-        lg: "1rem", // 16px
-        xl: "1.5rem", // 24px
-        "2xl": "2rem", // 32px
+        // Tighten everything — Dojo aesthetic uses hairlines, not rounded cards
+        sm: "1px",
+        DEFAULT: "2px",
+        md: "2px",
+        lg: "2px",   // was 16px
+        xl: "3px",   // was 24px
+        "2xl": "4px" // was 32px
+      },
+      boxShadow: {
+        // No drop shadows in this aesthetic — keep names but make them no-op-ish
+        sm: "none",
+        DEFAULT: "none",
+        md: "none",
+        lg: "none",
+        xl: "none",
+        "2xl": "none",
+        // Subtle paper edge for floating elements
+        seal: "0 1px 0 rgba(0,0,0,0.04)",
       },
     },
   },

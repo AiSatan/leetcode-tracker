@@ -1,29 +1,31 @@
 import { useEffect, useState } from "react";
-import {
-  Briefcase,
-  Code,
-  MessageSquare,
-  DollarSign,
-  ChevronDown,
-  ChevronRight,
-  CheckCircle,
-  Circle,
-  Brain,
-  Rocket,
-} from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { interviewRoadmap, dsaMindmap } from "../data";
 
-const iconMap = {
-  Briefcase,
-  Code,
-  MessageSquare,
-  DollarSign,
-  ChevronDown,
-  ChevronRight,
-  CheckCircle,
-  Circle,
-  Brain,
-};
+const Seal = ({ size = 14 }) => (
+  <span
+    className="inline-flex items-center justify-center"
+    style={{
+      width: size,
+      height: size,
+      backgroundColor: "var(--color-primary-main)",
+    }}
+  >
+    <svg viewBox="0 0 12 12" width={size * 0.65} height={size * 0.65} aria-hidden>
+      <path
+        d="M2.5 6.4 L5 8.7 L9.5 3.5"
+        fill="none"
+        stroke="var(--color-text-inverted)"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  </span>
+);
+
+const formatDateline = (d) =>
+  d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
 
 const InterviewRoadmap = () => {
   const [expandedSections, setExpandedSections] = useState({});
@@ -39,237 +41,249 @@ const InterviewRoadmap = () => {
 
   useEffect(() => {
     try {
-      localStorage.setItem(
-        "interview-progress",
-        JSON.stringify(completedItems)
-      );
+      localStorage.setItem("interview-progress", JSON.stringify(completedItems));
     } catch (error) {
       console.error("Error saving interview progress:", error);
     }
   }, [completedItems]);
 
-
   const toggleSection = (id) => {
-    setExpandedSections((prev) => ({ ...prev, [id]: !prev[id] }));
+    setExpandedSections(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
   const toggleComplete = (id) => {
-    setCompletedItems((prev) => ({ ...prev, [id]: !prev[id] }));
+    setCompletedItems(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
   const getProgress = (sectionId) => {
-    const section = interviewRoadmap.find((s) => s.id === sectionId);
+    const section = interviewRoadmap.find(s => s.id === sectionId);
     if (!section) return 0;
-    const completed = section.items.filter(
-      (item) => completedItems[item.id]
-    ).length;
+    const completed = section.items.filter(item => completedItems[item.id]).length;
     return Math.round((completed / section.items.length) * 100);
   };
 
   return (
-    <div className="min-h-screen bg-background-page p-6 transition-colors">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <h1 className="text-4xl font-bold text-text-main">
-              Interview Mastery Roadmap
-            </h1>
-            <Rocket size={36} className="text-primary-main ml-2" />
-          </div>
-          <p className="text-lg text-text-muted">
-            Your complete guide from application to offer
-          </p>
+    <main className="max-w-[1280px] mx-auto px-6 lg:px-10 pb-24">
+
+      <header className="pt-10 pb-8 border-b border-border-default">
+        <div className="flex items-baseline gap-3">
+          <span className="smallcaps text-text-muted">The path</span>
+          <span className="h-px w-6 bg-border-default" />
+          <time className="text-[11px] text-text-muted display italic tabular">
+            {formatDateline(new Date())}
+          </time>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="bg-background-surface rounded-lg shadow-md p-2 mb-8 flex gap-2">
-          <button
-            onClick={() => setActiveTab("interview")}
-            className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all ${activeTab === "interview"
-              ? "bg-primary-main text-text-inverted shadow-lg"
-              : "bg-background-subtle text-text-muted hover:bg-background-highlight"
-              }`}
-          >
-            Interview Process
-          </button>
-          <button
-            onClick={() => setActiveTab("dsa")}
-            className={`flex-1 py-2 px-6 rounded-lg font-semibold transition-all ${activeTab === "dsa"
-              ? "bg-primary-main text-text-inverted shadow-lg"
-              : "bg-background-subtle text-text-muted hover:bg-background-highlight"
-              }`}
-          >
-            DSA Mind Map
-          </button>
+        <h1 className="display text-[44px] lg:text-[52px] leading-[1.05] text-text-main mt-4">
+          From application to offer
+        </h1>
+        <p className="display italic text-text-muted text-[15px] mt-2">
+          A walking map. 道 (michi).
+        </p>
+      </header>
+
+      {/* Tab strip — text-tabs */}
+      <div className="border-b border-border-default mt-8">
+        <div className="flex items-center gap-8">
+          {[
+            { id: "interview", label: "Interview process" },
+            { id: "dsa",       label: "Decision tree" },
+          ].map(t => {
+            const active = activeTab === t.id;
+            return (
+              <button
+                key={t.id}
+                onClick={() => setActiveTab(t.id)}
+                className="relative py-3 text-[12px] tracking-wide transition-colors"
+                style={{
+                  color: active ? "var(--color-text-main)" : "var(--color-text-muted)",
+                  fontWeight: active ? 600 : 400,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.18em",
+                }}
+              >
+                {t.label}
+                {active && (
+                  <span className="absolute left-0 right-0 -bottom-px h-px bg-primary" />
+                )}
+              </button>
+            );
+          })}
         </div>
+      </div>
 
-        {/* Interview Process Tab */}
-        {activeTab === "interview" && (
-          <div className="space-y-6">
-            {interviewRoadmap.map((section, idx) => {
-              const Icon = iconMap[section.icon];
-              const progress = getProgress(section.id);
-              const isExpanded = expandedSections[section.id];
+      {/* Interview Process */}
+      {activeTab === "interview" && (
+        <div className="divide-y divide-border-default">
+          {interviewRoadmap.map((section, idx) => {
+            const progress = getProgress(section.id);
+            const isExpanded = expandedSections[section.id];
 
-              return (
-                <div
-                  key={section.id}
-                  className="bg-background-surface rounded-lg shadow-lg overflow-hidden"
+            return (
+              <article key={section.id} className="py-8">
+                <button
+                  onClick={() => toggleSection(section.id)}
+                  className="w-full grid grid-cols-[3.5rem_minmax(0,1fr)_8rem_2rem] gap-x-6 items-center text-left group"
                 >
-                  {/* Section Header */}
-                  <div
-                    onClick={() => toggleSection(section.id)}
-                    className={`bg-background-surface hover:bg-background-subtle p-4 cursor-pointer transition-colors border-b border-border-default`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className="bg-primary-light p-2 rounded-lg">
-                          <Icon size={32} className="text-primary-main" />
-                        </div>
-                        <div>
-                          <h2 className="text-lg font-bold text-text-main">
-                            {idx + 1}. {section.title}
-                          </h2>
-                          <div className="flex items-center gap-2 mt-2">
-                            <div className="bg-background-subtle border border-border-default rounded-full h-2 w-24 overflow-hidden">
-                              <div
-                                className="bg-primary-main h-full transition-all"
-                                style={{ width: `${progress}%` }}
-                              />
-                            </div>
-                            <span className="text-text-muted text-xs font-semibold">
-                              {progress}%
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      {isExpanded ? (
-                        <ChevronDown size={24} className="text-text-muted" />
-                      ) : (
-                        <ChevronRight size={24} className="text-text-muted" />
-                      )}
-                    </div>
-                  </div>
+                  <span className="display tabular text-[34px] leading-none text-text-muted/60 group-hover:text-primary transition-colors">
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
 
-                  {/* Section Content */}
-                  {isExpanded && (
-                    <div className="p-6 bg-background-subtle">
-                      <div className="grid gap-4">
-                        {section.items.map((item) => {
-                          const isCompleted = completedItems[item.id];
-                          return (
-                            <div
-                              key={item.id}
-                              onClick={() => toggleComplete(item.id)}
-                              className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${isCompleted
-                                ? "bg-background-surface border-status-success"
-                                : "bg-background-surface border-border-default hover:border-border-focus"
-                                }`}
-                            >
-                              <div className="flex items-start gap-3">
-                                {isCompleted ? (
-                                  <CheckCircle
-                                    className="text-status-success flex-shrink-0 mt-1"
-                                    size={24}
-                                  />
-                                ) : (
-                                  <Circle
-                                    className="text-text-muted flex-shrink-0 mt-1"
-                                    size={24}
-                                  />
-                                )}
-                                <div className="flex-1">
-                                  <h3
-                                    className={`font-semibold mb-1 ${isCompleted
-                                      ? "text-status-success line-through"
-                                      : "text-text-main"
-                                      }`}
-                                  >
-                                    {item.title}
-                                  </h3>
-                                  <p className="text-sm text-text-muted">
-                                    {item.description}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* DSA Mind Map Tab */}
-        {activeTab === "dsa" && (
-          <div className="space-y-6">
-            <div className="bg-background-surface rounded-lg shadow-lg py-4 px-6">
-              <div className="flex items-center gap-3 mb-2">
-                <h2 className="text-2xl font-bold text-text-main">
-                  {dsaMindmap.title}
-                </h2>
-                <Brain size={32} className="text-primary-main" />
-              </div>
-              <p className="text-text-muted">
-                {dsaMindmap.description}
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              {dsaMindmap.sections.map((section) => (
-                <div
-                  key={section.id}
-                  className="bg-background-surface rounded-lg shadow-lg overflow-hidden"
-                >
-                  <div className={`bg-background-subtle border-b border-border-default py-3 px-4`}>
-                    <h3 className="text-lg font-bold text-text-main">
+                  <div>
+                    <h2 className="display text-[22px] text-text-main leading-tight">
                       {section.title}
-                    </h3>
+                    </h2>
+                    <span className="smallcaps text-text-muted/70 mt-1 inline-block">
+                      Stage
+                    </span>
                   </div>
-                  <div className="p-4 space-y-2">
-                    {section.content.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className={`p-3 rounded-lg ${item.type === "question"
-                          ? "bg-background-surface border-l-4 border-border-default"
-                          : item.type === "answer"
-                            ? "bg-background-surface border-l-4 border-status-success ml-4"
-                            : item.type === "use"
-                              ? "bg-background-surface border-l-4 border-primary-main"
-                              : item.type === "note"
-                                ? "bg-background-subtle border-l-4 border-status-warning"
-                                : "bg-background-subtle border-l-4 border-border-default"
-                          }`}
+
+                  {/* Hairline progress */}
+                  <div className="flex flex-col gap-1.5">
+                    <span className="text-[11px] text-text-muted tabular text-right">
+                      {progress}<span className="text-text-muted/60">%</span>
+                    </span>
+                    <span className="relative h-px bg-border-default block">
+                      <span
+                        className="absolute left-0 top-0 h-px bg-primary transition-all duration-500"
+                        style={{ width: `${progress}%` }}
+                      />
+                    </span>
+                  </div>
+
+                  <ChevronDown
+                    size={16}
+                    strokeWidth={1.5}
+                    className="text-text-muted justify-self-end transition-transform"
+                    style={{ transform: isExpanded ? "rotate(0deg)" : "rotate(-90deg)" }}
+                  />
+                </button>
+
+                <div
+                  className="grid transition-all duration-300"
+                  style={{ gridTemplateRows: isExpanded ? "1fr" : "0fr" }}
+                >
+                  <div className="overflow-hidden">
+                    <div className="mt-6 pl-[3.5rem] grid sm:grid-cols-2 gap-x-8 gap-y-5 border-l border-border-default ml-6">
+                      {section.items.map(item => {
+                        const done = completedItems[item.id];
+                        return (
+                          <button
+                            key={item.id}
+                            onClick={() => toggleComplete(item.id)}
+                            className="flex items-start gap-3 text-left group"
+                          >
+                            <span className="mt-0.5 flex-shrink-0">
+                              {done ? (
+                                <Seal size={14} />
+                              ) : (
+                                <span className="block w-3.5 h-3.5 border border-border-default group-hover:border-primary transition-colors" />
+                              )}
+                            </span>
+                            <span className="flex flex-col">
+                              <span
+                                className="display text-[15px] leading-tight"
+                                style={{
+                                  color: done
+                                    ? "var(--color-text-muted)"
+                                    : "var(--color-text-main)",
+                                  textDecorationLine: done ? "line-through" : "none",
+                                  textDecorationColor: "var(--color-primary-main)",
+                                  textDecorationThickness: "1px",
+                                }}
+                              >
+                                {item.title}
+                              </span>
+                              <span className="display italic text-[12.5px] text-text-muted mt-1 leading-snug">
+                                {item.description}
+                              </span>
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
+
+      {/* DSA Decision Tree */}
+      {activeTab === "dsa" && (
+        <section className="mt-10">
+          <header className="mb-8 max-w-2xl">
+            <h2 className="display text-[28px] text-text-main">{dsaMindmap.title}</h2>
+            <p className="display italic text-text-muted mt-2 text-[14px]">
+              {dsaMindmap.description}
+            </p>
+          </header>
+
+          <div className="grid md:grid-cols-2 gap-x-10 gap-y-12">
+            {dsaMindmap.sections.map((section, idx) => (
+              <article key={section.id}>
+                <div className="flex items-baseline gap-3 border-b border-border-default pb-3 mb-4">
+                  <span className="display tabular text-[14px] text-text-muted/60">
+                    {String.fromCharCode(65 + idx)}
+                  </span>
+                  <h3 className="display text-[20px] text-text-main">{section.title}</h3>
+                </div>
+
+                <ul className="space-y-2.5">
+                  {section.content.map((item, i) => {
+                    const tone = {
+                      question: "var(--color-text-main)",
+                      answer:   "var(--color-status-success-main)",
+                      use:      "var(--color-primary-main)",
+                      note:     "var(--color-status-warning-main)",
+                      info:     "var(--color-text-muted)",
+                    }[item.type] || "var(--color-text-muted)";
+
+                    const marker = {
+                      question: "?",
+                      answer:   "→",
+                      use:      "✓",
+                      note:     "※",
+                      info:     "·",
+                    }[item.type] || "·";
+
+                    const indent = item.type === "answer" ? "pl-6" : "pl-0";
+                    const weight =
+                      item.type === "question" ? 600 :
+                      item.type === "use"      ? 500 : 400;
+
+                    return (
+                      <li
+                        key={i}
+                        className={`grid grid-cols-[1.25rem_minmax(0,1fr)] gap-2 ${indent} text-[13px] leading-snug`}
                       >
-                        <p
-                          className={`text-sm ${item.type === "question"
-                            ? "font-semibold text-text-main"
-                            : item.type === "answer"
-                              ? "text-status-success"
-                              : item.type === "use"
-                                ? "text-primary-text"
-                                : item.type === "note"
-                                  ? "text-status-warning"
-                                  : "text-text-muted"
-                            }`}
+                        <span
+                          className="display tabular pt-[1px]"
+                          style={{ color: tone, opacity: 0.7 }}
+                        >
+                          {marker}
+                        </span>
+                        <span
+                          style={{
+                            color: tone,
+                            fontWeight: weight,
+                            fontStyle: item.type === "note" ? "italic" : "normal",
+                          }}
+                          className={item.type === "note" ? "display" : ""}
                         >
                           {item.text}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </article>
+            ))}
           </div>
-        )}
-      </div>
-    </div>
+        </section>
+      )}
+    </main>
   );
 };
 
