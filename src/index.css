@@ -19,11 +19,12 @@
   body {
     background-color: var(--color-background-page);
     color: var(--color-text-main);
-    /* Subtle washi paper grain — barely perceptible */
+    /* Subtle grain — black-fleck on washi (light), ink-fleck on inkstone (dark).
+       Color comes from the theme so dark mode doesn't darken already-dark pixels. */
     background-image:
-      radial-gradient(circle at 12% 18%, rgba(0, 0, 0, 0.012) 0, transparent 1px),
-      radial-gradient(circle at 78% 42%, rgba(0, 0, 0, 0.01) 0, transparent 1px),
-      radial-gradient(circle at 38% 88%, rgba(0, 0, 0, 0.014) 0, transparent 1px);
+      radial-gradient(circle at 12% 18%, var(--color-grain-overlay) 0, transparent 1px),
+      radial-gradient(circle at 78% 42%, var(--color-grain-overlay) 0, transparent 1px),
+      radial-gradient(circle at 38% 88%, var(--color-grain-overlay) 0, transparent 1px);
     background-size: 7px 7px, 11px 11px, 13px 13px;
   }
 
@@ -183,6 +184,54 @@ select.dojo-select option {
 
 .animate-spin-slow {
   animation: spin-slow 14s linear infinite;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   Sakura at night — drifting cherry petals (dark theme only)
+
+   The layer sits between the body background and page content. Each
+   petal falls with two stacked animations: a long vertical "fall"
+   (translateY + drift across the viewport) and a short horizontal
+   "sway" (sub-pixel breathing). Combined they avoid the dead-straight
+   diagonal that gives away CSS animation.
+   ────────────────────────────────────────────────────────────────── */
+.sakura-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.sakura-petal {
+  position: absolute;
+  top: -6vh;
+  color: var(--color-primary-main);
+  filter: drop-shadow(0 0 0.5px rgba(0, 0, 0, 0.25));
+  animation:
+    sakura-fall var(--sakura-duration, 24s) linear var(--sakura-delay, 0s) infinite,
+    sakura-sway var(--sakura-sway, 6s) ease-in-out var(--sakura-delay, 0s) infinite alternate;
+  will-change: transform;
+}
+
+.sakura-petal svg {
+  display: block;
+  animation: sakura-spin var(--sakura-duration, 24s) linear var(--sakura-delay, 0s) infinite;
+}
+
+@keyframes sakura-fall {
+  0%   { transform: translate3d(0, -10vh, 0); }
+  100% { transform: translate3d(var(--sakura-drift, 6vw), 110vh, 0); }
+}
+
+@keyframes sakura-sway {
+  from { margin-left: -8px; }
+  to   { margin-left: 8px;  }
+}
+
+@keyframes sakura-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(540deg); }
 }
 
 /* sr-only — visually hidden, exposed to assistive tech */

@@ -1,79 +1,80 @@
 /**
- * Dojo Theme — Quiet Japanese-stationery minimalism.
+ * Two-mood theme:
  *
- * Light  : washi paper, sumi ink, single vermillion seal accent
- * Dark   : inkstone night, parchment text, brighter seal
+ * Light : Dojo — washi paper, sumi ink, single vermillion seal accent.
+ * Dark  : Sakura at night — cool deep ink, drifting petals, sakura-pink accent,
+ *         warm petal cream text. A different season, not a recolor.
  *
- * Colors are defined semantically. Each leaf value has { light, dark }
- * and is flattened into CSS variables by ThemeContext at runtime.
+ * Colors are defined semantically. Each leaf value has { light, dark } and
+ * is flattened into CSS variables by ThemeContext at runtime.
  */
 export const theme = {
     colors: {
-        // Base layout — washi paper / inkstone night
+        // Base layout — washi (light) / cool ink night (dark)
         background: {
             page: {
                 light: "#F4EFE5",   // warm washi
-                dark: "#1E1A15"     // lifted inkstone — was #15120F, too compressed
+                dark: "#14111B"     // cool deep ink, slight violet undertone
             },
             surface: {
                 light: "#FBF6EB",   // unbleached paper
-                dark: "#26221C"     // clearer step above page
+                dark: "#1E1A26"     // lifted, slightly violet (~1.7:1 step)
             },
             subtle: {
                 light: "#ECE3D1",   // aged paper grain
-                dark: "#302B23"
+                dark: "#2A2434"     // clearer step for nested surfaces
             },
             highlight: {
                 light: "#E5D8BC",   // warm parchment highlight
-                dark: "#3B342A"
+                dark: "#363042"     // warmer mauve glow
             }
         },
 
-        // Typography — sumi ink on paper
+        // Typography — sumi ink on paper / petal cream on ink
         text: {
             main: {
                 light: "#1B1714",
-                dark: "#F1E7D0"
+                dark: "#F4E8E8"     // warm petal cream, ~13:1 on page
             },
             muted: {
                 light: "#6B5F52",
-                dark: "#AB9D87"     // lifted to match brighter bg
+                dark: "#C2B0B8"     // dusty rose-grey, ~7.5:1 (passes AAA)
             },
             inverted: {
                 light: "#FBF6EB",
-                dark: "#1E1A15"
+                dark: "#14111B"
             }
         },
 
-        // Borders — hairlines, paper grain
+        // Borders — hairlines
         border: {
             default: {
                 light: "#D5C9B0",
-                dark: "#3F3A30"     // visible against lifted surface
+                dark: "#4A4258"     // mauve hairline, ~3.6:1 on page
             },
             focus: {
                 light: "#B5371A",
-                dark: "#D2553A"
+                dark: "#E988A4"     // sakura pink
             }
         },
 
-        // Vermillion seal — the single brand accent
+        // Brand accent — vermillion seal (light) / sakura petal (dark)
         primary: {
             main: {
                 light: "#B5371A",
-                dark: "#D2553A"
+                dark: "#E988A4"     // sakura pink
             },
             hover: {
                 light: "#952C13",
-                dark: "#E16A52"
+                dark: "#F2A0BA"     // brighter petal
             },
             light: {
                 light: "rgba(181, 55, 26, 0.08)",
-                dark: "rgba(210, 85, 58, 0.16)"
+                dark: "rgba(233, 136, 164, 0.22)"   // soft pink halo
             },
             text: {
                 light: "#7A2410",
-                dark: "#F4A797"
+                dark: "#FFD0DC"     // bright petal for text-on-dark
             }
         },
 
@@ -105,25 +106,34 @@ export const theme = {
         // Categorical — muted earth tones; used for tag tints / radar fills
         categorical: {
             blue:    { light: "#4A6480", dark: "#7892A8" },  // sumi indigo
-            blueDim: { light: "rgba(74, 100, 128, 0.10)", dark: "rgba(120, 146, 168, 0.16)" },
+            blueDim: { light: "rgba(74, 100, 128, 0.10)", dark: "rgba(120, 146, 168, 0.22)" },
             green:   { light: "#6F8A5A", dark: "#9CB587" },
-            greenDim:{ light: "rgba(111, 138, 90, 0.10)", dark: "rgba(156, 181, 135, 0.16)" },
+            greenDim:{ light: "rgba(111, 138, 90, 0.10)", dark: "rgba(156, 181, 135, 0.22)" },
             purple:  { light: "#6B5780", dark: "#8E7BA1" },  // muted plum
-            purpleDim:{light: "rgba(107, 87, 128, 0.10)", dark: "rgba(142, 123, 161, 0.16)" },
+            purpleDim:{light: "rgba(107, 87, 128, 0.10)", dark: "rgba(142, 123, 161, 0.22)" },
             yellow:  { light: "#B8842F", dark: "#DCAA52" },
-            yellowDim:{light: "rgba(184, 132, 47, 0.10)", dark: "rgba(220, 170, 82, 0.16)" },
+            yellowDim:{light: "rgba(184, 132, 47, 0.10)", dark: "rgba(220, 170, 82, 0.22)" },
             red:     { light: "#B5371A", dark: "#D2553A" },
-            redDim:  { light: "rgba(181, 55, 26, 0.10)", dark: "rgba(210, 85, 58, 0.16)" },
+            redDim:  { light: "rgba(181, 55, 26, 0.10)", dark: "rgba(210, 85, 58, 0.22)" },
             indigo:  { light: "#4A6480", dark: "#7892A8" },
-            indigoDim:{light: "rgba(74, 100, 128, 0.10)", dark: "rgba(120, 146, 168, 0.16)" },
+            indigoDim:{light: "rgba(74, 100, 128, 0.10)", dark: "rgba(120, 146, 168, 0.22)" },
             pink:    { light: "#A85A5A", dark: "#C97D7D" },  // rose-clay
-            pinkDim: { light: "rgba(168, 90, 90, 0.10)", dark: "rgba(201, 125, 125, 0.16)" },
+            pinkDim: { light: "rgba(168, 90, 90, 0.10)", dark: "rgba(201, 125, 125, 0.22)" },
             orange:  { light: "#C66A3D", dark: "#DD8A5C" },
-            orangeDim:{light: "rgba(198, 106, 61, 0.10)", dark: "rgba(221, 138, 92, 0.16)" },
+            orangeDim:{light: "rgba(198, 106, 61, 0.10)", dark: "rgba(221, 138, 92, 0.22)" },
             teal:    { light: "#4A7370", dark: "#7FA09C" },  // aged celadon
-            tealDim: { light: "rgba(74, 115, 112, 0.10)", dark: "rgba(127, 160, 156, 0.16)" },
+            tealDim: { light: "rgba(74, 115, 112, 0.10)", dark: "rgba(127, 160, 156, 0.22)" },
             cyan:    { light: "#5A7A85", dark: "#8AAAB5" },  // ash blue
-            cyanDim: { light: "rgba(90, 122, 133, 0.10)", dark: "rgba(138, 170, 181, 0.16)" }
+            cyanDim: { light: "rgba(90, 122, 133, 0.10)", dark: "rgba(138, 170, 181, 0.22)" }
+        },
+
+        // Surface texture — barely-perceptible grain.
+        // Light: ink-fleck on washi. Dark: faint petal cream on cool ink.
+        grain: {
+            overlay: {
+                light: "rgba(0, 0, 0, 0.012)",
+                dark:  "rgba(244, 232, 232, 0.022)"
+            }
         }
     }
 };

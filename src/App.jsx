@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LeetCodeTracker, Patterns, InterviewRoadmap } from "./pages";
-import { Navbar } from "./components";
+import { Navbar, SakuraBackground } from "./components";
 
 const App = () => {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-background-page transition-colors">
+      <SakuraBackground />
+      <div className="relative z-10 min-h-screen transition-colors">
         <Navbar />
         <Routes>
           <Route path="/" element={<LeetCodeTracker />} />
