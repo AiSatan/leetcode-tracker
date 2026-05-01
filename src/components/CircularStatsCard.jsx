@@ -10,8 +10,13 @@ const CircularProgress = ({ mastered, total, size = 88 }) => {
   const offset = c - (pct / 100) * c;
 
   return (
-    <div className="relative tabular" style={{ width: size, height: size }}>
-      <svg className="-rotate-90" width={size} height={size}>
+    <div
+      role="img"
+      aria-label={`${mastered} of ${total} mastered (${Math.round(pct)} percent)`}
+      className="relative tabular"
+      style={{ width: size, height: size }}
+    >
+      <svg className="-rotate-90" width={size} height={size} aria-hidden="true" focusable="false">
         <circle
           cx={size / 2} cy={size / 2} r={r}
           stroke="var(--color-border-default)" strokeWidth={stroke} fill="none"
@@ -24,7 +29,7 @@ const CircularProgress = ({ mastered, total, size = 88 }) => {
           style={{ transition: "stroke-dashoffset 600ms cubic-bezier(0.16,1,0.3,1)" }}
         />
       </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center leading-none">
+      <div aria-hidden="true" className="absolute inset-0 flex flex-col items-center justify-center leading-none">
         <span className="display text-[22px] text-text-main">{mastered}</span>
         <span className="text-[10px] text-text-muted mt-0.5">/ {total}</span>
       </div>
@@ -35,15 +40,23 @@ const CircularProgress = ({ mastered, total, size = 88 }) => {
 const Bar = ({ label, n, of, tone }) => {
   const pct = of > 0 ? (n / of) * 100 : 0;
   return (
-    <div className="grid grid-cols-[3.5rem_1fr_2.6rem] items-center gap-2">
-      <span className="smallcaps text-text-muted">{label}</span>
-      <span className="relative h-px bg-border-default block">
+    <div
+      className="grid grid-cols-[3.5rem_1fr_2.6rem] items-center gap-2"
+      role="meter"
+      aria-label={`${label} mastered`}
+      aria-valuenow={n}
+      aria-valuemin={0}
+      aria-valuemax={of}
+      aria-valuetext={`${n} of ${of}`}
+    >
+      <span className="smallcaps text-text-muted" aria-hidden="true">{label}</span>
+      <span aria-hidden="true" className="relative h-px bg-border-default block overflow-hidden">
         <span
-          className="absolute left-0 top-0 h-px transition-all duration-500"
-          style={{ width: `${pct}%`, backgroundColor: tone }}
+          className="absolute left-0 top-0 h-px w-full origin-left transition-transform duration-500"
+          style={{ transform: `scaleX(${pct / 100})`, backgroundColor: tone }}
         />
       </span>
-      <span className="text-[11px] text-text-muted text-right tabular">
+      <span aria-hidden="true" className="text-[11px] text-text-muted text-right tabular">
         {n}<span className="text-text-muted/60"> / {of}</span>
       </span>
     </div>
@@ -60,7 +73,7 @@ const CircularStatsCard = ({ stats, problems }) => {
     <div className="flex flex-col">
       <div className="flex items-baseline justify-between mb-4">
         <h3 className="smallcaps text-text-muted">Progress</h3>
-        <span className="text-[10px] text-text-muted/70 display italic">進捗</span>
+        <span aria-hidden="true" className="text-[10px] text-text-muted/70 display italic">進捗</span>
       </div>
 
       <div className="flex items-center gap-5 mb-5">

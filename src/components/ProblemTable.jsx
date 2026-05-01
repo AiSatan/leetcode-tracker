@@ -11,8 +11,7 @@ const difficultyTone = {
 /* A vermillion seal stamp for mastered problems. */
 const Seal = ({ size = 16 }) => (
   <span
-    aria-label="mastered"
-    title="Mastered"
+    aria-hidden="true"
     className="inline-flex items-center justify-center"
     style={{
       width: size, height: size,
@@ -20,7 +19,7 @@ const Seal = ({ size = 16 }) => (
       boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.18)"
     }}
   >
-    <svg viewBox="0 0 12 12" width={size * 0.65} height={size * 0.65} aria-hidden>
+    <svg viewBox="0 0 12 12" width={size * 0.65} height={size * 0.65} aria-hidden="true" focusable="false">
       <path
         d="M2.5 6.4 L5 8.7 L9.5 3.5"
         fill="none"
@@ -45,33 +44,51 @@ const StatusMark = ({ prob }) => {
   if (prob.solved) {
     return (
       <span className="inline-flex items-center gap-2">
-        <span className="w-3 h-3 border border-text-muted/60 inline-block" />
+        <span aria-hidden="true" className="w-3 h-3 border border-text-muted/60 inline-block" />
         <span className="smallcaps text-text-muted">Learning</span>
       </span>
     );
   }
   return (
     <span className="inline-flex items-center gap-2">
-      <span className="w-3 h-3 border border-dashed border-border-default inline-block" />
+      <span aria-hidden="true" className="w-3 h-3 border border-dashed border-border-default inline-block" />
       <span className="smallcaps text-text-muted/70">New</span>
     </span>
   );
 };
 
-const RatingRow = ({ onPick, currentScore, disabled }) => (
-  <div className="flex gap-1">
+const RATING_DESCRIPTIONS = {
+  1: "Forgotten",
+  2: "Struggled",
+  3: "Hesitant",
+  4: "Solid",
+  5: "Mastered",
+};
+
+const RatingRow = ({ onPick, currentScore, disabled, problemTitle }) => (
+  <div
+    role="radiogroup"
+    aria-label={problemTitle ? `Rate ${problemTitle} (1 to 5)` : "Rate this problem (1 to 5)"}
+    aria-disabled={disabled || undefined}
+    className="flex gap-1"
+  >
     {[1, 2, 3, 4, 5].map(rating => {
       const ink = getPerformanceColor(rating);
       const selected = currentScore === rating;
       return (
         <button
           key={rating}
+          type="button"
+          role="radio"
+          aria-checked={selected}
+          aria-label={`Score ${rating} of 5 — ${RATING_DESCRIPTIONS[rating]}`}
           disabled={disabled}
           onClick={!disabled ? () => onPick(rating) : undefined}
           className={`
-            w-7 h-7 flex items-center justify-center
+            w-8 h-8 flex items-center justify-center
             display tabular text-[13px]
             border transition-all
+            focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-primary
             ${disabled
               ? selected
                 ? "text-text-inverted border-transparent"
@@ -82,7 +99,6 @@ const RatingRow = ({ onPick, currentScore, disabled }) => (
             backgroundColor: disabled
               ? selected ? ink : "transparent"
               : undefined,
-            "--hover-ink": ink,
           }}
           onMouseEnter={(e) => {
             if (disabled) return;
@@ -92,9 +108,11 @@ const RatingRow = ({ onPick, currentScore, disabled }) => (
             if (disabled) return;
             e.currentTarget.style.backgroundColor = "";
           }}
-          title={!disabled ? `Score ${rating}/5` : `Last score: ${currentScore || "—"}`}
+          title={!disabled
+            ? `${rating} — ${RATING_DESCRIPTIONS[rating]}`
+            : `Last score: ${currentScore || "—"}`}
         >
-          {rating}
+          <span aria-hidden="true">{rating}</span>
         </button>
       );
     })}
@@ -143,20 +161,26 @@ const ProblemTable = ({
         </span>
       </header>
 
+      <div role="table" aria-label="Practice problems" aria-rowcount={filtered.length}>
       {/* Column header — quiet small caps */}
-      <div className="hidden lg:grid grid-cols-[3rem_minmax(0,2.4fr)_minmax(0,1.4fr)_5rem_8rem_minmax(0,1.6fr)] gap-4 py-2 border-b border-border-default smallcaps text-text-muted/80">
-        <span>№</span>
-        <span>Problem</span>
-        <span>Topic</span>
-        <span>Diff</span>
-        <span>Status</span>
-        <span>Review</span>
+      <div
+        role="row"
+        className="hidden lg:grid grid-cols-[3rem_minmax(0,2.4fr)_minmax(0,1.4fr)_5rem_8rem_minmax(0,1.6fr)] gap-4 py-2 border-b border-border-default smallcaps text-text-muted/80"
+      >
+        <span role="columnheader">№</span>
+        <span role="columnheader">Problem</span>
+        <span role="columnheader">Topic</span>
+        <span role="columnheader">Difficulty</span>
+        <span role="columnheader">Status</span>
+        <span role="columnheader">Review</span>
       </div>
 
       {filtered.length === 0 && (
-        <p className="display italic text-text-muted py-12 text-center">
-          No problems match these filters.
-        </p>
+        <div role="row">
+          <p role="cell" className="display italic text-text-muted py-12 text-center">
+            No problems match these filters. Try clearing a filter above.
+          </p>
+        </div>
       )}
 
       {filtered.map((problem, index) => {
@@ -169,36 +193,45 @@ const ProblemTable = ({
         return (
           <article
             key={problem.id}
+            role="row"
+            aria-rowindex={index + 1}
             className="grid grid-cols-1 lg:grid-cols-[3rem_minmax(0,2.4fr)_minmax(0,1.4fr)_5rem_8rem_minmax(0,1.6fr)] gap-x-4 gap-y-3 items-start py-5 border-b border-border-default"
           >
             {/* Index */}
-            <span className="display tabular text-[14px] text-text-muted/70 leading-tight pt-0.5">
+            <span
+              role="cell"
+              className="display tabular text-[14px] text-text-muted/70 leading-tight pt-0.5"
+            >
               {String(index + 1).padStart(2, '0')}
             </span>
 
             {/* Title + link */}
             <a
+              role="cell"
               href={problem.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-start gap-1.5 leading-tight"
+              className="group flex items-start gap-1.5 leading-tight min-w-0 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              aria-label={`${problem.title} (opens on LeetCode in a new tab)`}
             >
-              <span className="display text-[15px] text-text-main group-hover:text-primary transition-colors">
+              <span className="display text-[15px] text-text-main group-hover:text-primary transition-colors break-words [overflow-wrap:anywhere]">
                 {problem.title}
               </span>
               <ExternalLink
                 size={12}
                 strokeWidth={1.5}
+                aria-hidden="true"
+                focusable="false"
                 className="mt-1 text-text-muted/50 group-hover:text-primary transition-colors flex-shrink-0"
               />
             </a>
 
             {/* Tags — hairline outlines, small */}
-            <div className="flex flex-wrap gap-1.5">
+            <div role="cell" className="flex flex-wrap gap-1.5 min-w-0">
               {tags.map((tag, idx) => (
                 <span
                   key={idx}
-                  className={`px-1.5 py-px text-[10px] border tracking-wide ${
+                  className={`px-1.5 py-px text-[10px] border tracking-wide break-words [overflow-wrap:anywhere] ${
                     tag === tagSection
                       ? "border-border-default text-text-muted"
                       : "border-primary/40 text-primary-text"
@@ -210,8 +243,9 @@ const ProblemTable = ({
             </div>
 
             {/* Difficulty */}
-            <span className="flex items-center gap-1.5 text-[12px]">
+            <span role="cell" className="flex items-center gap-1.5 text-[12px]">
               <span
+                aria-hidden="true"
                 className="inline-block w-1.5 h-1.5 rounded-full"
                 style={{ backgroundColor: difficultyTone[problem.difficulty] }}
               />
@@ -221,16 +255,19 @@ const ProblemTable = ({
             </span>
 
             {/* Status */}
-            <StatusMark prob={prob} />
+            <span role="cell">
+              <StatusMark prob={prob} />
+            </span>
 
             {/* Review */}
-            <div className="flex flex-col gap-1.5">
+            <div role="cell" className="flex flex-col gap-1.5">
               {isDue ? (
                 <>
                   <span className="text-[10px] text-text-muted smallcaps">Rate 1–5</span>
                   <RatingRow
                     onPick={(r) => handleReview(problem.id, r)}
                     currentScore={prob.performance}
+                    problemTitle={problem.title}
                   />
                 </>
               ) : (
@@ -246,6 +283,7 @@ const ProblemTable = ({
                     onPick={() => {}}
                     currentScore={prob.performance}
                     disabled
+                    problemTitle={problem.title}
                   />
                 </>
               )}
@@ -253,6 +291,7 @@ const ProblemTable = ({
           </article>
         );
       })}
+      </div>
     </section>
   );
 };

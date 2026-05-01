@@ -23,10 +23,27 @@ const Patterns = () => {
   const [copiedIndex, setCopiedIndex] = useState(null);
   const { isDark } = useTheme();
 
-  const copyToClipboard = (text, index) => {
-    navigator.clipboard.writeText(text);
-    setCopiedIndex(index);
-    setTimeout(() => setCopiedIndex(null), 1800);
+  const copyToClipboard = async (text, index) => {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        // Legacy fallback for non-secure contexts.
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "absolute";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
+      setCopiedIndex(index);
+      setTimeout(() => setCopiedIndex(null), 1800);
+    } catch (err) {
+      console.error("Copy failed:", err);
+    }
   };
 
   const codeStyle = {
@@ -60,17 +77,23 @@ const Patterns = () => {
       </header>
 
       {/* Sticky language strip — inline text tabs, no pill buttons */}
-      <div className="sticky top-0 z-10 bg-background-page/95 backdrop-blur-sm border-b border-border-default -mx-6 lg:-mx-10 px-6 lg:px-10 py-3 mt-8 mb-2">
+      <div className="sticky top-0 z-10 bg-background-page border-b border-border-default -mx-6 lg:-mx-10 px-6 lg:px-10 py-3 mt-8 mb-2">
         <div className="flex items-center gap-6">
-          <span className="smallcaps text-text-muted">Language</span>
-          <div className="flex items-center gap-5">
+          <span id="lang-label" className="smallcaps text-text-muted">Language</span>
+          <div role="tablist" aria-labelledby="lang-label" className="flex items-center gap-5">
             {languages.map(lang => {
               const active = selectedLanguage === lang.id;
               return (
                 <button
                   key={lang.id}
+                  type="button"
+                  role="tab"
+                  id={`tab-${lang.id}`}
+                  aria-selected={active}
+                  aria-controls={`panel-${lang.id}`}
+                  tabIndex={active ? 0 : -1}
                   onClick={() => setSelectedLanguage(lang.id)}
-                  className="relative pb-1 text-[12px] tracking-wide transition-colors"
+                  className="relative pb-1 py-2 text-[12px] tracking-wide transition-colors focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-primary"
                   style={{
                     color: active ? "var(--color-text-main)" : "var(--color-text-muted)",
                     fontWeight: active ? 600 : 400,
@@ -78,7 +101,7 @@ const Patterns = () => {
                 >
                   {lang.name}
                   {active && (
-                    <span className="absolute left-0 right-0 -bottom-px h-px bg-primary" />
+                    <span aria-hidden="true" className="absolute left-0 right-0 -bottom-px h-px bg-primary" />
                   )}
                 </button>
               );
@@ -112,23 +135,30 @@ const Patterns = () => {
               </p>
 
               {/* Code block — bordered hairline frame, transparent bg */}
-              <div className="mt-6 border border-border-default">
+              <div
+                role="tabpanel"
+                id={`panel-${selectedLanguage}`}
+                aria-labelledby={`tab-${selectedLanguage}`}
+                className="mt-6 border border-border-default"
+              >
                 <div className="flex items-center justify-between px-4 py-2 border-b border-border-default bg-background-subtle/50">
                   <span className="smallcaps text-text-muted">
                     {languages.find(l => l.id === selectedLanguage)?.name} · Template
                   </span>
                   <button
+                    type="button"
                     onClick={() => copyToClipboard(pattern.templates[selectedLanguage], idx)}
-                    className="inline-flex items-center gap-1.5 text-[11px] text-text-muted hover:text-primary transition-colors"
+                    aria-label={copiedIndex === idx ? "Copied to clipboard" : `Copy ${pattern.title} template to clipboard`}
+                    className="inline-flex items-center gap-1.5 text-[11px] text-text-muted hover:text-primary transition-colors py-1 px-1 -mx-1 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-primary"
                   >
                     {copiedIndex === idx ? (
                       <>
-                        <Check size={13} strokeWidth={1.6} className="text-status-success" />
+                        <Check size={13} strokeWidth={1.6} aria-hidden="true" focusable="false" className="text-status-success" />
                         <span className="text-status-success smallcaps">Copied</span>
                       </>
                     ) : (
                       <>
-                        <Copy size={13} strokeWidth={1.6} />
+                        <Copy size={13} strokeWidth={1.6} aria-hidden="true" focusable="false" />
                         <span className="smallcaps">Copy</span>
                       </>
                     )}

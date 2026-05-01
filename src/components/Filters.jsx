@@ -13,7 +13,7 @@ const Filters = ({
   <div className="flex flex-col">
     <div className="flex items-baseline justify-between mb-4">
       <h3 className="smallcaps text-text-muted">Filters</h3>
-      <span className="text-[10px] text-text-muted/70 display italic">絞込</span>
+      <span aria-hidden="true" className="text-[10px] text-text-muted/70 display italic">絞込</span>
     </div>
 
     <div className="flex flex-col gap-3">
@@ -43,7 +43,10 @@ const Filters = ({
         </select>
       </label>
 
-      <div className="flex items-center gap-2 mt-1">
+      <label
+        htmlFor="due-today-checkbox"
+        className="flex items-center gap-2 mt-1 py-1.5 cursor-pointer select-none"
+      >
         <input
           id="due-today-checkbox"
           type="checkbox"
@@ -51,15 +54,13 @@ const Filters = ({
           onChange={() => setShowOnlyDueToday(p => !p)}
           className="custom-checkbox"
         />
-        <label
-          htmlFor="due-today-checkbox"
-          className="text-[11px] text-text-muted cursor-pointer select-none"
-        >
-          Due today only
-        </label>
-      </div>
+        <span className="text-[11px] text-text-muted">Due today only</span>
+      </label>
 
-      <div className="flex items-center gap-2">
+      <label
+        htmlFor="hide-planned-checkbox"
+        className="flex items-center gap-2 py-1.5 cursor-pointer select-none"
+      >
         <input
           id="hide-planned-checkbox"
           type="checkbox"
@@ -67,13 +68,8 @@ const Filters = ({
           onChange={() => setHidePlanned(p => !p)}
           className="custom-checkbox"
         />
-        <label
-          htmlFor="hide-planned-checkbox"
-          className="text-[11px] text-text-muted cursor-pointer select-none"
-        >
-          Hide planned
-        </label>
-      </div>
+        <span className="text-[11px] text-text-muted">Hide planned</span>
+      </label>
     </div>
   </div>
 );

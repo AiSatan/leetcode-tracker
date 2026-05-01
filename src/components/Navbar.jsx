@@ -11,7 +11,7 @@ const NAV = [
 const SealMark = () => (
   // A vermillion seal-stamp brand mark, drawn as SVG so it never depends on font fallback.
   // Square block, inset stroke, two horizontal "ink bars" inside.
-  <svg viewBox="0 0 32 32" width="22" height="22" aria-hidden>
+  <svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true" focusable="false">
     <rect x="0.5" y="0.5" width="31" height="31"
           fill="var(--color-primary-main)" stroke="var(--color-primary-main)" />
     <rect x="3" y="3" width="26" height="26" fill="none"
@@ -28,27 +28,29 @@ const ThemeToggle = ({ isDark, onToggle }) => (
   <button
     type="button"
     onClick={onToggle}
+    role="switch"
+    aria-checked={isDark}
     aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
     title={`Switch to ${isDark ? "light" : "dark"} mode`}
-    className="inline-flex items-center border border-border-default hover:border-primary transition-colors"
+    className="inline-flex items-center border border-border-default hover:border-primary transition-colors focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-primary"
   >
     <span
-      className="flex items-center justify-center w-7 h-7 transition-colors"
+      className="flex items-center justify-center w-8 h-8 transition-colors"
       style={{
         backgroundColor: isDark ? "transparent" : "var(--color-primary-main)",
         color: isDark ? "var(--color-text-muted)" : "var(--color-text-inverted)",
       }}
     >
-      <Sun size={13} strokeWidth={1.6} />
+      <Sun size={13} strokeWidth={1.6} aria-hidden="true" focusable="false" />
     </span>
     <span
-      className="flex items-center justify-center w-7 h-7 transition-colors border-l border-border-default"
+      className="flex items-center justify-center w-8 h-8 transition-colors border-l border-border-default"
       style={{
         backgroundColor: isDark ? "var(--color-primary-main)" : "transparent",
         color: isDark ? "var(--color-text-inverted)" : "var(--color-text-muted)",
       }}
     >
-      <Moon size={13} strokeWidth={1.6} />
+      <Moon size={13} strokeWidth={1.6} aria-hidden="true" focusable="false" />
     </span>
   </button>
 );
@@ -80,13 +82,15 @@ const Navbar = () => {
               <Link
                 key={to}
                 to={to}
-                className="relative py-1.5 smallcaps transition-colors"
+                aria-current={active ? "page" : undefined}
+                className="relative py-1.5 smallcaps transition-colors focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-primary"
                 style={{
                   color: active ? "var(--color-text-main)" : "var(--color-text-muted)"
                 }}
               >
                 {label}
                 <span
+                  aria-hidden="true"
                   className="absolute left-0 right-0 -bottom-px h-px transition-opacity"
                   style={{
                     backgroundColor: "var(--color-primary-main)",
@@ -104,24 +108,25 @@ const Navbar = () => {
             href="https://github.com/AiSatan/leetcode-tracker"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-text-muted hover:text-text-main transition-colors"
-            aria-label="GitHub"
+            className="inline-flex items-center justify-center w-8 h-8 text-text-muted hover:text-text-main transition-colors focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            aria-label="GitHub repository (opens in new tab)"
           >
-            <Github size={18} strokeWidth={1.5} />
+            <Github size={18} strokeWidth={1.5} aria-hidden="true" focusable="false" />
           </a>
         </div>
       </div>
 
       {/* Mobile nav row */}
       <div className="sm:hidden border-t border-border-default">
-        <div className="max-w-[1280px] mx-auto px-6 h-11 flex items-center gap-6">
+        <div className="max-w-[1280px] mx-auto px-6 h-12 flex items-center gap-6">
           {NAV.map(({ to, label }) => {
             const active = location.pathname === to;
             return (
               <Link
                 key={to}
                 to={to}
-                className="smallcaps"
+                aria-current={active ? "page" : undefined}
+                className="smallcaps py-3 -my-3 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 style={{
                   color: active ? "var(--color-text-main)" : "var(--color-text-muted)"
                 }}

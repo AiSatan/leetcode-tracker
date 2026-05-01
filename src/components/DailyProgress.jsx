@@ -8,14 +8,21 @@ const DailyProgress = ({ progress }) => {
 
     const forecast = useMemo(() => getDailyForecast(progress, days), [progress]);
 
+    const totalScheduled = forecast.reduce((sum, d) => sum + d.tasks.length, 0);
+    const heatmapLabel = totalScheduled === 0
+        ? "Ten-day review heatmap: no reviews scheduled."
+        : `Ten-day review heatmap. ${forecast.map(d => `Day ${d.label}: ${d.tasks.length} review${d.tasks.length === 1 ? "" : "s"}`).join("; ")}.`;
+
     return (
         <div className="flex flex-col">
             <div className="flex items-baseline justify-between mb-4">
                 <h3 className="smallcaps text-text-muted">Ten days</h3>
-                <span className="text-[10px] text-text-muted/70 display italic">十日</span>
+                <span aria-hidden="true" className="text-[10px] text-text-muted/70 display italic">十日</span>
             </div>
 
             <div
+                role="img"
+                aria-label={heatmapLabel}
                 className="inline-grid gap-y-1 gap-x-1.5"
                 style={{ gridTemplateColumns: `repeat(${days}, 1.5rem)` }}
             >
@@ -25,6 +32,7 @@ const DailyProgress = ({ progress }) => {
                         <div
                             key={`h-${day.date}`}
                             className="flex flex-col items-center pb-1"
+                            aria-hidden="true"
                         >
                             <span
                                 className="display tabular text-[12px] leading-none"
@@ -61,6 +69,7 @@ const DailyProgress = ({ progress }) => {
                         return (
                             <div
                                 key={`${day.date}-${slotIdx}`}
+                                aria-hidden="true"
                                 className={`
                                     w-6 h-6
                                     ${!task && !showStriped ? 'bg-background-subtle' : ''}
@@ -68,11 +77,11 @@ const DailyProgress = ({ progress }) => {
                                 `}
                                 style={{
                                     backgroundColor: task ? color : undefined,
-                                    border: task ? '0.5px solid rgba(0,0,0,0.06)' : undefined,
+                                    border: task ? '0.5px solid var(--color-border-default)' : undefined,
                                 }}
                                 title={task
-                                    ? `Score: ${task.performance}${task.performance === 5 ? ' · mastered' : ''}`
-                                    : 'Empty slot'}
+                                    ? `Day ${day.label}, score ${task.performance}${task.performance === 5 ? ' · mastered' : ''}`
+                                    : undefined}
                             />
                         );
                     })
@@ -80,9 +89,9 @@ const DailyProgress = ({ progress }) => {
             </div>
 
             {/* Legend */}
-            <div className="flex items-center gap-3 mt-4 text-[10px] text-text-muted">
+            <div className="flex items-center gap-3 mt-4 text-[10px] text-text-muted" aria-label="Legend: score 1 to 5, low to high">
                 <span className="smallcaps">Score</span>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1" aria-hidden="true">
                     {[1, 2, 3, 4, 5].map(n => (
                         <span
                             key={n}

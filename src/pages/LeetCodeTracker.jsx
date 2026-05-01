@@ -163,11 +163,12 @@ const LeetCodeTracker = () => {
 
           <div className="flex flex-wrap items-end gap-x-5 gap-y-3">
             <label className="flex flex-col gap-1">
-              <span className="text-[10px] text-text-muted smallcaps">Set</span>
+              <span className="text-[10px] text-text-muted smallcaps">Problem set</span>
               <select
                 value={selectedList}
                 onChange={(e) => setSelectedList(e.target.value)}
                 className="dojo-select text-[13px]"
+                aria-label="Choose a problem set"
               >
                 {Object.keys(problemLists).map(listName => (
                   <option key={listName} value={listName}>{listName}</option>
@@ -179,23 +180,28 @@ const LeetCodeTracker = () => {
               href={roadmapLinks[selectedList]}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-[12px] smallcaps text-text-muted hover:text-primary transition-colors pb-1.5"
-              title="Open the official roadmap"
+              aria-label={`Open the official ${selectedList} roadmap (new tab)`}
+              className="inline-flex items-center gap-1.5 text-[12px] smallcaps text-text-muted hover:text-primary transition-colors py-2 -my-2 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
               Official roadmap
-              <ExternalLink size={12} strokeWidth={1.5} />
+              <ExternalLink size={12} strokeWidth={1.5} aria-hidden="true" focusable="false" />
             </a>
           </div>
         </div>
 
         {/* Spaced rep disclosure — quiet, italic, expandable */}
         <button
+          type="button"
           onClick={() => setShowExplanation(s => !s)}
-          className="mt-6 inline-flex items-center gap-1.5 text-[12px] text-text-muted hover:text-primary transition-colors"
+          aria-expanded={showExplanation}
+          aria-controls="scheduler-explanation"
+          className="mt-6 inline-flex items-center gap-1.5 text-[12px] text-text-muted hover:text-primary transition-colors focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
           <ChevronDown
             size={12}
             strokeWidth={1.5}
+            aria-hidden="true"
+            focusable="false"
             style={{
               transform: showExplanation ? "rotate(0deg)" : "rotate(-90deg)",
               transition: "transform 200ms ease",
@@ -204,6 +210,7 @@ const LeetCodeTracker = () => {
           <span className="smallcaps">How the scheduler works</span>
         </button>
         <div
+          id="scheduler-explanation"
           className="grid transition-all duration-300"
           style={{ gridTemplateRows: showExplanation ? "1fr" : "0fr" }}
         >

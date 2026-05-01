@@ -58,15 +58,25 @@ const ForecastRadar = ({ progress }) => {
     });
     const outline = outerVertices.map(v => `${v.x},${v.y}`).join(' ');
 
+    const summary = sectors.length > 0
+        ? sectors.map(s => `Day ${s.label}: ${s.count > 0 ? `${s.count} review${s.count === 1 ? "" : "s"}, average score ${s.avg.toFixed(1)}` : "no reviews"}`).join("; ")
+        : "No upcoming reviews scheduled.";
+
     return (
         <div className="flex flex-col">
             <div className="flex items-baseline justify-between mb-4">
                 <h3 className="smallcaps text-text-muted">5-day forecast</h3>
-                <span className="text-[10px] text-text-muted/70 display italic">予報</span>
+                <span aria-hidden="true" className="text-[10px] text-text-muted/70 display italic">予報</span>
             </div>
 
             <div className="flex justify-center -mt-1">
-                <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="overflow-visible">
+                <svg
+                    role="img"
+                    aria-label={`Five-day review forecast. ${summary}`}
+                    viewBox={`0 0 ${size} ${size}`}
+                    className="overflow-visible w-full h-auto"
+                    style={{ maxWidth: size }}
+                >
                     {sectors.map((sector, i) => (
                         <g key={i}>
                             {sector.blocks.map((b, j) => (

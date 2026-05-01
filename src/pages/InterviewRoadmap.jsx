@@ -4,6 +4,7 @@ import { interviewRoadmap, dsaMindmap } from "../data";
 
 const Seal = ({ size = 14 }) => (
   <span
+    aria-hidden="true"
     className="inline-flex items-center justify-center"
     style={{
       width: size,
@@ -11,7 +12,7 @@ const Seal = ({ size = 14 }) => (
       backgroundColor: "var(--color-primary-main)",
     }}
   >
-    <svg viewBox="0 0 12 12" width={size * 0.65} height={size * 0.65} aria-hidden>
+    <svg viewBox="0 0 12 12" width={size * 0.65} height={size * 0.65} aria-hidden="true" focusable="false">
       <path
         d="M2.5 6.4 L5 8.7 L9.5 3.5"
         fill="none"
@@ -84,7 +85,7 @@ const InterviewRoadmap = () => {
 
       {/* Tab strip — text-tabs */}
       <div className="border-b border-border-default mt-8">
-        <div className="flex items-center gap-8">
+        <div role="tablist" aria-label="Roadmap view" className="flex items-center gap-8">
           {[
             { id: "interview", label: "Interview process" },
             { id: "dsa",       label: "Decision tree" },
@@ -93,8 +94,14 @@ const InterviewRoadmap = () => {
             return (
               <button
                 key={t.id}
+                type="button"
+                role="tab"
+                id={`roadmap-tab-${t.id}`}
+                aria-selected={active}
+                aria-controls={`roadmap-panel-${t.id}`}
+                tabIndex={active ? 0 : -1}
                 onClick={() => setActiveTab(t.id)}
-                className="relative py-3 text-[12px] tracking-wide transition-colors"
+                className="relative py-3 text-[12px] tracking-wide transition-colors focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 style={{
                   color: active ? "var(--color-text-main)" : "var(--color-text-muted)",
                   fontWeight: active ? 600 : 400,
@@ -104,7 +111,7 @@ const InterviewRoadmap = () => {
               >
                 {t.label}
                 {active && (
-                  <span className="absolute left-0 right-0 -bottom-px h-px bg-primary" />
+                  <span aria-hidden="true" className="absolute left-0 right-0 -bottom-px h-px bg-primary" />
                 )}
               </button>
             );
@@ -114,16 +121,25 @@ const InterviewRoadmap = () => {
 
       {/* Interview Process */}
       {activeTab === "interview" && (
-        <div className="divide-y divide-border-default">
+        <div
+          role="tabpanel"
+          id="roadmap-panel-interview"
+          aria-labelledby="roadmap-tab-interview"
+          className="divide-y divide-border-default"
+        >
           {interviewRoadmap.map((section, idx) => {
             const progress = getProgress(section.id);
             const isExpanded = expandedSections[section.id];
+            const sectionPanelId = `roadmap-section-${section.id}`;
 
             return (
               <article key={section.id} className="py-8">
                 <button
+                  type="button"
                   onClick={() => toggleSection(section.id)}
-                  className="w-full grid grid-cols-[3.5rem_minmax(0,1fr)_8rem_2rem] gap-x-6 items-center text-left group"
+                  aria-expanded={!!isExpanded}
+                  aria-controls={sectionPanelId}
+                  className="w-full grid grid-cols-[3.5rem_minmax(0,1fr)_8rem_2rem] gap-x-6 items-center text-left group focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 >
                   <span className="display tabular text-[34px] leading-none text-text-muted/60 group-hover:text-primary transition-colors">
                     {String(idx + 1).padStart(2, "0")}
@@ -139,14 +155,21 @@ const InterviewRoadmap = () => {
                   </div>
 
                   {/* Hairline progress */}
-                  <div className="flex flex-col gap-1.5">
-                    <span className="text-[11px] text-text-muted tabular text-right">
+                  <div
+                    className="flex flex-col gap-1.5"
+                    role="meter"
+                    aria-label={`${section.title} progress`}
+                    aria-valuenow={progress}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                  >
+                    <span aria-hidden="true" className="text-[11px] text-text-muted tabular text-right">
                       {progress}<span className="text-text-muted/60">%</span>
                     </span>
-                    <span className="relative h-px bg-border-default block">
+                    <span aria-hidden="true" className="relative h-px bg-border-default block overflow-hidden">
                       <span
-                        className="absolute left-0 top-0 h-px bg-primary transition-all duration-500"
-                        style={{ width: `${progress}%` }}
+                        className="absolute left-0 top-0 h-px w-full bg-primary origin-left transition-transform duration-500"
+                        style={{ transform: `scaleX(${progress / 100})` }}
                       />
                     </span>
                   </div>
@@ -154,12 +177,15 @@ const InterviewRoadmap = () => {
                   <ChevronDown
                     size={16}
                     strokeWidth={1.5}
+                    aria-hidden="true"
+                    focusable="false"
                     className="text-text-muted justify-self-end transition-transform"
                     style={{ transform: isExpanded ? "rotate(0deg)" : "rotate(-90deg)" }}
                   />
                 </button>
 
                 <div
+                  id={sectionPanelId}
                   className="grid transition-all duration-300"
                   style={{ gridTemplateRows: isExpanded ? "1fr" : "0fr" }}
                 >
@@ -170,10 +196,14 @@ const InterviewRoadmap = () => {
                         return (
                           <button
                             key={item.id}
+                            type="button"
+                            role="checkbox"
+                            aria-checked={!!done}
+                            aria-label={`${item.title}${done ? " (done)" : ""}`}
                             onClick={() => toggleComplete(item.id)}
-                            className="flex items-start gap-3 text-left group"
+                            className="flex items-start gap-3 text-left group focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-primary"
                           >
-                            <span className="mt-0.5 flex-shrink-0">
+                            <span aria-hidden="true" className="mt-0.5 flex-shrink-0">
                               {done ? (
                                 <Seal size={14} />
                               ) : (
@@ -212,7 +242,12 @@ const InterviewRoadmap = () => {
 
       {/* DSA Decision Tree */}
       {activeTab === "dsa" && (
-        <section className="mt-10">
+        <section
+          role="tabpanel"
+          id="roadmap-panel-dsa"
+          aria-labelledby="roadmap-tab-dsa"
+          className="mt-10"
+        >
           <header className="mb-8 max-w-2xl">
             <h2 className="display text-[28px] text-text-main">{dsaMindmap.title}</h2>
             <p className="display italic text-text-muted mt-2 text-[14px]">
