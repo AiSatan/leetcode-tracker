@@ -7,7 +7,8 @@
 > *   **Docker support**: Added docker and docker-compose files for easy deployment.
 > *   **Try it**: You can try this version here: [https://leetcode-tracker-fork.vercel.app](https://leetcode-tracker-fork.vercel.app)
 
-<img width="1190" height="944" alt="image" src="https://github.com/user-attachments/assets/50177a79-23cd-4e6a-ba11-ac5f35f95b51" />
+<img width="1215" height="759" alt="image" src="https://github.com/user-attachments/assets/0998ab9d-4b22-40b8-a3b0-b52e065aff02" />
+
 
 A modern, interactive web application to track your progress through the famous LeetCode problems with built-in spaced repetition system for long-term retention.
 
