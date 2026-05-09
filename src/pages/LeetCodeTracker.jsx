@@ -162,30 +162,38 @@ const LeetCodeTracker = () => {
           </div>
 
           <div className="flex flex-wrap items-end gap-x-5 gap-y-3">
-            <label className="flex flex-col gap-1">
-              <span className="text-[10px] text-text-muted smallcaps">Problem set</span>
+            <div className="flex flex-col items-start gap-1">
+              <label
+                htmlFor="problem-set-select"
+                className="text-[10px] text-text-muted smallcaps"
+              >
+                Problem set
+              </label>
+
               <select
+                id="problem-set-select"
                 value={selectedList}
                 onChange={(e) => setSelectedList(e.target.value)}
                 className="dojo-select text-[13px]"
-                aria-label="Choose a problem set"
               >
                 {Object.keys(problemLists).map(listName => (
                   <option key={listName} value={listName}>{listName}</option>
                 ))}
               </select>
-            </label>
 
-            <a
-              href={roadmapLinks[selectedList]}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`Open the official ${selectedList} roadmap (new tab)`}
-              className="inline-flex items-center gap-1.5 text-[12px] smallcaps text-text-muted hover:text-primary transition-colors py-2 -my-2 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-primary"
-            >
-              Official roadmap
-              <ExternalLink size={12} strokeWidth={1.5} aria-hidden="true" focusable="false" />
-            </a>
+              <div className="w-0 overflow-visible pt-1">
+                <a
+                  href={roadmapLinks[selectedList]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Open the official ${selectedList} roadmap (new tab)`}
+                  className="inline-flex whitespace-nowrap items-center gap-1.5 text-[12px] smallcaps text-text-muted hover:text-primary transition-colors focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                >
+                  Official roadmap
+                  <ExternalLink size={12} strokeWidth={1.5} aria-hidden="true" focusable="false" />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 
